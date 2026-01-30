@@ -11,53 +11,119 @@ datasource db {
 }
 
 // ===================================
+// ENUMS
+// ===================================
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum AdminRole {
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum ModuleStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum EventStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+// ===================================
 // USER MODEL
 // ===================================
 model User {
-  id         String    @id @default(uuid())
-  email      String    @unique
-  username   String    @unique
-  password   String
-  firstName  String?
-  lastName   String?
-  avatar     String?
-  isVerified Boolean   @default(false)
-  isActive   Boolean   @default(true)
-  role       UserRole  @default(USER)
-  lastLogin  DateTime?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id            String   @id @default(uuid())
+  email         String   @unique
+  username      String   @unique
+  password_hash String
+  avatar_url    String?
+  bio           String?
+  level         Int      @default(1)
+  total_points  Int      @default(0)
+  streak        Int      @default(0)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 
   // Relations
-  sessions      Session[]
-  refreshTokens RefreshToken[]
+  sessions           Session[]
+  refreshTokens      RefreshToken[]
+  admin              Admin?
+  userProgress       UserProgress[]
+  quizResults        QuizResult[]
+  orders             Order[]
+  chatMessages       ChatMessage[]
+  achievements       Achievement[]
+  notifications      Notification[]
+  followers          UserFollow[]        @relation("UserFollowers")
+  following          UserFollow[]        @relation("UserFollowing")
+  wishlistItems      WishlistItem[]
+  cartItems          CartItem[]
+  eventRegistrations EventRegistration[]
 
   @@index([email])
   @@index([username])
+  @@index([level])
+  @@index([total_points])
   @@map("users")
 }
 
-enum UserRole {
-  USER
-  ADMIN
-  MODERATOR
+// ===================================
+// ADMIN MODEL
+// ===================================
+model Admin {
+  id          String    @id @default(uuid())
+  user_id     String    @unique
+  role        AdminRole @default(ADMIN)
+  permissions Json?
+  created_at  DateTime  @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("admins")
 }
 
 // ===================================
 // SESSION MODEL
 // ===================================
 model Session {
-  id        String   @id @default(uuid())
-  userId    String
-  token     String   @unique
-  userAgent String?
-  ipAddress String?
-  expiresAt DateTime
-  createdAt DateTime @default(now())
+  id            String   @id @default(uuid())
+  user_id       String
+  token         String   @unique
+  refresh_token String?
+  ip_address    String?
+  user_agent    String?
+  expires_at    DateTime
+  created_at    DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@index([userId])
+  @@index([user_id])
   @@index([token])
   @@map("sessions")
 }
@@ -66,15 +132,334 @@ model Session {
 // REFRESH TOKEN MODEL
 // ===================================
 model RefreshToken {
-  id        String   @id @default(uuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-  createdAt DateTime @default(now())
+  id         String   @id @default(uuid())
+  user_id    String
+  token      String   @unique
+  expires_at DateTime
+  created_at DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@index([userId])
+  @@index([user_id])
   @@index([token])
   @@map("refresh_tokens")
+}
+
+// ===================================
+// MODULE MODEL
+// ===================================
+model Module {
+  id          String     @id @default(uuid())
+  title       String
+  description String?
+  category    String
+  difficulty  Difficulty @default(BEGINNER)
+  points      Int        @default(0)
+  content     String?
+  created_at  DateTime   @default(now())
+
+  // Relations
+  courses      Course[]
+  userProgress UserProgress[]
+  quizzes      Quiz[]
+
+  @@index([category])
+  @@index([difficulty])
+  @@map("modules")
+}
+
+// ===================================
+// COURSE MODEL
+// ===================================
+model Course {
+  id            String   @id @default(uuid())
+  module_id     String
+  lesson_number Int
+  title         String
+  content       String?
+  duration      Int?
+  created_at    DateTime @default(now())
+
+  module Module @relation(fields: [module_id], references: [id], onDelete: Cascade)
+
+  @@index([module_id])
+  @@index([lesson_number])
+  @@map("courses")
+}
+
+// ===================================
+// USER PROGRESS MODEL
+// ===================================
+model UserProgress {
+  id               String       @id @default(uuid())
+  user_id          String
+  module_id        String
+  percent_complete Float        @default(0)
+  status           ModuleStatus @default(NOT_STARTED)
+  time_spent       Int          @default(0)
+  started_at       DateTime?
+  completed_at     DateTime?
+
+  user   User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [module_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, module_id])
+  @@index([user_id])
+  @@index([module_id])
+  @@index([status])
+  @@map("user_progress")
+}
+
+// ===================================
+// QUIZ MODEL
+// ===================================
+model Quiz {
+  id         String   @id @default(uuid())
+  module_id  String
+  title      String
+  questions  Json
+  created_at DateTime @default(now())
+
+  module  Module       @relation(fields: [module_id], references: [id], onDelete: Cascade)
+  results QuizResult[]
+
+  @@index([module_id])
+  @@map("quizzes")
+}
+
+// ===================================
+// QUIZ RESULT MODEL
+// ===================================
+model QuizResult {
+  id           String   @id @default(uuid())
+  user_id      String
+  quiz_id      String
+  score        Float
+  answers      Json
+  completed_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  quiz Quiz @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([quiz_id])
+  @@map("quiz_results")
+}
+
+// ===================================
+// PRODUCT CATEGORY MODEL
+// ===================================
+model ProductCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  created_at  DateTime @default(now())
+
+  products Product[]
+
+  @@map("product_categories")
+}
+
+// ===================================
+// PRODUCT MODEL
+// ===================================
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  category_id String?
+  images      Json?
+  stock       Int      @default(0)
+  created_at  DateTime @default(now())
+
+  category      ProductCategory? @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  wishlistItems WishlistItem[]
+  cartItems     CartItem[]
+
+  @@index([category_id])
+  @@index([name])
+  @@map("products")
+}
+
+// ===================================
+// WISHLIST MODEL
+// ===================================
+model WishlistItem {
+  id         String   @id @default(uuid())
+  user_id    String
+  product_id String
+  added_at   DateTime @default(now())
+
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, product_id])
+  @@index([user_id])
+  @@index([product_id])
+  @@map("wishlist_items")
+}
+
+// ===================================
+// CART MODEL
+// ===================================
+model CartItem {
+  id         String   @id @default(uuid())
+  user_id    String
+  product_id String
+  quantity   Int      @default(1)
+  added_at   DateTime @default(now())
+
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, product_id])
+  @@index([user_id])
+  @@index([product_id])
+  @@map("cart_items")
+}
+
+// ===================================
+// ORDER MODEL
+// ===================================
+model Order {
+  id          String      @id @default(uuid())
+  user_id     String
+  items       Json
+  total_price Decimal     @db.Decimal(10, 2)
+  status      OrderStatus @default(PENDING)
+  created_at  DateTime    @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([status])
+  @@map("orders")
+}
+
+// ===================================
+// CHAT MESSAGE MODEL
+// ===================================
+model ChatMessage {
+  id           String    @id @default(uuid())
+  user_id      String
+  message_text String
+  encrypted    Boolean   @default(false)
+  reactions    Json?
+  created_at   DateTime  @default(now())
+  deleted_at   DateTime?
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([created_at])
+  @@map("chat_messages")
+}
+
+// ===================================
+// ACHIEVEMENT MODEL
+// ===================================
+model Achievement {
+  id         String   @id @default(uuid())
+  user_id    String
+  badge_name String
+  earned_at  DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([badge_name])
+  @@map("achievements")
+}
+
+// ===================================
+// EVENT MODEL
+// ===================================
+model Event {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  date        DateTime
+  location    String?
+  capacity    Int?
+  status      EventStatus @default(UPCOMING)
+  created_at  DateTime    @default(now())
+
+  registrations EventRegistration[]
+
+  @@index([date])
+  @@index([status])
+  @@map("events")
+}
+
+// ===================================
+// EVENT REGISTRATION MODEL
+// ===================================
+model EventRegistration {
+  id            String   @id @default(uuid())
+  event_id      String
+  user_id       String
+  registered_at DateTime @default(now())
+
+  event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([event_id, user_id])
+  @@index([event_id])
+  @@index([user_id])
+  @@map("event_registrations")
+}
+
+// ===================================
+// NOTIFICATION MODEL
+// ===================================
+model Notification {
+  id         String   @id @default(uuid())
+  user_id    String
+  message    String
+  read       Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([read])
+  @@map("notifications")
+}
+
+// ===================================
+// USER FOLLOW MODEL
+// ===================================
+model UserFollow {
+  id           String   @id @default(uuid())
+  follower_id  String
+  following_id String
+  created_at   DateTime @default(now())
+
+  follower  User @relation("UserFollowers", fields: [follower_id], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowing", fields: [following_id], references: [id], onDelete: Cascade)
+
+  @@unique([follower_id, following_id])
+  @@index([follower_id])
+  @@index([following_id])
+  @@map("user_follows")
+}
+
+// ===================================
+// MEETING MODEL
+// ===================================
+model Meeting {
+  id           String   @id @default(uuid())
+  title        String
+  description  String?
+  start_time   DateTime
+  end_time     DateTime
+  host_id      String
+  participants Json?
+  meeting_url  String?
+  created_at   DateTime @default(now())
+
+  @@index([host_id])
+  @@index([start_time])
+  @@map("meetings")
 }
