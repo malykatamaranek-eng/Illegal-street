@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illegal Street - Motoryzacyjna Pasja</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <svg class="logo" width="40" height="40" viewBox="0 0 40 40">
+                    <path d="M20 5 L35 15 L35 25 L20 35 L5 25 L5 15 Z" fill="none" stroke="#ff0000" stroke-width="2"/>
+                    <circle cx="20" cy="20" r="8" fill="#ff0000"/>
+                </svg>
+                <span>Illegal Street</span>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Strona główna</a></li>
+                <li class="social-nav-icons">
+                    <a href="https://www.instagram.com/illegal__street/" target="_blank" rel="noopener noreferrer" class="nav-social-link" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://www.youtube.com/@illegalstreet777" target="_blank" rel="noopener noreferrer" class="nav-social-link" aria-label="YouTube">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                        </svg>
+                    </a>
+                </li>
+                <li><a href="login.html" class="nav-link btn-login">Zaloguj się</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <!-- POV Driving Video -->
+            <video class="hero-car-image" autoplay loop muted playsinline aria-label="POV driving through city streets at night">
+                <source src="assets/videos/pov-driving-night-city.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="hero-content">
+            <p class="hero-subtitle">Illegal Street 2159</p>
+            <h1 class="hero-title">IllegalStreet</h1>
+            <p class="hero-tagline">Z pasji do motoryzacji, od nas dla was</p>
+            <div class="hero-buttons">
+                <a href="login.html" class="btn btn-primary">Zaloguj się</a>
+                <button class="btn-language" id="langToggle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span class="lang-text">ENG</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="hero-sidebar">
+            <div class="social-sidebar">
+                <a href="https://www.instagram.com/illegal__street/" target="_blank" rel="noopener noreferrer" class="social-sidebar-link" aria-label="Instagram">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a href="https://www.youtube.com/@illegalstreet777" target="_blank" rel="noopener noreferrer" class="social-sidebar-link" aria-label="YouTube">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                        <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <svg class="logo" width="40" height="40" viewBox="0 0 40 40">
+                        <path d="M20 5 L35 15 L35 25 L20 35 L5 25 L5 15 Z" fill="none" stroke="#ff0000" stroke-width="2"/>
+                        <circle cx="20" cy="20" r="8" fill="#ff0000"/>
+                    </svg>
+                    <span>Illegal Street</span>
+                </div>
+                <p>&copy; 2159 Illegal Street. All rights reserved.</p>
+                <p class="footer-tagline">Motoryzacyjna pasja bez granic</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="cookie-consent.js"></script>
+</body>
+</html>
