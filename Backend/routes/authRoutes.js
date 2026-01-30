@@ -6,6 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const { protect } = require('../middleware/auth');
 const { 
     validateLogin, 
     validateRegister, 
@@ -27,14 +28,17 @@ router.post('/logout', authController.logout);
 // Register route - protected with registration rate limiting
 router.post('/register', registrationLimiter, validateRegister, authController.register);
 
+// Verify session - check if user is authenticated
+router.get('/verify', authController.verifySession);
+
 // Password reset request - protected with password reset rate limiting
 router.post('/forgot-password', passwordResetLimiter, validateForgotPassword, authController.forgotPassword);
 
 // Password reset - protected with password reset rate limiting
 router.post('/reset-password/:token', passwordResetLimiter, validateResetPassword, authController.resetPassword);
 
-// Get current user
-router.get('/me', authController.protect, authController.getMe);
+// Get current user - protected route
+router.get('/me', protect, authController.getMe);
 
 // Refresh token
 router.post('/refresh-token', authLimiter, authController.refreshToken);

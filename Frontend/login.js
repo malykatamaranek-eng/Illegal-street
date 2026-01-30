@@ -41,6 +41,10 @@ function handleLoginSubmit(e) {
     
     const form = e.target;
     const submitBtn = form.querySelector('.btn-login-submit');
+    const successMsg = document.getElementById('loginSuccess');
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('remember').checked;
     
     // Validate fields
     const isUsernameValid = validateUsername();
@@ -51,27 +55,91 @@ function handleLoginSubmit(e) {
         submitBtn.classList.add('loading');
         submitBtn.disabled = true;
 
-        // Simulate login process
-        setTimeout(() => {
-            // Hide loading state
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
+        // Make real API call to backend
+        API.auth.login(username, password, remember)
+            .then(response => {
+                // Hide loading state
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
 
-            // Show success message
-            const successMsg = document.getElementById('loginSuccess');
-            successMsg.classList.add('show');
+                // Show success message
+                successMsg.textContent = response.message || 'Logowanie zakończone sukcesem!';
+                successMsg.classList.add('show');
 
-            // Clear form
-            form.reset();
-            clearLoginErrors();
+                // Clear form
+                form.reset();
+                clearLoginErrors();
 
-            // Simulate redirect
-            setTimeout(() => {
-                // In a real application, redirect to dashboard
-                console.log('Login successful! Redirecting...');
-                // window.location.href = 'dashboard.html';
-            }, 2000);
-        }, 1500);
+                console.log('Login successful:', response.data);
+
+                // Redirect to main page after short delay
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            })
+            .catch(error => {
+                // Hide loading state
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+
+                // Handle specific error cases
+                let errorMessage = 'Wystąpił błąd podczas logowania';
+                
+                if (error instanceof APIError) {
+                    errorMessage = error.message;
+                    
+                    // Handle specific status codes
+                    if (error.statusCode === 401) {
+                        // Invalid credentials
+                        showError(
+                            document.getElementById('password'),
+                            document.getElementById('passwordError'),
+                            errorMessage
+                        );
+                        
+                        // Show attempts left if available
+                        if (error.data && error.data.attemptsLeft !== undefined) {
+                            errorMessage += ` (Pozostało prób: ${error.data.attemptsLeft})`;
+                        }
+                    } else if (error.statusCode === 429) {
+                        // Account locked or rate limited
+                        showError(
+                            document.getElementById('username'),
+                            document.getElementById('usernameError'),
+                            errorMessage
+                        );
+                    } else if (error.statusCode === 0) {
+                        // Network error
+                        errorMessage = 'Nie można połączyć się z serwerem';
+                    }
+                }
+
+                // Show error in form
+                console.error('Login error:', error);
+                
+                // Create error display if not exists
+                let errorDisplay = form.querySelector('.form-error-message');
+                if (!errorDisplay) {
+                    errorDisplay = document.createElement('div');
+                    errorDisplay.className = 'form-error-message';
+                    errorDisplay.style.color = '#ff4444';
+                    errorDisplay.style.padding = '10px';
+                    errorDisplay.style.marginTop = '10px';
+                    errorDisplay.style.borderRadius = '4px';
+                    errorDisplay.style.backgroundColor = 'rgba(255, 68, 68, 0.1)';
+                    errorDisplay.style.textAlign = 'center';
+                    submitBtn.parentNode.insertBefore(errorDisplay, submitBtn.nextSibling);
+                }
+                errorDisplay.textContent = errorMessage;
+                errorDisplay.style.display = 'block';
+
+                // Hide error after 5 seconds
+                setTimeout(() => {
+                    if (errorDisplay) {
+                        errorDisplay.style.display = 'none';
+                    }
+                }, 5000);
+            });
     }
 }
 

@@ -144,6 +144,7 @@ exports.login = async (req, res) => {
         res.status(200).json({
             status: 'success',
             message: 'Zalogowano pomyślnie',
+            token: token, // JWT token for localStorage (optional)
             data: {
                 user: {
                     id: user.id,
@@ -376,6 +377,91 @@ exports.refreshToken = async (req, res) => {
         res.status(401).json({
             status: 'fail',
             message: 'Token jest nieprawidłowy lub wygasł'
+        });
+    }
+};
+
+// @desc    Verify current session
+// @route   GET /api/auth/verify
+// @access  Public
+exports.verifySession = async (req, res) => {
+    try {
+        let token;
+
+        // Get token from cookie
+        if (req.cookies.token) {
+            token = req.cookies.token;
+        }
+        // Also check Authorization header
+        else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+
+        // Check if token exists
+        if (!token || token === 'none') {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Brak sesji użytkownika',
+                authenticated: false
+            });
+        }
+
+        try {
+            // Verify token
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+            // Get user from database
+            const users = await db.query(
+                'SELECT id, username, email, role FROM users WHERE id = ?',
+                [decoded.id]
+            );
+
+            if (users.length === 0) {
+                return res.status(401).json({
+                    status: 'fail',
+                    message: 'Użytkownik nie istnieje',
+                    authenticated: false
+                });
+            }
+
+            const user = users[0];
+
+            res.status(200).json({
+                status: 'success',
+                message: 'Sesja aktywna',
+                authenticated: true,
+                data: {
+                    user: {
+                        id: user.id,
+                        username: user.username,
+                        email: user.email,
+                        role: user.role
+                    }
+                }
+            });
+
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                return res.status(401).json({
+                    status: 'fail',
+                    message: 'Sesja wygasła',
+                    authenticated: false
+                });
+            }
+
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Token nieprawidłowy',
+                authenticated: false
+            });
+        }
+
+    } catch (error) {
+        logger.error('Verify session error:', { error: error.message, stack: error.stack });
+        res.status(500).json({
+            status: 'error',
+            message: 'Wystąpił błąd podczas weryfikacji sesji',
+            authenticated: false
         });
     }
 };

@@ -6,12 +6,12 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const authController = require('../controllers/authController');
+const { protect } = require('../middleware/auth');
 const { apiLimiter, strictLimiter } = require('../middleware/rateLimiting');
 const { validateUpdateProfile, validateChangePassword } = require('../middleware/validation');
 
 // All routes require authentication
-router.use(authController.protect);
+router.use(protect);
 
 // Get user profile - moderate rate limiting
 router.get('/profile', apiLimiter, userController.getProfile);

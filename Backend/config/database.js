@@ -37,7 +37,11 @@ pool.getConnection()
     })
     .catch(err => {
         console.error('✗ Database connection failed:', err.message);
-        process.exit(1);
+        console.log('⚠ Server will start but database operations will fail');
+        // Don't exit in development to allow testing without DB
+        if (process.env.NODE_ENV === 'production') {
+            process.exit(1);
+        }
     });
 
 /**
