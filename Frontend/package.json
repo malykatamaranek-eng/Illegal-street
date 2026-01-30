@@ -1,0 +1,29 @@
+{
+  "name": "illegal-street-frontend",
+  "version": "1.0.0",
+  "description": "Frontend application for Illegal Street with TypeScript and SCSS",
+  "scripts": {
+    "build:scss": "sass src/styles/main.scss:styles.css --style=compressed",
+    "build:ts": "tsc",
+    "build": "npm run build:ts && npm run build:scss",
+    "watch:scss": "sass --watch src/styles/main.scss:styles.css",
+    "watch:ts": "tsc --watch",
+    "watch": "npm-run-all --parallel watch:scss watch:ts",
+    "dev": "npm run watch"
+  },
+  "keywords": [
+    "illegal-street",
+    "typescript",
+    "scss"
+  ],
+  "author": "Illegal Street Team",
+  "license": "ISC",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.69.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.1"
+  }
+}

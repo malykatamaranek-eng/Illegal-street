@@ -45,3 +45,12 @@ temp/
 # Build artifacts
 dist/
 build/
+
+# TypeScript compiled files
+Frontend/src/**/*.js
+Frontend/src/**/*.js.map
+!Frontend/src/**/*.d.ts
+
+# Compiled CSS (keep styles.css in root)
+Frontend/src/styles/**/*.css
+Frontend/src/styles/**/*.css.map

@@ -1,0 +1,511 @@
+// ===== User Settings Styles =====
+
+.settings {
+  max-width: 900px;
+  margin: 0 auto;
+
+  &-header {
+    margin-bottom: $spacing-xl;
+
+    h1 {
+      margin-bottom: $spacing-sm;
+    }
+
+    .settings-subtitle {
+      color: $text-gray;
+    }
+  }
+
+  &-tabs {
+    display: flex;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-xl;
+    border-bottom: 1px solid $border-color;
+    overflow-x: auto;
+    @include custom-scrollbar;
+
+    .tab {
+      padding: $spacing-sm $spacing-md;
+      background: transparent;
+      border: none;
+      color: $text-gray;
+      font-weight: $font-weight-medium;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all $transition-base;
+      white-space: nowrap;
+
+      &:hover,
+      &.active {
+        color: $primary-red;
+        border-bottom-color: $primary-red;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        margin-right: $spacing-xs;
+      }
+    }
+  }
+
+  &-section {
+    @include card;
+    margin-bottom: $spacing-lg;
+
+    &-header {
+      @include flex-between;
+      margin-bottom: $spacing-md;
+      padding-bottom: $spacing-md;
+      border-bottom: 1px solid $border-color;
+
+      h3 {
+        margin: 0;
+      }
+
+      .section-description {
+        color: $text-gray;
+        font-size: $font-size-sm;
+        margin-top: $spacing-xs;
+      }
+    }
+
+    &-content {
+      .form-group {
+        margin-bottom: $spacing-md;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        label {
+          display: block;
+          margin-bottom: $spacing-xs;
+          font-weight: $font-weight-medium;
+          color: $text-light;
+
+          .required {
+            color: $primary-red;
+          }
+        }
+
+        .input-field {
+          @include input-field;
+        }
+
+        .input-help {
+          font-size: $font-size-sm;
+          color: $text-gray;
+          margin-top: $spacing-xs;
+        }
+
+        .input-error {
+          font-size: $font-size-sm;
+          color: #ef4444;
+          margin-top: $spacing-xs;
+        }
+      }
+    }
+
+    &-footer {
+      margin-top: $spacing-md;
+      padding-top: $spacing-md;
+      border-top: 1px solid $border-color;
+      text-align: right;
+    }
+  }
+}
+
+// Avatar Upload
+.avatar-upload {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+
+  &-preview {
+    position: relative;
+
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: $radius-full;
+      border: 3px solid $primary-red;
+      object-fit: cover;
+    }
+
+    .upload-overlay {
+      position: absolute;
+      inset: 0;
+      @include flex-center;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: $radius-full;
+      opacity: 0;
+      transition: opacity $transition-base;
+      cursor: pointer;
+
+      svg {
+        width: 32px;
+        height: 32px;
+        color: $text-light;
+      }
+    }
+
+    &:hover .upload-overlay {
+      opacity: 1;
+    }
+  }
+
+  &-info {
+    flex: 1;
+
+    .upload-label {
+      font-weight: $font-weight-medium;
+      margin-bottom: $spacing-xs;
+    }
+
+    .upload-hint {
+      font-size: $font-size-sm;
+      color: $text-gray;
+      margin-bottom: $spacing-sm;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+  }
+}
+
+// Password Strength Indicator
+.password-strength {
+  margin-top: $spacing-sm;
+
+  &-bar {
+    height: 6px;
+    background: $bg-section;
+    border-radius: $radius-full;
+    overflow: hidden;
+    margin-bottom: $spacing-xs;
+
+    .strength-fill {
+      height: 100%;
+      border-radius: $radius-full;
+      transition: all $transition-base;
+      width: 0%;
+
+      &.weak {
+        width: 33%;
+        background: #ef4444;
+      }
+
+      &.medium {
+        width: 66%;
+        background: #fbbf24;
+      }
+
+      &.strong {
+        width: 100%;
+        background: #22c55e;
+      }
+    }
+  }
+
+  &-label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+
+    &.weak { color: #ef4444; }
+    &.medium { color: #fbbf24; }
+    &.strong { color: #22c55e; }
+  }
+}
+
+// 2FA Setup
+.twofa-setup {
+  text-align: center;
+
+  &-qr {
+    width: 200px;
+    height: 200px;
+    margin: $spacing-lg auto;
+    padding: $spacing-md;
+    background: $text-light;
+    border-radius: $radius-md;
+  }
+
+  &-code {
+    font-family: 'Courier New', monospace;
+    font-size: $font-size-lg;
+    padding: $spacing-sm $spacing-md;
+    background: $bg-section;
+    border-radius: $radius-md;
+    border: 1px solid $border-color;
+    margin: $spacing-md 0;
+  }
+
+  &-verify {
+    max-width: 300px;
+    margin: $spacing-lg auto 0;
+
+    input {
+      text-align: center;
+      font-size: $font-size-lg;
+      letter-spacing: 0.5em;
+      font-weight: $font-weight-bold;
+    }
+  }
+}
+
+// Active Sessions
+.active-sessions {
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    background: $bg-section;
+    border-radius: $radius-md;
+    border: 1px solid $border-color;
+
+    &.current {
+      border-color: $primary-red;
+      background: rgba($primary-red, 0.05);
+    }
+
+    .session-icon {
+      width: 50px;
+      height: 50px;
+      @include flex-center;
+      background: rgba($primary-red, 0.1);
+      border-radius: $radius-md;
+      flex-shrink: 0;
+
+      svg {
+        width: 24px;
+        height: 24px;
+        color: $primary-red;
+      }
+    }
+
+    .session-info {
+      flex: 1;
+
+      .session-device {
+        font-weight: $font-weight-medium;
+        margin-bottom: $spacing-xs / 2;
+      }
+
+      .session-location {
+        font-size: $font-size-sm;
+        color: $text-gray;
+        margin-bottom: $spacing-xs / 2;
+      }
+
+      .session-time {
+        font-size: $font-size-xs;
+        color: $text-dark;
+      }
+    }
+
+    .session-action {
+      .btn-revoke {
+        @include button-secondary;
+        padding: $spacing-xs $spacing-sm;
+        font-size: $font-size-sm;
+        color: #ef4444;
+        border-color: #ef4444;
+
+        &:hover {
+          background: rgba(239, 68, 68, 0.1);
+        }
+      }
+    }
+  }
+}
+
+// Theme Toggle
+.theme-toggle {
+  display: flex;
+  gap: $spacing-sm;
+
+  .theme-option {
+    flex: 1;
+    padding: $spacing-md;
+    background: $bg-section;
+    border: 2px solid $border-color;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-base;
+    text-align: center;
+
+    &:hover {
+      border-color: $primary-red;
+    }
+
+    &.active {
+      border-color: $primary-red;
+      background: rgba($primary-red, 0.1);
+    }
+
+    .theme-icon {
+      width: 40px;
+      height: 40px;
+      @include flex-center;
+      margin: 0 auto $spacing-sm;
+      background: rgba($primary-red, 0.1);
+      border-radius: $radius-md;
+
+      svg {
+        width: 24px;
+        height: 24px;
+        color: $primary-red;
+      }
+    }
+
+    .theme-name {
+      font-weight: $font-weight-medium;
+    }
+  }
+}
+
+// Notification Settings
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md;
+  background: $bg-section;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .notification-info {
+    .notification-title {
+      font-weight: $font-weight-medium;
+      margin-bottom: $spacing-xs / 2;
+    }
+
+    .notification-description {
+      font-size: $font-size-sm;
+      color: $text-gray;
+    }
+  }
+
+  .notification-toggle {
+    position: relative;
+    width: 50px;
+    height: 26px;
+    background: $border-color;
+    border-radius: $radius-full;
+    cursor: pointer;
+    transition: background $transition-base;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: $text-light;
+      border-radius: $radius-full;
+      transition: transform $transition-base;
+    }
+
+    &.active {
+      background: $primary-red;
+
+      &::after {
+        transform: translateX(24px);
+      }
+    }
+  }
+}
+
+// Danger Zone
+.danger-zone {
+  @include card;
+  border-color: #ef4444;
+  margin-top: $spacing-xl;
+
+  .danger-header {
+    @include flex-between;
+    margin-bottom: $spacing-md;
+
+    h3 {
+      margin: 0;
+      color: #ef4444;
+    }
+  }
+
+  .danger-item {
+    padding: $spacing-md;
+    background: rgba(239, 68, 68, 0.05);
+    border-radius: $radius-md;
+    margin-bottom: $spacing-sm;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .danger-content {
+      @include flex-between;
+      align-items: flex-start;
+      gap: $spacing-md;
+
+      .danger-info {
+        flex: 1;
+
+        .danger-title {
+          font-weight: $font-weight-medium;
+          margin-bottom: $spacing-xs;
+        }
+
+        .danger-description {
+          font-size: $font-size-sm;
+          color: $text-gray;
+        }
+      }
+
+      .btn-danger {
+        @include button-base;
+        background: #ef4444;
+        color: $text-light;
+
+        &:hover {
+          background: #dc2626;
+        }
+      }
+    }
+  }
+}
+
+@include mobile {
+  .settings-tabs {
+    .tab {
+      font-size: $font-size-sm;
+
+      svg {
+        display: none;
+      }
+    }
+  }
+
+  .avatar-upload {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .theme-toggle {
+    flex-direction: column;
+  }
+}

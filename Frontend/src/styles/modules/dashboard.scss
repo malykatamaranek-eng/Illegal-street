@@ -1,0 +1,305 @@
+// ===== Dashboard Module Styles =====
+
+.dashboard {
+  &-header {
+    margin-bottom: $spacing-xl;
+  }
+
+  &-title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-sm;
+  }
+
+  &-subtitle {
+    color: $text-gray;
+    font-size: $font-size-lg;
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
+  }
+}
+
+// Profile Card
+.profile-card {
+  @include card;
+  text-align: center;
+
+  &-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: $radius-full;
+    border: 3px solid $primary-red;
+    margin: 0 auto $spacing-md;
+    object-fit: cover;
+    box-shadow: $shadow-red;
+  }
+
+  &-username {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-xs;
+  }
+
+  &-level {
+    @include badge;
+    margin-bottom: $spacing-md;
+  }
+
+  &-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-md;
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid $border-color;
+  }
+
+  &-stat {
+    text-align: center;
+
+    .value {
+      display: block;
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-bold;
+      color: $primary-red;
+    }
+
+    .label {
+      display: block;
+      font-size: $font-size-sm;
+      color: $text-gray;
+      margin-top: $spacing-xs;
+    }
+  }
+}
+
+// Quick Links
+.quick-links {
+  @include card;
+
+  &-header {
+    margin-bottom: $spacing-md;
+    
+    h3 {
+      margin: 0;
+    }
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: $spacing-sm;
+  }
+
+  &-item {
+    @include flex-column;
+    align-items: center;
+    padding: $spacing-md;
+    background: $bg-section;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+      border-color: $primary-red;
+      background: rgba($primary-red, 0.05);
+      transform: translateY(-2px);
+    }
+
+    svg {
+      width: 32px;
+      height: 32px;
+      margin-bottom: $spacing-xs;
+      color: $primary-red;
+    }
+
+    span {
+      font-size: $font-size-sm;
+      text-align: center;
+    }
+  }
+}
+
+// Recent Activity
+.recent-activity {
+  @include card;
+
+  &-header {
+    @include flex-between;
+    margin-bottom: $spacing-md;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  &-list {
+    list-style: none;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-sm;
+    border-bottom: 1px solid $border-color;
+    transition: background $transition-base;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: rgba($primary-red, 0.05);
+    }
+  }
+
+  &-icon {
+    width: 40px;
+    height: 40px;
+    @include flex-center;
+    background: rgba($primary-red, 0.1);
+    border-radius: $radius-md;
+    flex-shrink: 0;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      color: $primary-red;
+    }
+  }
+
+  &-content {
+    flex: 1;
+  }
+
+  &-title {
+    font-weight: $font-weight-medium;
+    margin-bottom: $spacing-xs / 2;
+  }
+
+  &-time {
+    font-size: $font-size-sm;
+    color: $text-gray;
+  }
+}
+
+// Purchased Items
+.purchased-items {
+  @include card;
+
+  &-header {
+    @include flex-between;
+    margin-bottom: $spacing-md;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: $spacing-sm;
+  }
+
+  &-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: $radius-md;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform $transition-base;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &-name {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: $spacing-xs;
+      background: rgba(0, 0, 0, 0.8);
+      font-size: $font-size-xs;
+      text-align: center;
+    }
+  }
+}
+
+// Streak Calendar
+.streak-calendar {
+  @include card;
+
+  &-header {
+    margin-bottom: $spacing-md;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  &-current {
+    text-align: center;
+    margin-bottom: $spacing-md;
+
+    .streak-number {
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-bold;
+      color: $primary-red;
+      display: block;
+    }
+
+    .streak-label {
+      color: $text-gray;
+      font-size: $font-size-sm;
+    }
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: $spacing-xs;
+  }
+
+  &-day {
+    aspect-ratio: 1;
+    @include flex-center;
+    background: $bg-section;
+    border-radius: $radius-sm;
+    font-size: $font-size-xs;
+    transition: all $transition-base;
+
+    &.active {
+      background: $primary-red;
+      box-shadow: $shadow-red;
+    }
+
+    &.today {
+      border: 2px solid $primary-red;
+    }
+  }
+}
+
+@include mobile {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-links-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}

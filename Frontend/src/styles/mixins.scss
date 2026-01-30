@@ -1,0 +1,255 @@
+// ===== SCSS Mixins =====
+
+// Flexbox utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Responsive breakpoints
+@mixin mobile {
+  @media (max-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: $breakpoint-tablet) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
+@mixin wide {
+  @media (min-width: $breakpoint-wide) {
+    @content;
+  }
+}
+
+// Card component
+@mixin card {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  transition: all $transition-base;
+
+  &:hover {
+    border-color: $primary-red;
+    box-shadow: $shadow-red;
+    transform: translateY(-2px);
+  }
+}
+
+// Button base
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-md;
+  border: none;
+  border-radius: $radius-md;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: all $transition-base;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Primary button
+@mixin button-primary {
+  @include button-base;
+  background: $gradient-red;
+  color: $text-light;
+
+  &:hover:not(:disabled) {
+    background: $dark-red;
+    box-shadow: $shadow-red-glow;
+    transform: translateY(-2px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+// Secondary button
+@mixin button-secondary {
+  @include button-base;
+  background: transparent;
+  border: 1px solid $primary-red;
+  color: $primary-red;
+
+  &:hover:not(:disabled) {
+    background: rgba($primary-red, 0.1);
+    box-shadow: $shadow-red;
+  }
+}
+
+// Input field
+@mixin input-field {
+  width: 100%;
+  padding: $spacing-sm;
+  background: $bg-section;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  color: $text-light;
+  font-family: $font-family;
+  transition: all $transition-base;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-red;
+    box-shadow: 0 0 0 3px rgba($primary-red, 0.1);
+  }
+
+  &::placeholder {
+    color: $text-gray;
+  }
+}
+
+// Scrollbar styling
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $bg-darker;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $border-color;
+    border-radius: $radius-full;
+
+    &:hover {
+      background: $primary-red;
+    }
+  }
+}
+
+// Text truncate
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Animation utilities
+@mixin fade-in {
+  animation: fadeIn $transition-base;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@mixin slide-up {
+  animation: slideUp $transition-base;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Glassmorphism effect
+@mixin glass-effect {
+  background: rgba($bg-section, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// Red glow effect
+@mixin red-glow {
+  box-shadow: 0 0 20px rgba($primary-red, 0.5),
+              0 0 40px rgba($primary-red, 0.3);
+}
+
+// Loading skeleton
+@mixin skeleton {
+  background: linear-gradient(
+    90deg,
+    $bg-section 0%,
+    $bg-card 50%,
+    $bg-section 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Badge
+@mixin badge {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  background: rgba($primary-red, 0.2);
+  color: $primary-red;
+}
+
+// Modal overlay
+@mixin modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: $z-modal;
+  @include flex-center;
+}
+
+// Container
+@mixin container {
+  max-width: $breakpoint-wide;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @include wide {
+    padding: 0 $spacing-xl;
+  }
+}
