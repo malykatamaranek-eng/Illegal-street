@@ -1,0 +1,658 @@
+// ===== Admin Panel Styles =====
+
+.admin {
+  &-header {
+    @include flex-between;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-md;
+    border-bottom: 2px solid $primary-red;
+
+    .admin-title {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      h1 {
+        margin: 0;
+      }
+
+      .admin-badge {
+        @include badge;
+        background: $gradient-red;
+        color: $text-light;
+      }
+    }
+
+    .admin-user {
+      text-align: right;
+
+      .username {
+        font-weight: $font-weight-medium;
+        margin-bottom: $spacing-xs / 2;
+      }
+
+      .role {
+        font-size: $font-size-sm;
+        color: $text-gray;
+      }
+    }
+  }
+
+  &-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
+  }
+
+  &-stat-card {
+    @include card;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: $gradient-red;
+      opacity: 0.1;
+      border-radius: 0 0 0 100%;
+    }
+
+    .stat-header {
+      @include flex-between;
+      margin-bottom: $spacing-md;
+
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        @include flex-center;
+        background: rgba($primary-red, 0.1);
+        border-radius: $radius-md;
+
+        svg {
+          width: 24px;
+          height: 24px;
+          color: $primary-red;
+        }
+      }
+
+      .stat-trend {
+        @include badge;
+        font-size: $font-size-xs;
+
+        &.positive {
+          background: rgba(34, 197, 94, 0.2);
+          color: #22c55e;
+        }
+
+        &.negative {
+          background: rgba(239, 68, 68, 0.2);
+          color: #ef4444;
+        }
+      }
+    }
+
+    .stat-value {
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-bold;
+      color: $primary-red;
+      margin-bottom: $spacing-xs;
+    }
+
+    .stat-label {
+      color: $text-gray;
+      font-size: $font-size-sm;
+    }
+
+    .stat-footer {
+      margin-top: $spacing-md;
+      padding-top: $spacing-md;
+      border-top: 1px solid $border-color;
+      font-size: $font-size-sm;
+      color: $text-gray;
+    }
+  }
+
+  &-section {
+    @include card;
+    margin-bottom: $spacing-xl;
+
+    &-header {
+      @include flex-between;
+      margin-bottom: $spacing-lg;
+      padding-bottom: $spacing-md;
+      border-bottom: 1px solid $border-color;
+
+      h2 {
+        margin: 0;
+      }
+
+      .section-actions {
+        display: flex;
+        gap: $spacing-sm;
+      }
+    }
+
+    &-content {
+      // Content styles handled by specific sections
+    }
+  }
+}
+
+// Admin Table
+.admin-table {
+  overflow-x: auto;
+  @include custom-scrollbar;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      background: $bg-darker;
+
+      th {
+        padding: $spacing-md;
+        text-align: left;
+        font-weight: $font-weight-medium;
+        border-bottom: 1px solid $border-color;
+        white-space: nowrap;
+
+        &.sortable {
+          cursor: pointer;
+          user-select: none;
+
+          &:hover {
+            color: $primary-red;
+          }
+
+          svg {
+            width: 14px;
+            height: 14px;
+            margin-left: $spacing-xs;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid $border-color;
+        transition: background $transition-base;
+
+        &:hover {
+          background: rgba($primary-red, 0.05);
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &.banned {
+          opacity: 0.5;
+          background: rgba(239, 68, 68, 0.05);
+        }
+      }
+
+      td {
+        padding: $spacing-md;
+
+        &.actions {
+          white-space: nowrap;
+
+          .action-buttons {
+            display: flex;
+            gap: $spacing-xs;
+            flex-wrap: wrap;
+
+            button {
+              @include button-secondary;
+              padding: $spacing-xs / 2 $spacing-sm;
+              font-size: $font-size-sm;
+
+              &.danger {
+                color: #ef4444;
+                border-color: #ef4444;
+
+                &:hover {
+                  background: rgba(239, 68, 68, 0.1);
+                }
+              }
+
+              &.success {
+                color: #22c55e;
+                border-color: #22c55e;
+
+                &:hover {
+                  background: rgba(34, 197, 94, 0.1);
+                }
+              }
+            }
+          }
+        }
+
+        .user-info {
+          display: flex;
+          align-items: center;
+          gap: $spacing-sm;
+
+          .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: $radius-full;
+            border: 2px solid $border-color;
+            object-fit: cover;
+          }
+
+          .user-details {
+            .user-name {
+              font-weight: $font-weight-medium;
+            }
+
+            .user-email {
+              font-size: $font-size-sm;
+              color: $text-gray;
+            }
+          }
+        }
+
+        .status-badge {
+          @include badge;
+          font-size: $font-size-xs;
+
+          &.active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+          }
+
+          &.inactive {
+            background: rgba(107, 114, 128, 0.2);
+            color: #6b7280;
+          }
+
+          &.banned {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+          }
+        }
+
+        .role-badge {
+          @include badge;
+          font-size: $font-size-xs;
+
+          &.admin {
+            background: $gradient-red;
+            color: $text-light;
+          }
+
+          &.moderator {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+          }
+        }
+      }
+    }
+  }
+
+  .table-pagination {
+    @include flex-between;
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid $border-color;
+
+    .pagination-info {
+      font-size: $font-size-sm;
+      color: $text-gray;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: $spacing-xs;
+
+      button {
+        @include button-secondary;
+        padding: $spacing-xs $spacing-sm;
+        font-size: $font-size-sm;
+
+        &.active {
+          @include button-primary;
+        }
+
+        &:disabled {
+          opacity: 0.3;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+
+// Admin Forms
+.admin-form {
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+  }
+
+  .form-group {
+    margin-bottom: $spacing-md;
+
+    label {
+      display: block;
+      margin-bottom: $spacing-xs;
+      font-weight: $font-weight-medium;
+
+      .required {
+        color: $primary-red;
+      }
+    }
+
+    input,
+    textarea,
+    select {
+      @include input-field;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    .input-help {
+      font-size: $font-size-sm;
+      color: $text-gray;
+      margin-top: $spacing-xs;
+    }
+
+    .input-error {
+      font-size: $font-size-sm;
+      color: #ef4444;
+      margin-top: $spacing-xs;
+    }
+  }
+
+  .form-actions {
+    @include flex-between;
+    margin-top: $spacing-lg;
+    padding-top: $spacing-lg;
+    border-top: 1px solid $border-color;
+
+    .btn-cancel {
+      @include button-secondary;
+    }
+
+    .btn-submit {
+      @include button-primary;
+    }
+  }
+}
+
+// Admin Charts
+.admin-chart-container {
+  position: relative;
+  height: 400px;
+  margin-bottom: $spacing-lg;
+
+  canvas {
+    max-width: 100%;
+  }
+}
+
+// Activity Logs
+.activity-logs {
+  .log-item {
+    display: flex;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    background: $bg-section;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-sm;
+    transition: background $transition-base;
+
+    &:hover {
+      background: rgba($primary-red, 0.05);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .log-icon {
+      width: 40px;
+      height: 40px;
+      @include flex-center;
+      background: rgba($primary-red, 0.1);
+      border-radius: $radius-md;
+      flex-shrink: 0;
+
+      svg {
+        width: 20px;
+        height: 20px;
+        color: $primary-red;
+      }
+
+      &.warning {
+        background: rgba(251, 191, 36, 0.1);
+
+        svg {
+          color: #fbbf24;
+        }
+      }
+
+      &.danger {
+        background: rgba(239, 68, 68, 0.1);
+
+        svg {
+          color: #ef4444;
+        }
+      }
+    }
+
+    .log-content {
+      flex: 1;
+
+      .log-action {
+        font-weight: $font-weight-medium;
+        margin-bottom: $spacing-xs / 2;
+      }
+
+      .log-details {
+        font-size: $font-size-sm;
+        color: $text-gray;
+        margin-bottom: $spacing-xs / 2;
+      }
+
+      .log-time {
+        font-size: $font-size-xs;
+        color: $text-dark;
+      }
+    }
+
+    .log-user {
+      text-align: right;
+      font-size: $font-size-sm;
+
+      .user-name {
+        font-weight: $font-weight-medium;
+        margin-bottom: $spacing-xs / 2;
+      }
+
+      .user-ip {
+        color: $text-gray;
+        font-size: $font-size-xs;
+      }
+    }
+  }
+
+  .log-filters {
+    display: flex;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-lg;
+    flex-wrap: wrap;
+
+    select {
+      @include input-field;
+      cursor: pointer;
+      max-width: 200px;
+    }
+
+    input[type="date"] {
+      @include input-field;
+      max-width: 200px;
+    }
+  }
+}
+
+// Quick Actions
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+
+  .action-card {
+    @include card;
+    text-align: center;
+    cursor: pointer;
+
+    .action-icon {
+      width: 60px;
+      height: 60px;
+      @include flex-center;
+      background: $gradient-red;
+      border-radius: $radius-full;
+      margin: 0 auto $spacing-md;
+
+      svg {
+        width: 32px;
+        height: 32px;
+        color: $text-light;
+      }
+    }
+
+    .action-title {
+      font-weight: $font-weight-bold;
+      margin-bottom: $spacing-xs;
+    }
+
+    .action-description {
+      font-size: $font-size-sm;
+      color: $text-gray;
+    }
+  }
+}
+
+// Filters & Search
+.admin-filters {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  flex-wrap: wrap;
+
+  .search-box {
+    flex: 1;
+    min-width: 250px;
+
+    input {
+      @include input-field;
+    }
+  }
+
+  select {
+    @include input-field;
+    cursor: pointer;
+    min-width: 150px;
+  }
+
+  .btn-filter {
+    @include button-secondary;
+  }
+}
+
+@include tablet {
+  .admin-dashboard {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .admin-table {
+    font-size: $font-size-sm;
+
+    table {
+      td, th {
+        padding: $spacing-sm;
+      }
+    }
+  }
+}
+
+@include mobile {
+  .admin-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-table {
+    table {
+      thead {
+        display: none;
+      }
+
+      tbody {
+        tr {
+          display: block;
+          margin-bottom: $spacing-md;
+          border: 1px solid $border-color;
+          border-radius: $radius-md;
+        }
+
+        td {
+          display: block;
+          text-align: right;
+          padding: $spacing-xs $spacing-sm;
+
+          &::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: $font-weight-medium;
+            color: $text-gray;
+          }
+
+          &.actions {
+            text-align: center;
+            
+            .action-buttons {
+              justify-content: center;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .admin-form .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .admin-filters {
+    flex-direction: column;
+
+    .search-box,
+    select {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,444 @@
+// ===== E2E Encrypted Chat Styles =====
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 150px);
+  @include card;
+  padding: 0;
+  overflow: hidden;
+
+  &-header {
+    padding: $spacing-md;
+    background: $bg-darker;
+    border-bottom: 1px solid $border-color;
+    @include flex-between;
+
+    .chat-title {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      margin: 0;
+
+      .chat-status {
+        width: 10px;
+        height: 10px;
+        background: #22c55e;
+        border-radius: $radius-full;
+        animation: pulse 2s infinite;
+      }
+    }
+
+    .chat-info {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+      font-size: $font-size-sm;
+      color: $text-gray;
+
+      .online-count {
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      .encryption-badge {
+        @include badge;
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+
+        svg {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+  }
+
+  &-messages {
+    flex: 1;
+    padding: $spacing-md;
+    overflow-y: auto;
+    @include custom-scrollbar;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &-message {
+    display: flex;
+    gap: $spacing-sm;
+    animation: slideInMessage 0.3s ease;
+
+    &.own-message {
+      flex-direction: row-reverse;
+
+      .message-content {
+        background: $gradient-red;
+        border-radius: $radius-lg $radius-lg $radius-sm $radius-lg;
+      }
+    }
+
+    .message-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: $radius-full;
+      border: 2px solid $border-color;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .message-body {
+      flex: 1;
+      max-width: 70%;
+    }
+
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      margin-bottom: $spacing-xs / 2;
+      font-size: $font-size-sm;
+
+      .message-author {
+        font-weight: $font-weight-medium;
+        color: $text-light;
+
+        &.admin {
+          color: $primary-red;
+        }
+      }
+
+      .message-time {
+        color: $text-gray;
+        font-size: $font-size-xs;
+      }
+
+      .admin-badge {
+        @include badge;
+        font-size: $font-size-xs;
+        padding: 2px 6px;
+      }
+    }
+
+    .message-content {
+      padding: $spacing-sm $spacing-md;
+      background: $bg-section;
+      border-radius: $radius-lg $radius-lg $radius-lg $radius-sm;
+      word-wrap: break-word;
+
+      .message-text {
+        margin-bottom: 0;
+      }
+
+      .message-image {
+        max-width: 100%;
+        border-radius: $radius-md;
+        margin-top: $spacing-xs;
+        cursor: pointer;
+        transition: transform $transition-base;
+
+        &:hover {
+          transform: scale(1.02);
+        }
+      }
+
+      .message-emoji {
+        font-size: $font-size-2xl;
+      }
+    }
+
+    .message-actions {
+      display: flex;
+      gap: $spacing-xs;
+      margin-top: $spacing-xs;
+      opacity: 0;
+      transition: opacity $transition-base;
+
+      button {
+        padding: $spacing-xs / 2;
+        background: transparent;
+        border: none;
+        color: $text-gray;
+        cursor: pointer;
+        transition: color $transition-base;
+
+        &:hover {
+          color: $text-light;
+        }
+
+        svg {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+
+    &:hover .message-actions {
+      opacity: 1;
+    }
+  }
+
+  &-typing {
+    padding: $spacing-sm $spacing-md;
+    color: $text-gray;
+    font-size: $font-size-sm;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+
+    .typing-dots {
+      display: flex;
+      gap: 3px;
+
+      span {
+        width: 6px;
+        height: 6px;
+        background: $text-gray;
+        border-radius: $radius-full;
+        animation: typingDot 1.4s infinite;
+
+        &:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+
+        &:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+      }
+    }
+  }
+
+  &-input-container {
+    padding: $spacing-md;
+    background: $bg-darker;
+    border-top: 1px solid $border-color;
+  }
+
+  &-input {
+    display: flex;
+    gap: $spacing-sm;
+    align-items: flex-end;
+
+    .input-wrapper {
+      flex: 1;
+      position: relative;
+
+      textarea {
+        @include input-field;
+        min-height: 44px;
+        max-height: 120px;
+        resize: none;
+        padding-right: 100px;
+
+        &:focus {
+          border-color: $primary-red;
+        }
+      }
+
+      .input-actions {
+        position: absolute;
+        right: $spacing-sm;
+        bottom: $spacing-sm;
+        display: flex;
+        gap: $spacing-xs;
+
+        button {
+          width: 32px;
+          height: 32px;
+          @include flex-center;
+          background: transparent;
+          border: none;
+          color: $text-gray;
+          cursor: pointer;
+          border-radius: $radius-sm;
+          transition: all $transition-base;
+
+          &:hover {
+            background: rgba($primary-red, 0.1);
+            color: $primary-red;
+          }
+
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+
+    .btn-send {
+      @include button-primary;
+      padding: $spacing-sm $spacing-md;
+      height: 44px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+// Emoji Picker
+.emoji-picker {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: $spacing-sm;
+  background: $bg-section;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: $spacing-sm;
+  box-shadow: $shadow-lg;
+  z-index: $z-dropdown;
+  max-width: 300px;
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: $spacing-xs;
+    max-height: 200px;
+    overflow-y: auto;
+    @include custom-scrollbar;
+  }
+
+  &-item {
+    width: 32px;
+    height: 32px;
+    @include flex-center;
+    font-size: $font-size-xl;
+    cursor: pointer;
+    border-radius: $radius-sm;
+    transition: all $transition-base;
+
+    &:hover {
+      background: rgba($primary-red, 0.1);
+      transform: scale(1.2);
+    }
+  }
+}
+
+// Image Preview Modal
+.image-preview-modal {
+  .modal-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: 0;
+    background: transparent;
+    border: none;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: $radius-lg;
+    }
+
+    .preview-close {
+      position: absolute;
+      top: $spacing-md;
+      right: $spacing-md;
+      width: 40px;
+      height: 40px;
+      @include flex-center;
+      background: rgba(0, 0, 0, 0.8);
+      border: none;
+      border-radius: $radius-full;
+      color: $text-light;
+      cursor: pointer;
+      font-size: $font-size-xl;
+      transition: all $transition-base;
+
+      &:hover {
+        background: $primary-red;
+        transform: rotate(90deg);
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes slideInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typingDot {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+}
+
+@include mobile {
+  .chat {
+    height: calc(100vh - 120px);
+
+    &-header {
+      .chat-info {
+        display: none;
+      }
+    }
+
+    &-message {
+      .message-body {
+        max-width: 85%;
+      }
+
+      .message-avatar {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &-input {
+      .input-wrapper textarea {
+        padding-right: 70px;
+      }
+
+      .input-actions {
+        button {
+          width: 28px;
+          height: 28px;
+
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  .emoji-picker {
+    max-width: 250px;
+
+    &-grid {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+}

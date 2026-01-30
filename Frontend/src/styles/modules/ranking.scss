@@ -1,0 +1,438 @@
+// ===== Ranking & Achievements Styles =====
+
+.ranking {
+  &-header {
+    @include flex-between;
+    margin-bottom: $spacing-xl;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+
+    h1 {
+      margin: 0;
+    }
+  }
+
+  &-filters {
+    display: flex;
+    gap: $spacing-sm;
+
+    .filter-btn {
+      @include button-secondary;
+      padding: $spacing-xs $spacing-md;
+      font-size: $font-size-sm;
+
+      &.active {
+        @include button-primary;
+      }
+    }
+  }
+
+  &-my-position {
+    @include card;
+    margin-bottom: $spacing-xl;
+    background: $gradient-red;
+    border: none;
+    text-align: center;
+
+    .position-rank {
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-black;
+      margin-bottom: $spacing-sm;
+    }
+
+    .position-label {
+      font-size: $font-size-lg;
+      margin-bottom: $spacing-md;
+    }
+
+    .position-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: $spacing-md;
+      margin-top: $spacing-md;
+      padding-top: $spacing-md;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+      .stat {
+        .value {
+          display: block;
+          font-size: $font-size-2xl;
+          font-weight: $font-weight-bold;
+        }
+
+        .label {
+          display: block;
+          font-size: $font-size-sm;
+          margin-top: $spacing-xs;
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  &-leaderboard {
+    @include card;
+
+    h3 {
+      margin-bottom: $spacing-lg;
+    }
+  }
+
+  &-list {
+    list-style: none;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    background: $bg-section;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-sm;
+    transition: all $transition-base;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      background: rgba($primary-red, 0.05);
+      transform: translateX(5px);
+    }
+
+    &.top-3 {
+      background: linear-gradient(
+        135deg,
+        rgba($primary-red, 0.2) 0%,
+        rgba($primary-red, 0.05) 100%
+      );
+      border: 1px solid $primary-red;
+    }
+
+    &.current-user {
+      border: 2px solid $primary-red;
+      box-shadow: $shadow-red;
+    }
+
+    .rank {
+      width: 50px;
+      height: 50px;
+      @include flex-center;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      background: $bg-dark;
+      border-radius: $radius-md;
+      flex-shrink: 0;
+
+      &.rank-1 {
+        background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+        color: $bg-dark;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+      }
+
+      &.rank-2 {
+        background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+        color: $bg-dark;
+      }
+
+      &.rank-3 {
+        background: linear-gradient(135deg, #cd7f32 0%, #e09856 100%);
+        color: $bg-dark;
+      }
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: $radius-full;
+      border: 2px solid $border-color;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .info {
+      flex: 1;
+
+      .username {
+        font-weight: $font-weight-bold;
+        font-size: $font-size-lg;
+        margin-bottom: $spacing-xs / 2;
+      }
+
+      .level {
+        @include badge;
+        font-size: $font-size-xs;
+      }
+    }
+
+    .score {
+      text-align: right;
+
+      .points {
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-bold;
+        color: $primary-red;
+      }
+
+      .label {
+        font-size: $font-size-sm;
+        color: $text-gray;
+      }
+    }
+  }
+}
+
+// Achievements
+.achievements {
+  &-section {
+    margin-top: $spacing-xl;
+  }
+
+  &-header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+
+    h2 {
+      margin: 0;
+    }
+
+    .achievements-progress {
+      font-size: $font-size-sm;
+      color: $text-gray;
+    }
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: $spacing-md;
+  }
+
+  &-card {
+    @include card;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    &.unlocked {
+      border-color: $primary-red;
+
+      .achievement-icon {
+        background: $gradient-red;
+        box-shadow: $shadow-red-glow;
+      }
+    }
+
+    &.locked {
+      opacity: 0.5;
+
+      .achievement-icon {
+        background: $bg-section;
+        filter: grayscale(100%);
+      }
+    }
+
+    .achievement-icon {
+      width: 80px;
+      height: 80px;
+      @include flex-center;
+      background: $bg-section;
+      border-radius: $radius-full;
+      margin: 0 auto $spacing-md;
+      transition: all $transition-base;
+
+      svg {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    .achievement-title {
+      font-weight: $font-weight-bold;
+      margin-bottom: $spacing-xs;
+    }
+
+    .achievement-description {
+      font-size: $font-size-sm;
+      color: $text-gray;
+      margin-bottom: $spacing-sm;
+    }
+
+    .achievement-date {
+      font-size: $font-size-xs;
+      color: $text-gray;
+    }
+
+    .achievement-progress {
+      margin-top: $spacing-md;
+      padding-top: $spacing-md;
+      border-top: 1px solid $border-color;
+
+      .progress-bar {
+        height: 6px;
+        background: $bg-section;
+        border-radius: $radius-full;
+        overflow: hidden;
+        margin-top: $spacing-xs;
+
+        .progress-fill {
+          height: 100%;
+          background: $gradient-red;
+          border-radius: $radius-full;
+          transition: width $transition-slow;
+        }
+      }
+
+      .progress-text {
+        font-size: $font-size-xs;
+        color: $text-gray;
+        margin-top: $spacing-xs;
+      }
+    }
+
+    &.unlocked::before {
+      content: '✓';
+      position: absolute;
+      top: $spacing-sm;
+      right: $spacing-sm;
+      width: 30px;
+      height: 30px;
+      @include flex-center;
+      background: $primary-red;
+      border-radius: $radius-full;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+// Level System
+.level-system {
+  @include card;
+  margin-bottom: $spacing-xl;
+
+  &-header {
+    text-align: center;
+    margin-bottom: $spacing-lg;
+
+    .current-level {
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-black;
+      color: $primary-red;
+      margin-bottom: $spacing-xs;
+
+      .level-number {
+        display: inline-block;
+        padding: $spacing-sm $spacing-md;
+        background: $gradient-red;
+        border-radius: $radius-lg;
+        box-shadow: $shadow-red-glow;
+      }
+    }
+
+    .level-title {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-medium;
+      margin-bottom: $spacing-sm;
+    }
+  }
+
+  &-progress {
+    max-width: 600px;
+    margin: 0 auto;
+
+    .progress-bar {
+      height: 20px;
+      background: $bg-section;
+      border-radius: $radius-full;
+      overflow: hidden;
+      margin-bottom: $spacing-sm;
+      border: 2px solid $border-color;
+
+      .progress-fill {
+        height: 100%;
+        background: $gradient-red;
+        border-radius: $radius-full;
+        transition: width $transition-slow;
+        @include flex-center;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    .progress-info {
+      @include flex-between;
+      font-size: $font-size-sm;
+      color: $text-gray;
+
+      .next-level {
+        color: $primary-red;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+
+  &-rewards {
+    margin-top: $spacing-lg;
+    padding-top: $spacing-lg;
+    border-top: 1px solid $border-color;
+
+    h4 {
+      margin-bottom: $spacing-md;
+      text-align: center;
+    }
+
+    .rewards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: $spacing-md;
+
+      .reward-item {
+        text-align: center;
+        padding: $spacing-md;
+        background: $bg-section;
+        border-radius: $radius-md;
+
+        svg {
+          width: 32px;
+          height: 32px;
+          margin-bottom: $spacing-xs;
+          color: $primary-red;
+        }
+
+        .reward-name {
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+        }
+      }
+    }
+  }
+}
+
+@include mobile {
+  .ranking-my-position .position-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .ranking-item {
+    .rank {
+      width: 40px;
+      height: 40px;
+      font-size: $font-size-lg;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+    }
+
+    .score .points {
+      font-size: $font-size-xl;
+    }
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}

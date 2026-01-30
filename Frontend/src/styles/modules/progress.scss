@@ -1,0 +1,312 @@
+// ===== Progress System Styles =====
+
+.progress {
+  &-header {
+    margin-bottom: $spacing-xl;
+    text-align: center;
+
+    h1 {
+      margin-bottom: $spacing-sm;
+    }
+
+    .progress-summary {
+      font-size: $font-size-lg;
+      color: $text-gray;
+    }
+  }
+
+  &-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
+  }
+
+  &-stat-card {
+    @include card;
+    text-align: center;
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      @include flex-center;
+      background: $gradient-red;
+      border-radius: $radius-full;
+      margin: 0 auto $spacing-md;
+
+      svg {
+        width: 32px;
+        height: 32px;
+        color: $text-light;
+      }
+    }
+
+    .stat-value {
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-bold;
+      color: $primary-red;
+      margin-bottom: $spacing-xs;
+    }
+
+    .stat-label {
+      color: $text-gray;
+      font-size: $font-size-sm;
+    }
+
+    .stat-change {
+      font-size: $font-size-sm;
+      margin-top: $spacing-xs;
+
+      &.positive {
+        color: #22c55e;
+      }
+
+      &.negative {
+        color: #ef4444;
+      }
+    }
+  }
+
+  &-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
+  }
+
+  &-chart-card {
+    @include card;
+
+    h3 {
+      margin-bottom: $spacing-md;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+      @include flex-center;
+
+      canvas {
+        max-width: 100%;
+      }
+    }
+  }
+
+  &-modules {
+    @include card;
+    margin-bottom: $spacing-xl;
+
+    h3 {
+      margin-bottom: $spacing-lg;
+    }
+  }
+
+  &-module-item {
+    padding: $spacing-md;
+    background: $bg-section;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-md;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .module-header {
+      @include flex-between;
+      margin-bottom: $spacing-sm;
+
+      .module-name {
+        font-weight: $font-weight-medium;
+        font-size: $font-size-lg;
+      }
+
+      .module-completion {
+        @include badge;
+        font-size: $font-size-sm;
+      }
+    }
+
+    .module-progress-bar {
+      height: 12px;
+      background: $bg-dark;
+      border-radius: $radius-full;
+      overflow: hidden;
+      margin-bottom: $spacing-sm;
+
+      .progress-fill {
+        height: 100%;
+        background: $gradient-red;
+        border-radius: $radius-full;
+        transition: width $transition-slow;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+          );
+          animation: shimmer 2s infinite;
+        }
+      }
+    }
+
+    .module-meta {
+      display: flex;
+      gap: $spacing-lg;
+      font-size: $font-size-sm;
+      color: $text-gray;
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Heatmap Calendar
+.heatmap-calendar {
+  @include card;
+
+  h3 {
+    margin-bottom: $spacing-md;
+  }
+
+  &-legend {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+    font-size: $font-size-sm;
+    color: $text-gray;
+
+    .legend-scale {
+      display: flex;
+      gap: $spacing-xs / 2;
+
+      .scale-item {
+        width: 15px;
+        height: 15px;
+        border-radius: $radius-sm;
+        background: $bg-section;
+
+        &.level-1 { background: rgba($primary-red, 0.2); }
+        &.level-2 { background: rgba($primary-red, 0.4); }
+        &.level-3 { background: rgba($primary-red, 0.6); }
+        &.level-4 { background: rgba($primary-red, 0.8); }
+        &.level-5 { background: $primary-red; }
+      }
+    }
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(53, 1fr);
+    gap: 3px;
+    overflow-x: auto;
+    @include custom-scrollbar;
+  }
+
+  &-cell {
+    aspect-ratio: 1;
+    background: $bg-section;
+    border-radius: $radius-sm;
+    transition: all $transition-fast;
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+      transform: scale(1.2);
+      z-index: 1;
+      box-shadow: $shadow-red;
+    }
+
+    &.has-activity {
+      background: $primary-red;
+
+      &.level-1 { background: rgba($primary-red, 0.2); }
+      &.level-2 { background: rgba($primary-red, 0.4); }
+      &.level-3 { background: rgba($primary-red, 0.6); }
+      &.level-4 { background: rgba($primary-red, 0.8); }
+      &.level-5 { background: $primary-red; }
+    }
+  }
+}
+
+// Time Tracking
+.time-tracking {
+  @include card;
+
+  h3 {
+    margin-bottom: $spacing-md;
+  }
+
+  &-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+  }
+
+  &-period {
+    text-align: center;
+    padding: $spacing-md;
+    background: $bg-section;
+    border-radius: $radius-md;
+
+    .period-value {
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-bold;
+      color: $primary-red;
+    }
+
+    .period-label {
+      font-size: $font-size-sm;
+      color: $text-gray;
+      margin-top: $spacing-xs;
+    }
+  }
+}
+
+@include tablet {
+  .progress-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .heatmap-calendar-grid {
+    grid-template-columns: repeat(26, 1fr);
+  }
+}
+
+@include mobile {
+  .progress-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .time-tracking-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

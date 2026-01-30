@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Illegal Street</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Fixed Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <svg class="logo" width="40" height="40" viewBox="0 0 40 40">
+                    <path d="M20 5 L35 15 L35 25 L20 35 L5 25 L5 15 Z" fill="none" stroke="#ff0000" stroke-width="2"/>
+                    <circle cx="20" cy="20" r="8" fill="#ff0000"/>
+                </svg>
+                <span>Illegal Street</span>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+                <li><a href="kursy.html" class="nav-link">Kursy</a></li>
+                <li><a href="postepy.html" class="nav-link">Postępy</a></li>
+                <li><a href="ranking.html" class="nav-link">Ranking</a></li>
+                <li><a href="ustawienia.html" class="nav-link">Ustawienia</a></li>
+                <li><a href="chat.html" class="nav-link">Chat</a></li>
+                <li><a href="sklep.html" class="nav-link">Sklep</a></li>
+                <li class="nav-user">
+                    <div class="nav-user-info">
+                        <img src="assets/default-avatar.png" alt="User Avatar" class="nav-user-avatar" id="navAvatar">
+                        <span class="nav-user-name" id="navUsername">Loading...</span>
+                    </div>
+                </li>
+                <li><button class="btn btn-secondary btn-small" id="logoutBtn">Wyloguj</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="dashboard.html" class="active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="kursy.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                        <span>Kursy</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="postepy.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        <span>Postępy</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="ranking.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 16v6m-8-6v6m4-10v10M4 8l8-6 8 6v13H4V8z"></path>
+                        </svg>
+                        <span>Ranking</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="ustawienia.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 1v6m0 6v6m-9-9h6m6 0h6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"></path>
+                        </svg>
+                        <span>Ustawienia</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="chat.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span>Chat</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="sklep.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span>Sklep</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Loading Skeleton -->
+            <div id="loadingSkeleton" class="hidden">
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="skeleton skeleton-avatar" style="margin: 0 auto 1rem;"></div>
+                        <div class="skeleton skeleton-text" style="margin: 0 auto;"></div>
+                    </div>
+                    <div class="card">
+                        <div class="skeleton" style="height: 200px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div id="dashboardContent">
+                <!-- Welcome Header -->
+                <header class="dashboard-header">
+                    <h1 class="dashboard-title">Witaj, <span id="welcomeName">User</span>! 🏎️</h1>
+                    <p class="dashboard-subtitle">Gotowy na kolejną przygodę motoryzacyjną?</p>
+                </header>
+
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <!-- Profile Card -->
+                    <div class="profile-card">
+                        <img src="assets/default-avatar.png" alt="User Avatar" class="profile-card-avatar" id="profileAvatar">
+                        <h2 class="profile-card-username" id="profileUsername">Username</h2>
+                        <span class="profile-card-level badge" id="profileLevel">Poziom 1</span>
+                        
+                        <div class="profile-card-stats">
+                            <div class="profile-card-stat">
+                                <span class="value" id="statPoints">0</span>
+                                <span class="label">Punkty</span>
+                            </div>
+                            <div class="profile-card-stat">
+                                <span class="value" id="statStreak">0</span>
+                                <span class="label">Seria</span>
+                            </div>
+                            <div class="profile-card-stat">
+                                <span class="value" id="statRank">-</span>
+                                <span class="label">Ranking</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Streak Calendar -->
+                    <div class="streak-calendar">
+                        <div class="streak-calendar-header">
+                            <h3>🔥 Twoja seria aktywności</h3>
+                        </div>
+                        <div class="streak-calendar-current">
+                            <span class="streak-number" id="streakNumber">0</span>
+                            <span class="streak-label">dni z rzędu</span>
+                        </div>
+                        <div class="streak-calendar-grid" id="streakGrid">
+                            <!-- Generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="quick-links">
+                    <div class="quick-links-header">
+                        <h3>Szybki dostęp</h3>
+                    </div>
+                    <div class="quick-links-grid">
+                        <a href="kursy.html" class="quick-links-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                            <span>Kursy</span>
+                        </a>
+                        <a href="postepy.html" class="quick-links-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                            </svg>
+                            <span>Postępy</span>
+                        </a>
+                        <a href="ranking.html" class="quick-links-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 16v6m-8-6v6m4-10v10M4 8l8-6 8 6v13H4V8z"></path>
+                            </svg>
+                            <span>Ranking</span>
+                        </a>
+                        <a href="ustawienia.html" class="quick-links-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M12 1v6m0 6v6m-9-9h6m6 0h6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"></path>
+                            </svg>
+                            <span>Ustawienia</span>
+                        </a>
+                        <a href="chat.html" class="quick-links-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span>Chat</span>
+                        </a>
+                        <a href="sklep.html" class="quick-links-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            <span>Sklep</span>
+                        </a>
+                        <a href="dashboard.html" class="quick-links-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Recent Activity & Purchased Items -->
+                <div class="dashboard-grid">
+                    <!-- Recent Activity -->
+                    <div class="recent-activity">
+                        <div class="recent-activity-header">
+                            <h3>Ostatnia aktywność</h3>
+                            <a href="#" class="text-primary">Zobacz wszystko</a>
+                        </div>
+                        <ul class="recent-activity-list" id="activityList">
+                            <li class="recent-activity-item">
+                                <div class="recent-activity-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="recent-activity-content">
+                                    <div class="recent-activity-title">Brak ostatniej aktywności</div>
+                                    <div class="recent-activity-time">Rozpocznij swoją przygodę!</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Purchased Items -->
+                    <div class="purchased-items">
+                        <div class="purchased-items-header">
+                            <h3>Zakupione przedmioty</h3>
+                            <a href="sklep.html" class="text-primary">Sklep</a>
+                        </div>
+                        <div class="purchased-items-grid" id="purchasedGrid">
+                            <div class="text-center text-gray" style="grid-column: 1 / -1; padding: 2rem;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 48px; height: 48px; margin: 0 auto 1rem; opacity: 0.5;">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                <p>Nie masz jeszcze żadnych zakupionych przedmiotów</p>
+                                <a href="sklep.html" class="btn btn-primary btn-small" style="margin-top: 1rem;">Odwiedź sklep</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Dashboard initialization and authentication
+        (function() {
+            'use strict';
+
+            // Check authentication
+            function checkAuth() {
+                // Check if Auth is available from main.js
+                if (typeof window.Auth === 'undefined') {
+                    console.error('Auth module not loaded');
+                    window.location.href = 'login.html';
+                    return false;
+                }
+
+                // Check if user is authenticated
+                if (!window.Auth.requireAuth()) {
+                    return false;
+                }
+
+                // Check if user is admin and redirect
+                if (window.Auth.isAdmin()) {
+                    window.location.href = 'admin.html';
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Load user data
+            function loadUserData() {
+                const user = window.Auth.getCurrentUser();
+                
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return null;
+                }
+
+                return user;
+            }
+
+            // Update UI with user data
+            function updateUI(user) {
+                // Get default values or user data
+                const username = user.username || user.email || 'User';
+                const avatar = user.avatar || 'assets/default-avatar.png';
+                const level = user.level || 1;
+                const points = user.points || 0;
+                const streak = user.streak || 0;
+                const rank = user.rank || '-';
+
+                // Update navigation
+                const navUsername = document.getElementById('navUsername');
+                const navAvatar = document.getElementById('navAvatar');
+                if (navUsername) navUsername.textContent = username;
+                if (navAvatar) navAvatar.src = avatar;
+
+                // Update profile card
+                const welcomeName = document.getElementById('welcomeName');
+                const profileUsername = document.getElementById('profileUsername');
+                const profileAvatar = document.getElementById('profileAvatar');
+                const profileLevel = document.getElementById('profileLevel');
+                
+                if (welcomeName) welcomeName.textContent = username;
+                if (profileUsername) profileUsername.textContent = username;
+                if (profileAvatar) profileAvatar.src = avatar;
+                if (profileLevel) profileLevel.textContent = `Poziom ${level}`;
+
+                // Update stats
+                const statPoints = document.getElementById('statPoints');
+                const statStreak = document.getElementById('statStreak');
+                const statRank = document.getElementById('statRank');
+                
+                if (statPoints) statPoints.textContent = points.toLocaleString('pl-PL');
+                if (statStreak) statStreak.textContent = streak;
+                if (statRank) statRank.textContent = rank;
+
+                // Update streak display
+                const streakNumber = document.getElementById('streakNumber');
+                if (streakNumber) streakNumber.textContent = streak;
+
+                // Generate streak calendar
+                generateStreakCalendar(user.streakDays || []);
+
+                // Load activity
+                loadRecentActivity(user.recentActivity || []);
+
+                // Load purchased items
+                loadPurchasedItems(user.purchasedItems || []);
+            }
+
+            // Generate streak calendar (last 28 days)
+            function generateStreakCalendar(activeDays = []) {
+                const streakGrid = document.getElementById('streakGrid');
+                if (!streakGrid) return;
+
+                streakGrid.innerHTML = '';
+                const today = new Date();
+                const days = 28;
+
+                for (let i = days - 1; i >= 0; i--) {
+                    const day = new Date(today);
+                    day.setDate(day.getDate() - i);
+                    const dayStr = day.toISOString().split('T')[0];
+
+                    const dayEl = document.createElement('div');
+                    dayEl.className = 'streak-calendar-day';
+                    dayEl.title = dayStr;
+
+                    if (activeDays.includes(dayStr)) {
+                        dayEl.classList.add('active');
+                    }
+
+                    if (i === 0) {
+                        dayEl.classList.add('today');
+                    }
+
+                    streakGrid.appendChild(dayEl);
+                }
+            }
+
+            // Load recent activity
+            function loadRecentActivity(activities = []) {
+                const activityList = document.getElementById('activityList');
+                if (!activityList) return;
+
+                if (activities.length === 0) {
+                    return; // Keep default empty state
+                }
+
+                activityList.innerHTML = '';
+
+                activities.slice(0, 5).forEach(activity => {
+                    const li = document.createElement('li');
+                    li.className = 'recent-activity-item';
+                    
+                    const icon = getActivityIcon(activity.type);
+                    const timeAgo = getTimeAgo(activity.timestamp);
+
+                    li.innerHTML = `
+                        <div class="recent-activity-icon">
+                            ${icon}
+                        </div>
+                        <div class="recent-activity-content">
+                            <div class="recent-activity-title">${activity.title}</div>
+                            <div class="recent-activity-time">${timeAgo}</div>
+                        </div>
+                    `;
+
+                    activityList.appendChild(li);
+                });
+            }
+
+            // Get activity icon based on type
+            function getActivityIcon(type) {
+                const icons = {
+                    course: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>',
+                    achievement: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path></svg>',
+                    purchase: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>',
+                    default: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>'
+                };
+                return icons[type] || icons.default;
+            }
+
+            // Get time ago string
+            function getTimeAgo(timestamp) {
+                const now = new Date();
+                const time = new Date(timestamp);
+                const diff = Math.floor((now - time) / 1000);
+
+                if (diff < 60) return 'Teraz';
+                if (diff < 3600) return `${Math.floor(diff / 60)} min temu`;
+                if (diff < 86400) return `${Math.floor(diff / 3600)} godz. temu`;
+                if (diff < 604800) return `${Math.floor(diff / 86400)} dni temu`;
+                return time.toLocaleDateString('pl-PL');
+            }
+
+            // Load purchased items
+            function loadPurchasedItems(items = []) {
+                const purchasedGrid = document.getElementById('purchasedGrid');
+                if (!purchasedGrid) return;
+
+                if (items.length === 0) {
+                    return; // Keep default empty state
+                }
+
+                purchasedGrid.innerHTML = '';
+
+                items.slice(0, 6).forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'purchased-items-item';
+                    itemEl.innerHTML = `
+                        <img src="${item.image || 'assets/placeholder-item.png'}" alt="${item.name}">
+                        <div class="purchased-items-item-name">${item.name}</div>
+                    `;
+                    purchasedGrid.appendChild(itemEl);
+                });
+            }
+
+            // Logout handler
+            function setupLogout() {
+                const logoutBtn = document.getElementById('logoutBtn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', async function(e) {
+                        e.preventDefault();
+                        
+                        try {
+                            // Try to call API logout if available
+                            if (window.API && window.API.auth && window.API.auth.logout) {
+                                await window.API.auth.logout();
+                            }
+                        } catch (error) {
+                            console.error('Logout API error:', error);
+                        }
+                        
+                        // Always clear local auth
+                        window.Auth.logout();
+                        window.location.href = 'login.html';
+                    });
+                }
+            }
+
+            // Mobile menu toggle
+            function setupMobileMenu() {
+                const navToggle = document.getElementById('navToggle');
+                const sidebar = document.getElementById('sidebar');
+                
+                if (navToggle && sidebar) {
+                    navToggle.addEventListener('click', function() {
+                        sidebar.classList.toggle('active');
+                    });
+                }
+            }
+
+            // Initialize dashboard
+            function init() {
+                // Check authentication
+                if (!checkAuth()) {
+                    return;
+                }
+
+                // Load user data
+                const user = loadUserData();
+                if (!user) {
+                    return;
+                }
+
+                // Update UI
+                updateUI(user);
+
+                // Setup event handlers
+                setupLogout();
+                setupMobileMenu();
+
+                // Hide loading skeleton
+                const loadingSkeleton = document.getElementById('loadingSkeleton');
+                const dashboardContent = document.getElementById('dashboardContent');
+                if (loadingSkeleton) loadingSkeleton.classList.add('hidden');
+                if (dashboardContent) dashboardContent.style.display = 'block';
+            }
+
+            // Run on DOM ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+</html>
