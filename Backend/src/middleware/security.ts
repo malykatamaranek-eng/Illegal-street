@@ -104,10 +104,13 @@ export const preventXSS = (
   // Sanitize request body, query, and params
   const sanitize = (obj: any): any => {
     if (typeof obj === 'string') {
+      // More comprehensive sanitization
       return obj
         .replace(/[<>]/g, '') // Remove < and >
         .replace(/javascript:/gi, '') // Remove javascript: protocol
-        .replace(/on\w+=/gi, ''); // Remove event handlers
+        .replace(/data:/gi, '') // Remove data: protocol
+        .replace(/vbscript:/gi, '') // Remove vbscript: protocol
+        .replace(/on\w+\s*=/gi, ''); // Remove event handlers with better regex
     }
     if (typeof obj === 'object' && obj !== null) {
       Object.keys(obj).forEach((key) => {
