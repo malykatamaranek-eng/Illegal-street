@@ -39,3 +39,9 @@ export interface RequestWithUser extends Request {
     role: string;
   };
 }
+
+// Export all service types
+export * from './auth';
+export * from './user';
+export * from './notification';
+export * from './analytics';
