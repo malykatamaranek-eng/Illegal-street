@@ -57,17 +57,17 @@ enum Difficulty {
 // USER MODEL
 // ===================================
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  username      String   @unique
-  password_hash String
-  avatar_url    String?
-  bio           String?
-  level         Int      @default(1)
-  total_points  Int      @default(0)
-  streak        Int      @default(0)
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  id           String   @id @default(uuid())
+  email        String   @unique
+  username     String   @unique
+  passwordHash String   @map("password_hash")
+  avatarUrl    String?  @map("avatar_url")
+  bio          String?
+  level        Int      @default(1)
+  totalPoints  Int      @default(0) @map("total_points")
+  streak       Int      @default(0)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   // Relations
   sessions           Session[]
@@ -84,11 +84,13 @@ model User {
   wishlistItems      WishlistItem[]
   cartItems          CartItem[]
   eventRegistrations EventRegistration[]
+  userActivities     UserActivity[]
+  goals              Goal[]
 
   @@index([email])
   @@index([username])
   @@index([level])
-  @@index([total_points])
+  @@index([totalPoints])
   @@map("users")
 }
 
@@ -97,14 +99,15 @@ model User {
 // ===================================
 model Admin {
   id          String    @id @default(uuid())
-  user_id     String    @unique
+  userId      String    @unique @map("user_id")
   role        AdminRole @default(ADMIN)
   permissions Json?
-  created_at  DateTime  @default(now())
+  createdAt   DateTime  @default(now()) @map("created_at")
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  auditLogs AuditLog[]
 
-  @@index([user_id])
+  @@index([userId])
   @@map("admins")
 }
 
@@ -112,18 +115,18 @@ model Admin {
 // SESSION MODEL
 // ===================================
 model Session {
-  id            String   @id @default(uuid())
-  user_id       String
-  token         String   @unique
-  refresh_token String?
-  ip_address    String?
-  user_agent    String?
-  expires_at    DateTime
-  created_at    DateTime @default(now())
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  token        String   @unique
+  refreshToken String?  @map("refresh_token")
+  ipAddress    String?  @map("ip_address")
+  userAgent    String?  @map("user_agent")
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
+  @@index([userId])
   @@index([token])
   @@map("sessions")
 }
@@ -132,15 +135,15 @@ model Session {
 // REFRESH TOKEN MODEL
 // ===================================
 model RefreshToken {
-  id         String   @id @default(uuid())
-  user_id    String
-  token      String   @unique
-  expires_at DateTime
-  created_at DateTime @default(now())
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
+  @@index([userId])
   @@index([token])
   @@map("refresh_tokens")
 }
@@ -156,7 +159,7 @@ model Module {
   difficulty  Difficulty @default(BEGINNER)
   points      Int        @default(0)
   content     String?
-  created_at  DateTime   @default(now())
+  createdAt   DateTime   @default(now()) @map("created_at")
 
   // Relations
   courses      Course[]
@@ -172,18 +175,18 @@ model Module {
 // COURSE MODEL
 // ===================================
 model Course {
-  id            String   @id @default(uuid())
-  module_id     String
-  lesson_number Int
-  title         String
-  content       String?
-  duration      Int?
-  created_at    DateTime @default(now())
+  id           String   @id @default(uuid())
+  moduleId     String   @map("module_id")
+  lessonNumber Int      @map("lesson_number")
+  title        String
+  content      String?
+  duration     Int?
+  createdAt    DateTime @default(now()) @map("created_at")
 
-  module Module @relation(fields: [module_id], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
-  @@index([module_id])
-  @@index([lesson_number])
+  @@index([moduleId])
+  @@index([lessonNumber])
   @@map("courses")
 }
 
@@ -191,21 +194,21 @@ model Course {
 // USER PROGRESS MODEL
 // ===================================
 model UserProgress {
-  id               String       @id @default(uuid())
-  user_id          String
-  module_id        String
-  percent_complete Float        @default(0)
-  status           ModuleStatus @default(NOT_STARTED)
-  time_spent       Int          @default(0)
-  started_at       DateTime?
-  completed_at     DateTime?
+  id              String       @id @default(uuid())
+  userId          String       @map("user_id")
+  moduleId        String       @map("module_id")
+  percentComplete Float        @default(0) @map("percent_complete")
+  status          ModuleStatus @default(NOT_STARTED)
+  timeSpent       Int          @default(0) @map("time_spent")
+  startedAt       DateTime?    @map("started_at")
+  completedAt     DateTime?    @map("completed_at")
 
-  user   User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  module Module @relation(fields: [module_id], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, module_id])
-  @@index([user_id])
-  @@index([module_id])
+  @@unique([userId, moduleId])
+  @@index([userId])
+  @@index([moduleId])
   @@index([status])
   @@map("user_progress")
 }
@@ -214,16 +217,16 @@ model UserProgress {
 // QUIZ MODEL
 // ===================================
 model Quiz {
-  id         String   @id @default(uuid())
-  module_id  String
-  title      String
-  questions  Json
-  created_at DateTime @default(now())
+  id        String   @id @default(uuid())
+  moduleId  String   @map("module_id")
+  title     String
+  questions Json
+  createdAt DateTime @default(now()) @map("created_at")
 
-  module  Module       @relation(fields: [module_id], references: [id], onDelete: Cascade)
+  module  Module       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   results QuizResult[]
 
-  @@index([module_id])
+  @@index([moduleId])
   @@map("quizzes")
 }
 
@@ -231,18 +234,18 @@ model Quiz {
 // QUIZ RESULT MODEL
 // ===================================
 model QuizResult {
-  id           String   @id @default(uuid())
-  user_id      String
-  quiz_id      String
-  score        Float
-  answers      Json
-  completed_at DateTime @default(now())
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  quizId      String   @map("quiz_id")
+  score       Float
+  answers     Json
+  completedAt DateTime @default(now()) @map("completed_at")
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  quiz Quiz @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
-  @@index([quiz_id])
+  @@index([userId])
+  @@index([quizId])
   @@map("quiz_results")
 }
 
@@ -253,7 +256,7 @@ model ProductCategory {
   id          String   @id @default(uuid())
   name        String   @unique
   description String?
-  created_at  DateTime @default(now())
+  createdAt   DateTime @default(now()) @map("created_at")
 
   products Product[]
 
@@ -268,16 +271,16 @@ model Product {
   name        String
   description String?
   price       Decimal  @db.Decimal(10, 2)
-  category_id String?
+  categoryId  String?  @map("category_id")
   images      Json?
   stock       Int      @default(0)
-  created_at  DateTime @default(now())
+  createdAt   DateTime @default(now()) @map("created_at")
 
-  category      ProductCategory? @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  category      ProductCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   wishlistItems WishlistItem[]
   cartItems     CartItem[]
 
-  @@index([category_id])
+  @@index([categoryId])
   @@index([name])
   @@map("products")
 }
@@ -286,17 +289,17 @@ model Product {
 // WISHLIST MODEL
 // ===================================
 model WishlistItem {
-  id         String   @id @default(uuid())
-  user_id    String
-  product_id String
-  added_at   DateTime @default(now())
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  productId String   @map("product_id")
+  addedAt   DateTime @default(now()) @map("added_at")
 
-  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, product_id])
-  @@index([user_id])
-  @@index([product_id])
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
   @@map("wishlist_items")
 }
 
@@ -304,18 +307,18 @@ model WishlistItem {
 // CART MODEL
 // ===================================
 model CartItem {
-  id         String   @id @default(uuid())
-  user_id    String
-  product_id String
-  quantity   Int      @default(1)
-  added_at   DateTime @default(now())
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  productId String   @map("product_id")
+  quantity  Int      @default(1)
+  addedAt   DateTime @default(now()) @map("added_at")
 
-  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, product_id])
-  @@index([user_id])
-  @@index([product_id])
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
   @@map("cart_items")
 }
 
@@ -323,16 +326,16 @@ model CartItem {
 // ORDER MODEL
 // ===================================
 model Order {
-  id          String      @id @default(uuid())
-  user_id     String
-  items       Json
-  total_price Decimal     @db.Decimal(10, 2)
-  status      OrderStatus @default(PENDING)
-  created_at  DateTime    @default(now())
+  id         String      @id @default(uuid())
+  userId     String      @map("user_id")
+  items      Json
+  totalPrice Decimal     @map("total_price") @db.Decimal(10, 2)
+  status     OrderStatus @default(PENDING)
+  createdAt  DateTime    @default(now()) @map("created_at")
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
+  @@index([userId])
   @@index([status])
   @@map("orders")
 }
@@ -341,18 +344,18 @@ model Order {
 // CHAT MESSAGE MODEL
 // ===================================
 model ChatMessage {
-  id           String    @id @default(uuid())
-  user_id      String
-  message_text String
-  encrypted    Boolean   @default(false)
-  reactions    Json?
-  created_at   DateTime  @default(now())
-  deleted_at   DateTime?
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  messageText String    @map("message_text")
+  encrypted   Boolean   @default(false)
+  reactions   Json?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  deletedAt   DateTime? @map("deleted_at")
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
-  @@index([created_at])
+  @@index([userId])
+  @@index([createdAt])
   @@map("chat_messages")
 }
 
@@ -360,15 +363,15 @@ model ChatMessage {
 // ACHIEVEMENT MODEL
 // ===================================
 model Achievement {
-  id         String   @id @default(uuid())
-  user_id    String
-  badge_name String
-  earned_at  DateTime @default(now())
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  badgeName String   @map("badge_name")
+  earnedAt  DateTime @default(now()) @map("earned_at")
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
-  @@index([badge_name])
+  @@index([userId])
+  @@index([badgeName])
   @@map("achievements")
 }
 
@@ -383,7 +386,7 @@ model Event {
   location    String?
   capacity    Int?
   status      EventStatus @default(UPCOMING)
-  created_at  DateTime    @default(now())
+  createdAt   DateTime    @default(now()) @map("created_at")
 
   registrations EventRegistration[]
 
@@ -396,17 +399,17 @@ model Event {
 // EVENT REGISTRATION MODEL
 // ===================================
 model EventRegistration {
-  id            String   @id @default(uuid())
-  event_id      String
-  user_id       String
-  registered_at DateTime @default(now())
+  id           String   @id @default(uuid())
+  eventId      String   @map("event_id")
+  userId       String   @map("user_id")
+  registeredAt DateTime @default(now()) @map("registered_at")
 
-  event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
-  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([event_id, user_id])
-  @@index([event_id])
-  @@index([user_id])
+  @@unique([eventId, userId])
+  @@index([eventId])
+  @@index([userId])
   @@map("event_registrations")
 }
 
@@ -414,15 +417,15 @@ model EventRegistration {
 // NOTIFICATION MODEL
 // ===================================
 model Notification {
-  id         String   @id @default(uuid())
-  user_id    String
-  message    String
-  read       Boolean  @default(false)
-  created_at DateTime @default(now())
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
+  @@index([userId])
   @@index([read])
   @@map("notifications")
 }
@@ -431,17 +434,17 @@ model Notification {
 // USER FOLLOW MODEL
 // ===================================
 model UserFollow {
-  id           String   @id @default(uuid())
-  follower_id  String
-  following_id String
-  created_at   DateTime @default(now())
+  id          String   @id @default(uuid())
+  followerId  String   @map("follower_id")
+  followingId String   @map("following_id")
+  createdAt   DateTime @default(now()) @map("created_at")
 
-  follower  User @relation("UserFollowers", fields: [follower_id], references: [id], onDelete: Cascade)
-  following User @relation("UserFollowing", fields: [following_id], references: [id], onDelete: Cascade)
+  follower  User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
 
-  @@unique([follower_id, following_id])
-  @@index([follower_id])
-  @@index([following_id])
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
   @@map("user_follows")
 }
 
@@ -452,14 +455,87 @@ model Meeting {
   id           String   @id @default(uuid())
   title        String
   description  String?
-  start_time   DateTime
-  end_time     DateTime
-  host_id      String
+  startTime    DateTime @map("start_time")
+  endTime      DateTime @map("end_time")
+  hostId       String   @map("host_id")
   participants Json?
-  meeting_url  String?
-  created_at   DateTime @default(now())
+  meetingUrl   String?  @map("meeting_url")
+  createdAt    DateTime @default(now()) @map("created_at")
 
-  @@index([host_id])
-  @@index([start_time])
+  @@index([hostId])
+  @@index([startTime])
   @@map("meetings")
+}
+
+// ===================================
+// USER ACTIVITY MODEL
+// ===================================
+model UserActivity {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  action    String
+  metadata  Json?
+  timestamp DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([timestamp])
+  @@map("user_activities")
+}
+
+// ===================================
+// AUDIT LOG MODEL
+// ===================================
+model AuditLog {
+  id         String   @id @default(uuid())
+  adminId    String   @map("admin_id")
+  action     String
+  targetType String   @map("target_type")
+  targetId   String   @map("target_id")
+  changes    Json?
+  ipAddress  String?  @map("ip_address")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([targetType])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ===================================
+// CHAT ROOM MODEL
+// ===================================
+model ChatRoom {
+  id           String   @id @default(uuid())
+  name         String
+  type         String
+  participants Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([type])
+  @@map("chat_rooms")
+}
+
+// ===================================
+// GOAL MODEL
+// ===================================
+model Goal {
+  id           String    @id @default(uuid())
+  userId       String    @map("user_id")
+  title        String
+  description  String?
+  targetValue  Int       @map("target_value")
+  currentValue Int       @default(0) @map("current_value")
+  deadline     DateTime?
+  completed    Boolean   @default(false)
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([completed])
+  @@map("goals")
 }
