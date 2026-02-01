@@ -373,6 +373,88 @@ const API = {
                 method: 'GET'
             });
         }
+    },
+
+    /**
+     * Progress APIs
+     */
+    progress: {
+        /**
+         * Get user progress
+         * @returns {Promise<object>} Progress data
+         */
+        get: async () => {
+            return await apiRequest('/api/progress', {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get progress statistics
+         * @returns {Promise<object>} Statistics data
+         */
+        getStatistics: async () => {
+            return await apiRequest('/api/progress/statistics', {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get progress chart data
+         * @param {string} period - Time period (week, month, year)
+         * @returns {Promise<object>} Chart data
+         */
+        getChartData: async (period = 'week') => {
+            return await apiRequest(`/api/progress/chart/${period}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get goals
+         * @returns {Promise<object>} Goals list
+         */
+        getGoals: async () => {
+            return await apiRequest('/api/progress/goals', {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Create goal
+         * @param {object} goalData - Goal data
+         * @returns {Promise<object>} Created goal
+         */
+        createGoal: async (goalData) => {
+            return await apiRequest('/api/progress/goals', {
+                method: 'POST',
+                body: JSON.stringify(goalData)
+            });
+        },
+
+        /**
+         * Update goal
+         * @param {string} id - Goal ID
+         * @param {object} goalData - Updated goal data
+         * @returns {Promise<object>} Updated goal
+         */
+        updateGoal: async (id, goalData) => {
+            return await apiRequest(`/api/progress/goals/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(goalData)
+            });
+        },
+
+        /**
+         * Delete goal
+         * @param {string} id - Goal ID
+         * @returns {Promise<object>} Response
+         */
+        deleteGoal: async (id) => {
+            return await apiRequest(`/api/progress/goals/${id}`, {
+                method: 'DELETE'
+            });
+        }
     }
 };
 
