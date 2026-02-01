@@ -6,7 +6,7 @@ import logger from '../config/logger';
 export const getProgress = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   
-  const progress = await prisma.userModuleProgress.findMany({
+  const progress = await prisma.userProgress.findMany({
     where: { userId },
     include: {
       module: {
@@ -28,7 +28,7 @@ export const getModuleProgress = asyncHandler(async (req: Request, res: Response
   const userId = req.user!.id;
   const { moduleId } = req.params;
   
-  const progress = await prisma.userModuleProgress.findFirst({
+  const progress = await prisma.userProgress.findFirst({
     where: {
       userId,
       moduleId,
@@ -55,22 +55,22 @@ export const getStatistics = asyncHandler(async (req: Request, res: Response) =>
   const userId = req.user!.id;
   
   const [totalModules, completedModules, inProgressModules, totalTimeSpent] = await Promise.all([
-    prisma.userModuleProgress.count({
+    prisma.userProgress.count({
       where: { userId },
     }),
-    prisma.userModuleProgress.count({
+    prisma.userProgress.count({
       where: {
         userId,
         status: 'COMPLETED',
       },
     }),
-    prisma.userModuleProgress.count({
+    prisma.userProgress.count({
       where: {
         userId,
         status: 'IN_PROGRESS',
       },
     }),
-    prisma.userModuleProgress.aggregate({
+    prisma.userProgress.aggregate({
       where: { userId },
       _sum: {
         timeSpent: true,
@@ -100,7 +100,7 @@ export const getChart = asyncHandler(async (req: Request, res: Response) => {
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days);
   
-  const progress = await prisma.userModuleProgress.findMany({
+  const progress = await prisma.userProgress.findMany({
     where: {
       userId,
       startedAt: {
@@ -232,7 +232,7 @@ export const getTimeSpent = asyncHandler(async (req: Request, res: Response) => 
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days);
   
-  const timeSpent = await prisma.userModuleProgress.aggregate({
+  const timeSpent = await prisma.userProgress.aggregate({
     where: {
       userId,
       startedAt: {
@@ -257,10 +257,10 @@ export const getCompletionRate = asyncHandler(async (req: Request, res: Response
   const userId = req.user!.id;
   
   const [total, completed] = await Promise.all([
-    prisma.userModuleProgress.count({
+    prisma.userProgress.count({
       where: { userId },
     }),
-    prisma.userModuleProgress.count({
+    prisma.userProgress.count({
       where: {
         userId,
         status: 'COMPLETED',
@@ -284,7 +284,7 @@ export const exportProgress = asyncHandler(async (req: Request, res: Response) =
   const userId = req.user!.id;
   const { format = 'json' } = req.query;
   
-  const progress = await prisma.userModuleProgress.findMany({
+  const progress = await prisma.userProgress.findMany({
     where: { userId },
     include: {
       module: true,

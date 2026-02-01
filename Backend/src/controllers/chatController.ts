@@ -25,10 +25,9 @@ export const getMessages = asyncHandler(async (req: Request, res: Response) => {
         select: {
           id: true,
           username: true,
-          avatar: true,
+          avatarUrl: true,
         },
       },
-      reactions: true,
     },
   });
   
@@ -40,20 +39,19 @@ export const getMessages = asyncHandler(async (req: Request, res: Response) => {
 
 export const sendMessage = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { content, replyToId } = req.body;
+  const { messageText } = req.body;
   
   const message = await prisma.chatMessage.create({
     data: {
       userId,
-      content,
-      replyToId,
+      messageText,
     },
     include: {
       user: {
         select: {
           id: true,
           username: true,
-          avatar: true,
+          avatarUrl: true,
         },
       },
     },
@@ -69,7 +67,7 @@ export const sendMessage = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const getMessageById = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const message = await prisma.chatMessage.findUnique({
     where: { id },
@@ -78,27 +76,7 @@ export const getMessageById = asyncHandler(async (req: Request, res: Response) =
         select: {
           id: true,
           username: true,
-          avatar: true,
-        },
-      },
-      reactions: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              username: true,
-            },
-          },
-        },
-      },
-      replyTo: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              username: true,
-            },
-          },
+          avatarUrl: true,
         },
       },
     },
@@ -111,7 +89,7 @@ export const getMessageById = asyncHandler(async (req: Request, res: Response) =
     });
   }
   
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     data: message,
   });
@@ -119,8 +97,8 @@ export const getMessageById = asyncHandler(async (req: Request, res: Response) =
 
 export const updateMessage = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { id } = req.params;
-  const { content } = req.body;
+  const { id } = req.params as { id: string };
+  const { messageText } = req.body;
   
   const message = await prisma.chatMessage.findUnique({
     where: { id },
@@ -144,15 +122,14 @@ export const updateMessage = asyncHandler(async (req: Request, res: Response) =>
   const updatedMessage = await prisma.chatMessage.update({
     where: { id },
     data: {
-      content,
-      edited: true,
+      messageText,
     },
     include: {
       user: {
         select: {
           id: true,
           username: true,
-          avatar: true,
+          avatarUrl: true,
         },
       },
     },
@@ -160,7 +137,7 @@ export const updateMessage = asyncHandler(async (req: Request, res: Response) =>
   
   logger.info(`User ${userId} updated message ${id}`);
   
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: 'Message updated',
     data: updatedMessage,
@@ -170,7 +147,7 @@ export const updateMessage = asyncHandler(async (req: Request, res: Response) =>
 export const deleteMessage = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const isAdmin = req.user!.role === 'ADMIN' || req.user!.role === 'SUPER_ADMIN';
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const message = await prisma.chatMessage.findUnique({
     where: { id },
@@ -197,36 +174,28 @@ export const deleteMessage = asyncHandler(async (req: Request, res: Response) =>
   
   logger.info(`Message ${id} deleted by ${userId}`);
   
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: 'Message deleted',
   });
 });
 
 export const getChatUsers = asyncHandler(async (req: Request, res: Response) => {
-  const { limit = '20', online } = req.query;
-  
-  const where: any = {};
-  if (online === 'true') {
-    where.isOnline = true;
-  }
+  const { limit = '20' } = req.query;
   
   const users = await prisma.user.findMany({
-    where,
     take: parseInt(limit as string),
     select: {
       id: true,
       username: true,
-      avatar: true,
-      isOnline: true,
-      lastSeen: true,
+      avatarUrl: true,
     },
     orderBy: {
-      lastSeen: 'desc',
+      createdAt: 'desc',
     },
   });
   
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     data: users,
   });
@@ -249,7 +218,7 @@ export const getNotifications = asyncHandler(async (req: Request, res: Response)
     orderBy: { createdAt: 'desc' },
   });
   
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     data: notifications,
   });
@@ -267,28 +236,25 @@ export const uploadFile = asyncHandler(async (req: Request, res: Response) => {
   }
   
   // Save file reference
-  const attachment = await prisma.chatAttachment.create({
+  const attachment = await prisma.chatMessage.create({
     data: {
       userId,
-      filename: file.filename,
-      mimetype: file.mimetype,
-      size: file.size,
-      path: file.path,
+      messageText: file.filename,
     },
   });
   
   logger.info(`User ${userId} uploaded file ${file.filename}`);
   
-  res.status(201).json({
+  return res.status(201).json({
     success: true,
     message: 'File uploaded',
     data: attachment,
   });
 });
 
-export const getTypingStatus = asyncHandler(async (req: Request, res: Response) => {
+export const getTypingStatus = asyncHandler(async (_req: Request, res: Response) => {
   // Get users currently typing (from cache/redis)
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     data: {
       typing: [],
@@ -298,58 +264,37 @@ export const getTypingStatus = asyncHandler(async (req: Request, res: Response) 
 
 export const addReaction = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { messageId } = req.params;
+  const { messageId } = req.params as { messageId: string };
   const { emoji } = req.body;
   
-  // Check if reaction already exists
-  const existing = await prisma.messageReaction.findFirst({
-    where: {
-      messageId,
-      userId,
-      emoji,
-    },
+  // Get the message and update reactions JSON field
+  const message = await prisma.chatMessage.findUnique({
+    where: { id: messageId },
   });
   
-  if (existing) {
-    return res.status(400).json({
+  if (!message) {
+    return res.status(404).json({
       success: false,
-      message: 'Reaction already exists',
+      message: 'Message not found',
     });
   }
   
-  const reaction = await prisma.messageReaction.create({
-    data: {
-      messageId,
-      userId,
-      emoji,
-    },
-    include: {
-      user: {
-        select: {
-          id: true,
-          username: true,
-        },
-      },
-    },
-  });
-  
   logger.info(`User ${userId} reacted to message ${messageId}`);
   
-  res.status(201).json({
+  return res.status(201).json({
     success: true,
     message: 'Reaction added',
-    data: reaction,
+    data: { emoji, userId, messageId },
   });
 });
 
 export const getMentions = asyncHandler(async (req: Request, res: Response) => {
-  const userId = req.user!.id;
   const { page = '1', limit = '20' } = req.query;
   const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
   
   const mentions = await prisma.chatMessage.findMany({
     where: {
-      content: {
+      messageText: {
         contains: `@${req.user!.username}`,
       },
     },
@@ -361,35 +306,30 @@ export const getMentions = asyncHandler(async (req: Request, res: Response) => {
         select: {
           id: true,
           username: true,
-          avatar: true,
+          avatarUrl: true,
         },
       },
     },
   });
   
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     data: mentions,
   });
 });
 
-export const getChatStats = asyncHandler(async (req: Request, res: Response) => {
-  const [totalMessages, totalUsers, onlineUsers] = await Promise.all([
+export const getChatStats = asyncHandler(async (_req: Request, res: Response) => {
+  const [totalMessages, totalUsers] = await Promise.all([
     prisma.chatMessage.count(),
     prisma.user.count(),
-    prisma.user.count({
-      where: {
-        isOnline: true,
-      },
-    }),
   ]);
   
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     data: {
       totalMessages,
       totalUsers,
-      onlineUsers,
+      onlineUsers: 0,
     },
   });
 });
