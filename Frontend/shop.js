@@ -158,7 +158,7 @@ function renderCart() {
     
     cartItemsEl.querySelectorAll('.cart-item-quantity').forEach(input => {
         input.addEventListener('change', (e) => {
-            updateCartQuantity(e.target.dataset.productId, parseInt(e.target.value));
+            updateCartQuantity(e.target.dataset.productId, parseInt(e.target.value, 10));
         });
     });
 }
@@ -196,7 +196,7 @@ function setupCheckout() {
         }
         
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const userPoints = parseInt(document.getElementById('userPointsDisplay').textContent);
+        const userPoints = parseInt(document.getElementById('userPointsDisplay').textContent, 10);
         
         if (total > userPoints) {
             showNotification('Niewystarczająca liczba punktów', 'error');
