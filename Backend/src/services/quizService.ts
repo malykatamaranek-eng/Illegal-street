@@ -141,6 +141,11 @@ export class QuizService {
       let correctAnswers = 0;
       const totalQuestions = questions.length;
 
+      // Guard against empty quiz
+      if (totalQuestions === 0) {
+        throw new Error('Quiz has no questions');
+      }
+
       questions.forEach((question, index) => {
         const questionKey = index.toString();
         const userAnswer = answers[questionKey];
