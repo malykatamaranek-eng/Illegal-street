@@ -2,6 +2,7 @@ import { Router } from 'express';
 import authRoutes from './auth';
 import userRoutes from './user';
 import moduleRoutes from './modules';
+import quizRoutes from './quizzes';
 import progressRoutes from './progress';
 import rankingRoutes from './ranking';
 import shopRoutes from './shop';
@@ -14,6 +15,7 @@ const router = Router();
 router.use('/auth', authRoutes);
 router.use('/users', userRoutes);
 router.use('/modules', moduleRoutes);
+router.use('/quizzes', quizRoutes);
 router.use('/progress', progressRoutes);
 router.use('/ranking', rankingRoutes);
 router.use('/shop', shopRoutes);
@@ -39,6 +41,7 @@ router.get('/', (_req, res) => {
       auth: '/api/auth',
       users: '/api/users',
       modules: '/api/modules',
+      quizzes: '/api/quizzes',
       progress: '/api/progress',
       ranking: '/api/ranking',
       shop: '/api/shop',
