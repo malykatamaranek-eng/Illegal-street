@@ -196,11 +196,13 @@ export class ProgressService {
       const chartData: Record<string, { date: string; count: number }> = {};
       
       activities.forEach((activity) => {
-        const dateStr: string = activity.timestamp.toISOString().split('T')[0];
-        if (!chartData[dateStr]) {
+        const dateStr = activity.timestamp.toISOString().split('T')[0] || '';
+        if (dateStr && !chartData[dateStr]) {
           chartData[dateStr] = { date: dateStr, count: 0 };
         }
-        chartData[dateStr].count++;
+        if (dateStr && chartData[dateStr]) {
+          chartData[dateStr].count++;
+        }
       });
 
       return Object.values(chartData);
