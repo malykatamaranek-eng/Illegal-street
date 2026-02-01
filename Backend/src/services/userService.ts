@@ -37,13 +37,13 @@ class UserService {
         id: user.id,
         email: user.email,
         username: user.username,
-        avatar_url: user.avatar_url || undefined,
+        avatar_url: user.avatarUrl || undefined,
         bio: user.bio || undefined,
         level: user.level,
-        total_points: user.total_points,
+        total_points: user.totalPoints,
         streak: user.streak,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
+        created_at: user.createdAt,
+        updated_at: user.updatedAt,
       };
     } catch (error) {
       logger.error('Get user profile error:', error);
@@ -75,7 +75,7 @@ class UserService {
         data: {
           username: data.username,
           bio: data.bio,
-          avatar_url: data.avatar_url,
+          avatarUrl: data.avatar_url,
         },
       });
 
@@ -95,7 +95,7 @@ class UserService {
     try {
       await prisma.user.update({
         where: { id: userId },
-        data: { avatar_url: avatarUrl },
+        data: { avatarUrl: avatarUrl },
       });
 
       logger.info(`User avatar updated: ${userId}`);
@@ -121,7 +121,7 @@ class UserService {
       }
 
       // Verify old password
-      const isPasswordValid = await bcrypt.compare(data.oldPassword, user.password_hash);
+      const isPasswordValid = await bcrypt.compare(data.oldPassword, user.passwordHash);
 
       if (!isPasswordValid) {
         throw new AuthenticationError('Invalid old password');
@@ -133,12 +133,12 @@ class UserService {
       // Update password
       await prisma.user.update({
         where: { id: userId },
-        data: { password_hash },
+        data: { passwordHash: password_hash },
       });
 
       // Invalidate all sessions except current one
       await prisma.session.deleteMany({
-        where: { user_id: userId },
+        where: { userId: userId },
       });
 
       logger.info(`Password changed for user: ${userId}`);
@@ -172,7 +172,7 @@ class UserService {
 
       // Get module stats
       const moduleProgress = await prisma.userProgress.findMany({
-        where: { user_id: userId },
+        where: { userId: userId },
       });
 
       const modulesCompleted = moduleProgress.filter(
@@ -180,13 +180,13 @@ class UserService {
       ).length;
 
       const totalTimeSpent = moduleProgress.reduce(
-        (sum, p) => sum + p.time_spent,
+        (sum, p) => sum + p.timeSpent,
         0
       );
 
       // Get quiz stats
       const quizResults = await prisma.quizResult.findMany({
-        where: { user_id: userId },
+        where: { userId: userId },
       });
 
       const quizzesTaken = quizResults.length;
@@ -197,7 +197,7 @@ class UserService {
 
       return {
         level: user.level,
-        total_points: user.total_points,
+        total_points: user.totalPoints,
         streak: user.streak,
         modules_completed: modulesCompleted,
         quizzes_taken: quizzesTaken,
@@ -235,9 +235,9 @@ class UserService {
       // Check if already following
       const existingFollow = await prisma.userFollow.findUnique({
         where: {
-          follower_id_following_id: {
-            follower_id: followerId,
-            following_id: followingId,
+          followerId_followingId: {
+            followerId: followerId,
+            followingId: followingId,
           },
         },
       });
@@ -249,8 +249,8 @@ class UserService {
       // Create follow relationship
       const follow = await prisma.userFollow.create({
         data: {
-          follower_id: followerId,
-          following_id: followingId,
+          followerId: followerId,
+          followingId: followingId,
         },
       });
 
@@ -258,9 +258,9 @@ class UserService {
 
       return {
         success: true,
-        follower_id: follow.follower_id,
-        following_id: follow.following_id,
-        created_at: follow.created_at,
+        follower_id: follow.followerId,
+        following_id: follow.followingId,
+        created_at: follow.createdAt,
       };
     } catch (error) {
       logger.error('Follow user error:', error);
@@ -275,9 +275,9 @@ class UserService {
     try {
       const follow = await prisma.userFollow.findUnique({
         where: {
-          follower_id_following_id: {
-            follower_id: followerId,
-            following_id: followingId,
+          followerId_followingId: {
+            followerId: followerId,
+            followingId: followingId,
           },
         },
       });
@@ -288,9 +288,9 @@ class UserService {
 
       await prisma.userFollow.delete({
         where: {
-          follower_id_following_id: {
-            follower_id: followerId,
-            following_id: followingId,
+          followerId_followingId: {
+            followerId: followerId,
+            followingId: followingId,
           },
         },
       });
@@ -312,7 +312,7 @@ class UserService {
   ): Promise<UserListItem[]> {
     try {
       const followers = await prisma.userFollow.findMany({
-        where: { following_id: userId },
+        where: { followingId: userId },
         take: limit,
         skip: offset,
         include: {
@@ -320,9 +320,9 @@ class UserService {
             select: {
               id: true,
               username: true,
-              avatar_url: true,
+              avatarUrl: true,
               level: true,
-              total_points: true,
+              totalPoints: true,
             },
           },
         },
@@ -331,9 +331,9 @@ class UserService {
       return followers.map((f) => ({
         id: f.follower.id,
         username: f.follower.username,
-        avatar_url: f.follower.avatar_url || undefined,
+        avatar_url: f.follower.avatarUrl || undefined,
         level: f.follower.level,
-        total_points: f.follower.total_points,
+        total_points: f.follower.totalPoints,
       }));
     } catch (error) {
       logger.error('Get followers error:', error);
@@ -351,7 +351,7 @@ class UserService {
   ): Promise<UserListItem[]> {
     try {
       const following = await prisma.userFollow.findMany({
-        where: { follower_id: userId },
+        where: { followerId: userId },
         take: limit,
         skip: offset,
         include: {
@@ -359,9 +359,9 @@ class UserService {
             select: {
               id: true,
               username: true,
-              avatar_url: true,
+              avatarUrl: true,
               level: true,
-              total_points: true,
+              totalPoints: true,
             },
           },
         },
@@ -370,9 +370,9 @@ class UserService {
       return following.map((f) => ({
         id: f.following.id,
         username: f.following.username,
-        avatar_url: f.following.avatar_url || undefined,
+        avatar_url: f.following.avatarUrl || undefined,
         level: f.following.level,
-        total_points: f.following.total_points,
+        total_points: f.following.totalPoints,
       }));
     } catch (error) {
       logger.error('Get following error:', error);
@@ -397,11 +397,11 @@ class UserService {
       }
 
       if (filters?.minPoints) {
-        where.total_points = { gte: filters.minPoints };
+        where.totalPoints = { gte: filters.minPoints };
       }
 
       if (filters?.maxPoints) {
-        where.total_points = { ...where.total_points, lte: filters.maxPoints };
+        where.totalPoints = { ...where.totalPoints, lte: filters.maxPoints };
       }
 
       const users = await prisma.user.findMany({
@@ -409,21 +409,21 @@ class UserService {
         select: {
           id: true,
           username: true,
-          avatar_url: true,
+          avatarUrl: true,
           level: true,
-          total_points: true,
+          totalPoints: true,
         },
         take: filters?.limit || 20,
         skip: filters?.offset || 0,
-        orderBy: { total_points: 'desc' },
+        orderBy: { totalPoints: 'desc' },
       });
 
       return users.map((u) => ({
         id: u.id,
         username: u.username,
-        avatar_url: u.avatar_url || undefined,
+        avatar_url: u.avatarUrl || undefined,
         level: u.level,
-        total_points: u.total_points,
+        total_points: u.totalPoints,
       }));
     } catch (error) {
       logger.error('Search users error:', error);
