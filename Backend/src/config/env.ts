@@ -22,9 +22,19 @@ const envSchema = z.object({
   JWT_REFRESH_SECRET: z.string().optional(),
   JWT_EXPIRES_IN: z.string().default('1h'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
+  JWT_EXPIRE: z.string().optional(),
+  REFRESH_TOKEN_EXPIRE: z.string().optional(),
+
+  // API Keys
+  API_KEY: z.string().optional(),
+  HMAC_SECRET: z.string().optional(),
 
   // CORS
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
+  ALLOWED_ORIGINS: z.string().optional(),
+
+  // App
+  APP_NAME: z.string().default('Illegal Street'),
 
   // API
   API_VERSION: z.string().default('v1'),
@@ -96,9 +106,19 @@ export default {
   JWT_REFRESH_SECRET: env.JWT_REFRESH_SECRET || env.JWT_SECRET,
   JWT_EXPIRES_IN: env.JWT_EXPIRES_IN,
   JWT_REFRESH_EXPIRES_IN: env.JWT_REFRESH_EXPIRES_IN,
+  JWT_EXPIRE: env.JWT_EXPIRE || env.JWT_EXPIRES_IN,
+  REFRESH_TOKEN_EXPIRE: env.REFRESH_TOKEN_EXPIRE || env.JWT_REFRESH_EXPIRES_IN,
+
+  // API Keys
+  API_KEY: env.API_KEY,
+  HMAC_SECRET: env.HMAC_SECRET,
 
   // CORS
   CORS_ORIGIN: env.CORS_ORIGIN.split(',').map((origin) => origin.trim()),
+  ALLOWED_ORIGINS: env.ALLOWED_ORIGINS?.split(',').map((origin) => origin.trim()) || env.CORS_ORIGIN.split(',').map((origin) => origin.trim()),
+
+  // App
+  APP_NAME: env.APP_NAME,
 
   // API
   API_VERSION: env.API_VERSION,

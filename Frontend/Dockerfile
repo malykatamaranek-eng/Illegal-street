@@ -8,4 +8,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["http-server", ".", "-p", "8080", "--cors"]
+CMD ["http-server", ".", "-p", "8080", "--cors", "--gzip"]
