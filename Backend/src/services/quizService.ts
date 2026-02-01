@@ -312,6 +312,97 @@ export class QuizService {
       throw new Error('Failed to delete quiz');
     }
   }
+
+  /**
+   * Start quiz attempt (alias for startQuiz)
+   */
+  async startQuizAttempt(userId: string, quizId: string) {
+    return this.startQuiz(userId, quizId);
+  }
+
+  /**
+   * Submit quiz answers (alias for submitQuiz)
+   */
+  async submitQuizAnswers(
+    userId: string,
+    quizId: string,
+    attemptId: string,
+    answers: Record<string, number>
+  ) {
+    return this.submitQuiz(userId, quizId, attemptId, answers);
+  }
+
+  /**
+   * Get quiz attempts for a user
+   */
+  async getQuizAttempts(userId: string, quizId: string) {
+    return this.getQuizResults(userId, quizId);
+  }
+
+  /**
+   * Get best score for a user on a quiz
+   */
+  async getBestScore(userId: string, quizId: string) {
+    try {
+      const result = await prisma.quizResult.findFirst({
+        where: {
+          userId,
+          quizId,
+        },
+        orderBy: {
+          score: 'desc',
+        },
+        select: {
+          score: true,
+        },
+      });
+
+      return result?.score || 0;
+    } catch (error) {
+      logger.error('Error fetching best score:', error);
+      throw new Error('Failed to fetch best score');
+    }
+  }
+
+  /**
+   * Get quiz leaderboard
+   */
+  async getQuizLeaderboard(quizId: string, limit: number = 10) {
+    try {
+      const leaderboard = await prisma.quizResult.findMany({
+        where: {
+          quizId,
+          completedAt: {
+            not: null as any,
+          },
+        },
+        orderBy: {
+          score: 'desc',
+        },
+        take: limit,
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              avatarUrl: true,
+              level: true,
+            },
+          },
+        },
+      });
+
+      return leaderboard.map((result: any, index: number) => ({
+        rank: index + 1,
+        user: result.user,
+        score: result.score,
+        completedAt: result.completedAt,
+      }));
+    } catch (error) {
+      logger.error('Error fetching quiz leaderboard:', error);
+      throw new Error('Failed to fetch quiz leaderboard');
+    }
+  }
 }
 
 export const quizService = new QuizService();
