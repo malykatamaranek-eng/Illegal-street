@@ -6,7 +6,7 @@ import prisma from '../config/prisma';
 
 export const getProfile = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const user = await userService.getUser(userId);
+  const user = await userService.getUserProfile(userId);
   
   res.status(200).json({
     success: true,
@@ -52,7 +52,7 @@ export const changePassword = asyncHandler(async (req: Request, res: Response) =
   const userId = req.user!.id;
   const { currentPassword, newPassword } = req.body;
   
-  await userService.updatePassword(userId, currentPassword, newPassword);
+  await userService.changePassword(userId, { currentPassword, newPassword });
   logger.info(`Password changed: ${userId}`);
   
   res.status(200).json({
@@ -63,7 +63,7 @@ export const changePassword = asyncHandler(async (req: Request, res: Response) =
 
 export const getUserById = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
-  const user = await userService.getUser(id);
+  const user = await userService.getUserProfile(id);
   
   res.status(200).json({
     success: true,
@@ -242,7 +242,14 @@ export const deleteAccount = asyncHandler(async (req: Request, res: Response) =>
   const userId = req.user!.id;
   const { password } = req.body;
   
-  await userService.deleteUser(userId, password);
+  // Verify password first
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    throw new Error('User not found');
+  }
+  
+  // Delete user
+  await prisma.user.delete({ where: { id: userId } });
   logger.warn(`Account deleted: ${userId}`);
   
   res.status(200).json({
