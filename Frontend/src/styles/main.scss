@@ -238,7 +238,14 @@ a {
   max-width: 400px;
   box-shadow: $shadow-lg;
   z-index: $z-tooltip;
-  @include slide-up;
+  transform: translateX(400px);
+  opacity: 0;
+  transition: transform $transition-base, opacity $transition-base;
+
+  &.show {
+    transform: translateX(0);
+    opacity: 1;
+  }
 
   &.toast-success {
     border-color: #22c55e;

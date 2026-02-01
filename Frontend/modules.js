@@ -690,14 +690,46 @@
      * Show success message
      */
     function showSuccess(message) {
-        alert(message); // Simple alert for now
+        showToast(message, 'success');
     }
 
     /**
      * Show error message
      */
     function showError(message) {
-        alert(message); // Simple alert for now
+        showToast(message, 'error');
+    }
+
+    /**
+     * Show toast notification
+     */
+    function showToast(message, type = 'info') {
+        // Remove any existing toasts
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+
+        // Add to body
+        document.body.appendChild(toast);
+
+        // Show toast with animation
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+
+        // Remove toast after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 5000);
     }
 
     /**
