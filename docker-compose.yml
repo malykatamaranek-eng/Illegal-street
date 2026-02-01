@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: illegal-street-db
+    environment:
+      POSTGRES_USER: illegal_street_user
+      POSTGRES_PASSWORD: SecurePassword123!
+      POSTGRES_DB: illegal_street_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - illegal-street-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U illegal_street_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: illegal-street-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - illegal-street-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: illegal-street-backend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://illegal_street_user:SecurePassword123!@postgres:5432/illegal_street_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: your_super_secret_jwt_key_min_32_characters_long
+      PORT: 3000
+      HOST: 0.0.0.0
+      CORS_ORIGIN: http://localhost:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - illegal-street-network
+    volumes:
+      - ./Backend/src:/app/backend/src
+      - ./Backend/prisma:/app/backend/prisma
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: illegal-street-frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    networks:
+      - illegal-street-network
+    volumes:
+      - ./Frontend:/app/frontend
+
+volumes:
+  postgres_data:
+
+networks:
+  illegal-street-network:
+    driver: bridge
