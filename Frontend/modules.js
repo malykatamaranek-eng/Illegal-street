@@ -21,158 +21,11 @@
     const searchInput = document.getElementById('searchInput');
     const filterBtns = document.querySelectorAll('.filter-btn');
     const moduleModal = document.getElementById('moduleModal');
-    const modalOverlay = document.getElementById('modalOverlay');
     const modalClose = document.getElementById('modalClose');
     const moduleDetailContent = document.getElementById('moduleDetailContent');
     const quizModal = document.getElementById('quizModal');
-    const quizModalOverlay = document.getElementById('quizModalOverlay');
     const quizModalClose = document.getElementById('quizModalClose');
     const quizContent = document.getElementById('quizContent');
-
-    // API Extensions for Modules
-    const ModulesAPI = {
-        /**
-         * Get all modules with optional filters
-         */
-        getModules: async (params = {}) => {
-            const queryParams = new URLSearchParams(params);
-            const response = await fetch(`/api/modules?${queryParams}`, {
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(localStorage.getItem('authToken') && {
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                    })
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('Failed to fetch modules');
-            }
-            
-            return await response.json();
-        },
-
-        /**
-         * Get module by ID
-         */
-        getModuleById: async (id) => {
-            const response = await fetch(`/api/modules/${id}`, {
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(localStorage.getItem('authToken') && {
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                    })
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('Failed to fetch module');
-            }
-            
-            return await response.json();
-        },
-
-        /**
-         * Start module progress
-         */
-        startModule: async (id) => {
-            const response = await fetch(`/api/modules/${id}/start`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('Failed to start module');
-            }
-            
-            return await response.json();
-        },
-
-        /**
-         * Get module content (courses)
-         */
-        getModuleContent: async (id) => {
-            const response = await fetch(`/api/modules/${id}/content`, {
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('Failed to fetch module content');
-            }
-            
-            return await response.json();
-        },
-
-        /**
-         * Get quiz by ID
-         */
-        getQuizById: async (id) => {
-            const response = await fetch(`/api/modules/quizzes/${id}`, {
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('Failed to fetch quiz');
-            }
-            
-            return await response.json();
-        },
-
-        /**
-         * Start quiz
-         */
-        startQuiz: async (id) => {
-            const response = await fetch(`/api/modules/quizzes/${id}/start`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('Failed to start quiz');
-            }
-            
-            return await response.json();
-        },
-
-        /**
-         * Submit quiz
-         */
-        submitQuiz: async (id, attemptId, answers) => {
-            const response = await fetch(`/api/modules/quizzes/${id}/submit`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                },
-                body: JSON.stringify({ attemptId, answers })
-            });
-            
-            if (!response.ok) {
-                throw new Error('Failed to submit quiz');
-            }
-            
-            return await response.json();
-        }
-    };
 
     /**
      * Initialize the modules page
@@ -240,9 +93,13 @@
 
         // Modal close handlers
         if (modalClose) modalClose.addEventListener('click', closeModuleModal);
-        if (modalOverlay) modalOverlay.addEventListener('click', closeModuleModal);
+        if (moduleModal) moduleModal.addEventListener('click', (e) => {
+            if (e.target === moduleModal) closeModuleModal();
+        });
         if (quizModalClose) quizModalClose.addEventListener('click', closeQuizModal);
-        if (quizModalOverlay) quizModalOverlay.addEventListener('click', closeQuizModal);
+        if (quizModal) quizModal.addEventListener('click', (e) => {
+            if (e.target === quizModal) closeQuizModal();
+        });
 
         // Logout handler
         const logoutBtn = document.getElementById('logoutBtn');
@@ -270,7 +127,7 @@
         try {
             showLoading();
 
-            const response = await ModulesAPI.getModules({ limit: 50 });
+            const response = await API.modules.getAll({ limit: 50 });
             
             if (response.success && response.data && response.data.modules) {
                 allModules = response.data.modules;
@@ -373,6 +230,7 @@
             // Show modal
             if (moduleModal) {
                 moduleModal.style.display = 'flex';
+                moduleModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
 
@@ -382,7 +240,7 @@
             }
 
             // Fetch module details
-            const response = await ModulesAPI.getModuleById(moduleId);
+            const response = await API.modules.getById(moduleId);
             
             if (response.success && response.data) {
                 renderModuleDetail(response.data);
@@ -476,7 +334,7 @@
         if (!coursesContainer) return;
 
         try {
-            const response = await ModulesAPI.getModuleContent(moduleId);
+            const response = await API.modules.getContent(moduleId);
             
             if (response.success && response.data && response.data.length > 0) {
                 coursesContainer.innerHTML = response.data.map((course, index) => `
@@ -507,7 +365,7 @@
         }
 
         try {
-            const response = await ModulesAPI.startModule(moduleId);
+            const response = await API.modules.start(moduleId);
             
             if (response.success) {
                 showSuccess('Moduł został rozpoczęty! Rozpocznij naukę.');
@@ -537,6 +395,7 @@
             // Show modal
             if (quizModal) {
                 quizModal.style.display = 'flex';
+                quizModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
 
@@ -547,8 +406,8 @@
 
             // Start quiz and get quiz data
             const [quizResponse, attemptResponse] = await Promise.all([
-                ModulesAPI.getQuizById(quizId),
-                ModulesAPI.startQuiz(quizId)
+                API.quiz.getById(quizId),
+                API.quiz.start(quizId)
             ]);
             
             if (quizResponse.success && attemptResponse.success) {
@@ -624,7 +483,7 @@
         });
 
         try {
-            const response = await ModulesAPI.submitQuiz(quizId, currentQuizAttemptId, answers);
+            const response = await API.quiz.submit(quizId, currentQuizAttemptId, answers);
             
             if (response.success && response.data) {
                 showQuizResults(response.data);
@@ -681,7 +540,10 @@
      */
     function closeModuleModal() {
         if (moduleModal) {
-            moduleModal.style.display = 'none';
+            moduleModal.classList.remove('active');
+            setTimeout(() => {
+                moduleModal.style.display = 'none';
+            }, 300); // Wait for fade animation
             document.body.style.overflow = '';
         }
         currentModuleId = null;
@@ -692,7 +554,10 @@
      */
     function closeQuizModal() {
         if (quizModal) {
-            quizModal.style.display = 'none';
+            quizModal.classList.remove('active');
+            setTimeout(() => {
+                quizModal.style.display = 'none';
+            }, 300); // Wait for fade animation
             document.body.style.overflow = '';
         }
         currentQuizAttemptId = null;

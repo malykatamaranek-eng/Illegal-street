@@ -248,6 +248,131 @@ const API = {
      */
     isAuthenticated: () => {
         return !!localStorage.getItem('user');
+    },
+
+    /**
+     * Modules APIs
+     */
+    modules: {
+        /**
+         * Get all modules
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Modules list
+         */
+        getAll: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/modules?${queryParams}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get module by ID
+         * @param {string} id - Module ID
+         * @returns {Promise<object>} Module data
+         */
+        getById: async (id) => {
+            return await apiRequest(`/api/modules/${id}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Start module
+         * @param {string} id - Module ID
+         * @returns {Promise<object>} Progress data
+         */
+        start: async (id) => {
+            return await apiRequest(`/api/modules/${id}/start`, {
+                method: 'POST'
+            });
+        },
+
+        /**
+         * Get module content
+         * @param {string} id - Module ID
+         * @returns {Promise<object>} Module content
+         */
+        getContent: async (id) => {
+            return await apiRequest(`/api/modules/${id}/content`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Complete module
+         * @param {string} id - Module ID
+         * @returns {Promise<object>} Response
+         */
+        complete: async (id) => {
+            return await apiRequest(`/api/modules/${id}/complete`, {
+                method: 'POST'
+            });
+        }
+    },
+
+    /**
+     * Quiz APIs
+     */
+    quiz: {
+        /**
+         * Get all quizzes
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Quizzes list
+         */
+        getAll: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/modules/quizzes?${queryParams}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get quiz by ID
+         * @param {string} id - Quiz ID
+         * @returns {Promise<object>} Quiz data
+         */
+        getById: async (id) => {
+            return await apiRequest(`/api/modules/quizzes/${id}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Start quiz
+         * @param {string} id - Quiz ID
+         * @returns {Promise<object>} Attempt data
+         */
+        start: async (id) => {
+            return await apiRequest(`/api/modules/quizzes/${id}/start`, {
+                method: 'POST'
+            });
+        },
+
+        /**
+         * Submit quiz
+         * @param {string} id - Quiz ID
+         * @param {string} attemptId - Attempt ID
+         * @param {object} answers - Quiz answers
+         * @returns {Promise<object>} Results data
+         */
+        submit: async (id, attemptId, answers) => {
+            return await apiRequest(`/api/modules/quizzes/${id}/submit`, {
+                method: 'POST',
+                body: JSON.stringify({ attemptId, answers })
+            });
+        },
+
+        /**
+         * Get quiz results
+         * @param {string} id - Quiz ID
+         * @returns {Promise<object>} Results data
+         */
+        getResults: async (id) => {
+            return await apiRequest(`/api/modules/quizzes/${id}/results`, {
+                method: 'GET'
+            });
+        }
     }
 };
 
