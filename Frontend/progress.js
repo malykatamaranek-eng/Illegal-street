@@ -243,6 +243,10 @@
         const labels = data.labels || [];
         const values = data.values || [];
 
+        // Primary red color from design system
+        const primaryColor = '#ff0000';
+        const primaryColorRgba = 'rgba(255, 0, 0, 0.1)';
+
         // Create new chart
         activityChart = new Chart(ctx, {
             type: 'line',
@@ -251,12 +255,12 @@
                 datasets: [{
                     label: 'Punkty zdobyte',
                     data: values,
-                    borderColor: '#ff6b6b',
-                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    borderColor: primaryColor,
+                    backgroundColor: primaryColorRgba,
                     borderWidth: 2,
                     fill: true,
                     tension: 0.4,
-                    pointBackgroundColor: '#ff6b6b',
+                    pointBackgroundColor: primaryColor,
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                     pointRadius: 4,
@@ -275,7 +279,7 @@
                         padding: 12,
                         titleColor: '#fff',
                         bodyColor: '#fff',
-                        borderColor: '#ff6b6b',
+                        borderColor: primaryColor,
                         borderWidth: 1
                     }
                 },
@@ -438,6 +442,7 @@
     function createGoalItem(goal) {
         const div = document.createElement('div');
         div.className = 'goal-item';
+        div.setAttribute('data-goal-id', goal.id);
 
         const progress = calculateGoalProgress(goal);
         const isCompleted = goal.status === 'completed' || progress >= 100;
@@ -451,13 +456,13 @@
                 </div>
                 <div class="goal-actions">
                     ${!isCompleted ? `
-                        <button class="btn btn-secondary btn-small" onclick="window.ProgressPage.completeGoal('${goal.id}')">
+                        <button class="btn btn-secondary btn-small goal-complete-btn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </button>
                     ` : ''}
-                    <button class="btn btn-secondary btn-small" onclick="window.ProgressPage.deleteGoal('${goal.id}')">
+                    <button class="btn btn-secondary btn-small goal-delete-btn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -489,6 +494,17 @@
                 ${goal.deadline ? `<span>Termin: ${formatDate(goal.deadline)}</span>` : ''}
             </div>
         `;
+
+        // Add event listeners
+        const completeBtn = div.querySelector('.goal-complete-btn');
+        const deleteBtn = div.querySelector('.goal-delete-btn');
+
+        if (completeBtn) {
+            completeBtn.addEventListener('click', () => completeGoal(goal.id));
+        }
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', () => deleteGoal(goal.id));
+        }
 
         return div;
     }
@@ -589,7 +605,9 @@
      * Delete a goal
      */
     async function deleteGoal(goalId) {
-        if (!confirm('Czy na pewno chcesz usunąć ten cel?')) {
+        // Simple confirmation - could be enhanced with a custom modal in the future
+        const confirmDelete = confirm('Czy na pewno chcesz usunąć ten cel?');
+        if (!confirmDelete) {
             return;
         }
 
@@ -780,10 +798,9 @@
      * Show toast notification
      */
     function showToast(message, type = 'info') {
-        const existingToast = document.querySelector('.toast');
-        if (existingToast) {
-            existingToast.remove();
-        }
+        // Remove any existing toasts immediately
+        const existingToasts = document.querySelectorAll('.toast');
+        existingToasts.forEach(toast => toast.remove());
 
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
@@ -791,14 +808,19 @@
 
         document.body.appendChild(toast);
 
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 10);
+        // Force reflow to ensure animation works
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                toast.classList.add('show');
+            });
+        });
 
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => {
-                toast.remove();
+                if (toast.parentNode) {
+                    toast.remove();
+                }
             }, 300);
         }, 5000);
     }
@@ -856,12 +878,6 @@
             throw error;
         }
     }
-
-    // Export functions to window for onclick handlers
-    window.ProgressPage = {
-        completeGoal,
-        deleteGoal
-    };
 
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
