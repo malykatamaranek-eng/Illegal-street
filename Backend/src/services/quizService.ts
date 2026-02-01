@@ -373,7 +373,7 @@ export class QuizService {
         where: {
           quizId,
           completedAt: {
-            not: null,
+            not: null as any,
           },
         },
         orderBy: {
@@ -392,7 +392,7 @@ export class QuizService {
         },
       });
 
-      return leaderboard.map((result, index) => ({
+      return leaderboard.map((result: any, index: number) => ({
         rank: index + 1,
         user: result.user,
         score: result.score,

@@ -10,7 +10,7 @@ import logger from '../config/logger';
 
 // 1. Get all quizzes
 export const getAllQuizzes = asyncHandler(async (req: Request, res: Response) => {
-  const { moduleId, difficulty, page = '1', limit = '20' } = req.query;
+  const { moduleId, page = '1', limit = '20' } = req.query;
   
   const quizzes = await quizService.getQuizzes(moduleId as string);
   
@@ -26,7 +26,7 @@ export const getAllQuizzes = asyncHandler(async (req: Request, res: Response) =>
 
 // 2. Get quiz by ID
 export const getQuizById = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const quiz = await quizService.getQuizById(id);
   
@@ -46,7 +46,7 @@ export const getQuizById = asyncHandler(async (req: Request, res: Response) => {
 // 3. Start quiz attempt
 export const startQuizAttempt = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const attempt = await quizService.startQuizAttempt(userId, id);
   
@@ -62,7 +62,7 @@ export const startQuizAttempt = asyncHandler(async (req: Request, res: Response)
 // 4. Submit quiz answers
 export const submitQuizAnswers = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   const { attemptId, answers } = req.body;
   
   const result = await quizService.submitQuizAnswers(userId, id, attemptId, answers);
@@ -79,7 +79,7 @@ export const submitQuizAnswers = asyncHandler(async (req: Request, res: Response
 // 5. Get quiz results/attempts
 export const getQuizAttempts = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const attempts = await quizService.getQuizAttempts(userId, id);
   
@@ -92,7 +92,7 @@ export const getQuizAttempts = asyncHandler(async (req: Request, res: Response) 
 // 6. Get user's best score for a quiz
 export const getBestScore = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const bestScore = await quizService.getBestScore(userId, id);
   
@@ -104,7 +104,7 @@ export const getBestScore = asyncHandler(async (req: Request, res: Response) => 
 
 // 7. Get quiz statistics
 export const getQuizStatistics = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const stats = await quizService.getQuizStatistics(id);
   
@@ -116,7 +116,7 @@ export const getQuizStatistics = asyncHandler(async (req: Request, res: Response
 
 // 8. Get quiz leaderboard
 export const getQuizLeaderboard = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   const { limit = '10' } = req.query;
   
   const leaderboard = await quizService.getQuizLeaderboard(id, parseInt(limit as string));
