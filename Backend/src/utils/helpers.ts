@@ -1,24 +1,28 @@
+import crypto from 'crypto';
+
 /**
  * Helper utilities for Illegal Street Backend
  */
 
 /**
- * Generate a random ID
+ * Generate a cryptographically secure random ID
  */
 export const generateId = (): string => {
-  return Math.random().toString(36).substr(2, 9);
+  return crypto.randomBytes(6).toString('base64url');
 };
 
 /**
- * Generate a random token
+ * Generate a cryptographically secure random token
  */
 export const generateToken = (length: number = 32): string => {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let token = '';
-  for (let i = 0; i < length; i++) {
-    token += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return token;
+  return crypto.randomBytes(length).toString('hex');
+};
+
+/**
+ * Generate a UUID v4
+ */
+export const generateUuid = (): string => {
+  return crypto.randomUUID();
 };
 
 /**
