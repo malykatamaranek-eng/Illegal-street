@@ -104,7 +104,7 @@ export const getMyPosition = asyncHandler(async (req: Request, res: Response): P
   });
 });
 
-export const getUserRanking = asyncHandler(async (req: Request, res: Response) => {
+export const getUserRanking = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params as { id: string };
   
   const user = await prisma.user.findUnique({
@@ -115,15 +115,15 @@ export const getUserRanking = asyncHandler(async (req: Request, res: Response) =
       avatarUrl: true,
       totalPoints: true,
       level: true,
-      monthlyPoints: true,
     },
   });
   
   if (!user) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       message: 'User not found',
     });
+    return;
   }
   
   const globalRank = await prisma.user.count({
@@ -177,7 +177,7 @@ export const getRankingByLevel = asyncHandler(async (req: Request, res: Response
 
 export const getAllAchievements = asyncHandler(async (req: Request, res: Response) => {
   const achievements = await prisma.achievement.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { id: 'desc' },
   });
   
   res.status(200).json({
@@ -186,33 +186,19 @@ export const getAllAchievements = asyncHandler(async (req: Request, res: Respons
   });
 });
 
-export const getAchievementById = asyncHandler(async (req: Request, res: Response) => {
+export const getAchievementById = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params as { id: string };
   
   const achievement = await prisma.achievement.findUnique({
     where: { id },
-    include: {
-      userAchievements: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              username: true,
-              avatarUrl: true,
-            },
-          },
-        },
-        take: 10,
-        orderBy: { unlockedAt: 'desc' },
-      },
-    },
   });
   
   if (!achievement) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       message: 'Achievement not found',
     });
+    return;
   }
   
   res.status(200).json({
@@ -222,10 +208,10 @@ export const getAchievementById = asyncHandler(async (req: Request, res: Respons
 });
 
 export const getMyBadges = asyncHandler(async (req: Request, res: Response) => {
-  const userId = req.user!.id;
+  const _userId = req.user!.id;
   
   const badges = await prisma.achievement.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { id: 'desc' },
   });
   
   res.status(200).json({

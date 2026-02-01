@@ -317,7 +317,7 @@ export const exportProgress = asyncHandler(async (req: Request, res: Response): 
 });
 
 export const getGoals = asyncHandler(async (req: Request, res: Response) => {
-  const userId = req.user!.id;
+  const _userId = req.user!.id;
   
   // Placeholder for goals - model doesn't exist in schema
   const goals: any[] = [];

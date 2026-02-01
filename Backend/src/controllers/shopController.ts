@@ -51,34 +51,22 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export const getProductById = asyncHandler(async (req: Request, res: Response) => {
+export const getProductById = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params as { id: string };
   
   const product = await prisma.product.findUnique({
     where: { id },
     include: {
       category: true,
-      reviews: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              username: true,
-              avatarUrl: true,
-            },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-        take: 10,
-      },
     },
   });
   
   if (!product) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       message: 'Product not found',
     });
+    return;
   }
   
   res.status(200).json({
@@ -264,7 +252,7 @@ export const getCart = asyncHandler(async (req: Request, res: Response) => {
   });
   
   const total = cartItems.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
+    (sum, item) => sum + Number(item.product.price) * item.quantity,
     0
   );
   
@@ -278,7 +266,7 @@ export const getCart = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export const updateCartItem = asyncHandler(async (req: Request, res: Response) => {
+export const updateCartItem = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
   const { id } = req.params as { id: string };
   const { quantity } = req.body;
@@ -291,10 +279,11 @@ export const updateCartItem = asyncHandler(async (req: Request, res: Response) =
   });
   
   if (!cartItem) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       message: 'Cart item not found',
     });
+    return;
   }
   
   const updatedItem = await prisma.cartItem.update({
@@ -312,7 +301,7 @@ export const updateCartItem = asyncHandler(async (req: Request, res: Response) =
   });
 });
 
-export const removeFromCart = asyncHandler(async (req: Request, res: Response) => {
+export const removeFromCart = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
   const { id } = req.params as { id: string };
   
@@ -324,10 +313,11 @@ export const removeFromCart = asyncHandler(async (req: Request, res: Response) =
   });
   
   if (!cartItem) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       message: 'Cart item not found',
     });
+    return;
   }
   
   await prisma.cartItem.delete({
@@ -359,7 +349,7 @@ export const clearCart = asyncHandler(async (req: Request, res: Response) => {
 
 export const checkout = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
-  const { paymentMethod } = req.body;
+  const { paymentMethod: _paymentMethod } = req.body;
   
   // Get cart items
   const cartItems = await prisma.cartItem.findMany({
@@ -428,7 +418,7 @@ export const getOrders = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export const getOrderById = asyncHandler(async (req: Request, res: Response) => {
+export const getOrderById = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
   const { id } = req.params as { id: string };
   
@@ -437,20 +427,14 @@ export const getOrderById = asyncHandler(async (req: Request, res: Response) => 
       id,
       userId,
     },
-    include: {
-      items: {
-        include: {
-          product: true,
-        },
-      },
-    },
   });
   
   if (!order) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       message: 'Order not found',
     });
+    return;
   }
   
   res.status(200).json({
@@ -518,7 +502,7 @@ export const addToWishlist = asyncHandler(async (req: Request, res: Response): P
   });
 });
 
-export const removeFromWishlist = asyncHandler(async (req: Request, res: Response) => {
+export const removeFromWishlist = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
   const { id } = req.params as { id: string };
   
@@ -530,10 +514,11 @@ export const removeFromWishlist = asyncHandler(async (req: Request, res: Respons
   });
   
   if (!wishlistItem) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       message: 'Wishlist item not found',
     });
+    return;
   }
   
   await prisma.wishlistItem.delete({
