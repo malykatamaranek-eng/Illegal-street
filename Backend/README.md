@@ -1,4 +1,125 @@
-# Illegal Street - Secure Backend API
+# Illegal Street - Secure Backend API (TypeScript)
+
+A secure, enterprise-grade backend API built with TypeScript, Node.js, Express, PostgreSQL, and Redis.
+
+## 🚀 Technology Stack
+
+- **Runtime**: Node.js 18+
+- **Language**: TypeScript 5.7
+- **Framework**: Express.js
+- **Database**: PostgreSQL with Prisma ORM
+- **Cache**: Redis with ioredis
+- **Queue**: Bull (Redis-based job queue)
+- **WebSocket**: Socket.io
+- **Testing**: Jest + Supertest
+- **Logging**: Winston + Sentry
+- **Security**: Helmet, bcrypt, JWT, rate limiting
+- **Validation**: Express-validator + Zod
+- **File Storage**: AWS S3
+- **Email**: Nodemailer
+
+## 📦 Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Copy environment variables
+cp .env.example .env
+
+# Generate Prisma Client
+npm run prisma:generate
+
+# Run database migrations
+npm run migrate
+
+# Build TypeScript
+npm run build
+```
+
+## 🛠️ Development
+
+```bash
+# Run development server with hot reload
+npm run dev
+
+# Run with tsx (faster)
+npm run dev:tsx
+
+# Type checking
+npm run typecheck
+
+# Linting
+npm run lint
+npm run lint:fix
+
+# Format code
+npm run format
+```
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm test:watch
+
+# Run tests with coverage
+npm run test:ci
+```
+
+## 🏗️ Building
+
+```bash
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
+
+## 🐳 Docker
+
+```bash
+# Build Docker image
+npm run docker:build
+
+# Start all services
+npm run docker:up
+
+# Stop all services
+npm run docker:down
+
+# View logs
+npm run docker:logs
+```
+
+## 📁 Project Structure
+
+```
+Backend/
+├── src/
+│   ├── main.ts              # Express app configuration
+│   ├── server.ts            # HTTP + WebSocket server
+│   ├── config/              # Configuration files
+│   ├── middleware/          # Express middleware
+│   ├── controllers/         # Route controllers
+│   ├── routes/              # API routes
+│   ├── services/            # Business logic
+│   ├── models/              # Data models
+│   ├── utils/               # Utilities
+│   ├── websocket/           # WebSocket handlers
+│   ├── jobs/                # Background jobs
+│   └── types/               # TypeScript types
+├── prisma/
+│   └── schema.prisma        # Database schema
+├── dist/                    # Compiled JavaScript
+├── tests/                   # Test files
+├── logs/                    # Application logs
+└── uploads/                 # File uploads
+```
 
 ## 🔒 Security Features
 
