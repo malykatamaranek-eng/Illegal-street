@@ -158,7 +158,7 @@
         }
 
         hideEmptyState();
-        modulesGrid.style.display = 'grid';
+        modulesGrid.classList.remove('hidden');
 
         filteredModules.forEach(module => {
             const moduleCard = createModuleCard(module);
@@ -229,8 +229,10 @@
             
             // Show modal
             if (moduleModal) {
-                moduleModal.style.display = 'flex';
-                moduleModal.classList.add('active');
+                moduleModal.classList.remove('hidden');
+                setTimeout(() => {
+                    moduleModal.classList.add('active');
+                }, 10);
                 document.body.style.overflow = 'hidden';
             }
 
@@ -394,8 +396,10 @@
         try {
             // Show modal
             if (quizModal) {
-                quizModal.style.display = 'flex';
-                quizModal.classList.add('active');
+                quizModal.classList.remove('hidden');
+                setTimeout(() => {
+                    quizModal.classList.add('active');
+                }, 10);
                 document.body.style.overflow = 'hidden';
             }
 
@@ -542,7 +546,7 @@
         if (moduleModal) {
             moduleModal.classList.remove('active');
             setTimeout(() => {
-                moduleModal.style.display = 'none';
+                moduleModal.classList.add('hidden');
             }, 300); // Wait for fade animation
             document.body.style.overflow = '';
         }
@@ -556,7 +560,7 @@
         if (quizModal) {
             quizModal.classList.remove('active');
             setTimeout(() => {
-                quizModal.style.display = 'none';
+                quizModal.classList.add('hidden');
             }, 300); // Wait for fade animation
             document.body.style.overflow = '';
         }
@@ -659,31 +663,31 @@
      * Show loading state
      */
     function showLoading() {
-        if (loadingSkeleton) loadingSkeleton.style.display = 'grid';
-        if (modulesGrid) modulesGrid.style.display = 'none';
-        if (emptyState) emptyState.style.display = 'none';
+        if (loadingSkeleton) loadingSkeleton.classList.remove('hidden');
+        if (modulesGrid) modulesGrid.classList.add('hidden');
+        if (emptyState) emptyState.classList.add('hidden');
     }
 
     /**
      * Hide loading state
      */
     function hideLoading() {
-        if (loadingSkeleton) loadingSkeleton.style.display = 'none';
+        if (loadingSkeleton) loadingSkeleton.classList.add('hidden');
     }
 
     /**
      * Show empty state
      */
     function showEmptyState() {
-        if (emptyState) emptyState.style.display = 'block';
-        if (modulesGrid) modulesGrid.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
+        if (modulesGrid) modulesGrid.classList.add('hidden');
     }
 
     /**
      * Hide empty state
      */
     function hideEmptyState() {
-        if (emptyState) emptyState.style.display = 'none';
+        if (emptyState) emptyState.classList.add('hidden');
     }
 
     /**

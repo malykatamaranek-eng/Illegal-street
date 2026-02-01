@@ -20,7 +20,7 @@
                 </svg>
                 <span>Illegal Street</span>
             </div>
-            <button class="nav-toggle" aria-label="Toggle navigation" id="navToggle">
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" id="navToggle">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -43,7 +43,7 @@
                     <a href="login.html" class="btn btn-secondary btn-small" id="loginBtn">Zaloguj</a>
                 </li>
                 <li id="logoutSection" style="display: none;">
-                    <button class="btn btn-secondary btn-small" id="logoutBtn">Wyloguj</button>
+                    <button type="button" class="btn btn-secondary btn-small" id="logoutBtn">Wyloguj</button>
                 </li>
             </ul>
         </div>
@@ -139,31 +139,31 @@
                     </svg>
                     <input type="text" id="searchInput" placeholder="Szukaj modułu...">
                 </div>
-                
+
                 <div class="courses-filters">
-                    <button class="filter-btn active" data-category="all">Wszystkie</button>
-                    <button class="filter-btn" data-category="beginner">Początkujący</button>
-                    <button class="filter-btn" data-category="intermediate">Średniozaawansowany</button>
-                    <button class="filter-btn" data-category="advanced">Zaawansowany</button>
+                    <button class="filter-btn active" type="button" data-category="all">Wszystkie</button>
+                    <button class="filter-btn" type="button" data-category="beginner">Początkujący</button>
+                    <button class="filter-btn" type="button" data-category="intermediate">Średniozaawansowany</button>
+                    <button class="filter-btn" type="button" data-category="advanced">Zaawansowany</button>
                 </div>
             </div>
 
             <!-- Loading Skeleton -->
-            <div id="loadingSkeleton" class="courses-grid">
+            <div id="loadingSkeleton" class="courses-grid hidden">
                 <div class="card">
-                    <div class="skeleton" style="height: 60px; width: 60px; margin-bottom: 1rem;"></div>
+                    <div class="skeleton skeleton-icon"></div>
                     <div class="skeleton skeleton-title"></div>
                     <div class="skeleton skeleton-text"></div>
                     <div class="skeleton skeleton-text"></div>
                 </div>
                 <div class="card">
-                    <div class="skeleton" style="height: 60px; width: 60px; margin-bottom: 1rem;"></div>
+                    <div class="skeleton skeleton-icon"></div>
                     <div class="skeleton skeleton-title"></div>
                     <div class="skeleton skeleton-text"></div>
                     <div class="skeleton skeleton-text"></div>
                 </div>
                 <div class="card">
-                    <div class="skeleton" style="height: 60px; width: 60px; margin-bottom: 1rem;"></div>
+                    <div class="skeleton skeleton-icon"></div>
                     <div class="skeleton skeleton-title"></div>
                     <div class="skeleton skeleton-text"></div>
                     <div class="skeleton skeleton-text"></div>
@@ -171,32 +171,32 @@
             </div>
 
             <!-- Modules Grid -->
-            <div id="modulesGrid" class="courses-grid" style="display: none;">
+            <div id="modulesGrid" class="courses-grid hidden">
                 <!-- Modules will be rendered here by JavaScript -->
             </div>
 
             <!-- Empty State -->
-            <div id="emptyState" class="text-center" style="display: none; padding: 4rem 2rem;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 64px; height: 64px; margin: 0 auto 1rem; opacity: 0.5;">
+            <div id="emptyState" class="text-center empty-state hidden">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-icon">
                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                 </svg>
-                <h3 style="margin-bottom: 0.5rem; color: #fff;">Nie znaleziono modułów</h3>
-                <p style="color: #888;">Spróbuj zmienić filtry lub wyszukiwanie</p>
+                <h3 class="empty-title">Nie znaleziono modułów</h3>
+                <p class="empty-subtitle">Spróbuj zmienić filtry lub wyszukiwanie</p>
             </div>
         </main>
     </div>
 
     <!-- Module Detail Modal -->
-    <div class="modal-overlay" id="moduleModal" style="display: none;">
-        <div class="modal-content" style="max-width: 900px;">
-            <button class="modal-close" id="modalClose">
+    <div class="modal-overlay hidden" id="moduleModal">
+        <div class="modal-content modal-large">
+            <button class="modal-close" type="button" id="modalClose" aria-label="Zamknij okno">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
             </button>
-            
+
             <div id="moduleDetailContent">
                 <!-- Module details will be loaded here -->
             </div>
@@ -204,15 +204,15 @@
     </div>
 
     <!-- Quiz Modal -->
-    <div class="modal-overlay" id="quizModal" style="display: none;">
-        <div class="modal-content" style="max-width: 900px;">
-            <button class="modal-close" id="quizModalClose">
+    <div class="modal-overlay hidden" id="quizModal">
+        <div class="modal-content modal-large">
+            <button class="modal-close" type="button" id="quizModalClose" aria-label="Zamknij quiz">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
             </button>
-            
+
             <div id="quizContent">
                 <!-- Quiz content will be loaded here -->
             </div>
