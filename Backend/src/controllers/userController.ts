@@ -103,8 +103,8 @@ export const deleteSession = asyncHandler(async (req: Request, res: Response) =>
   });
 });
 
-export const getUserAchievements = asyncHandler(async (req: Request, res: Response) => {
-  const { id: _id } = req.params as { id: string };
+export const getUserAchievements = asyncHandler(async (_req: Request, res: Response) => {
+  // const { id } = req.params as { id: string }; // ID validation handled by middleware
   
   const achievements = await prisma.achievement.findMany({
     orderBy: { id: 'desc' },
@@ -199,8 +199,8 @@ export const unfollowUser = asyncHandler(async (req: Request, res: Response) => 
   });
 });
 
-export const getFollowers = asyncHandler(async (req: Request, res: Response) => {
-  const { id: _id } = req.params as { id: string };
+export const getFollowers = asyncHandler(async (_req: Request, res: Response) => {
+  // const { id } = req.params as { id: string }; // ID validation handled by middleware
   
   // Placeholder - Follow model doesn't exist in schema
   const followers: any[] = [];
@@ -240,7 +240,7 @@ export const searchUsers = asyncHandler(async (req: Request, res: Response) => {
 
 export const deleteAccount = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { password: _password } = req.body;
+  // const { password } = req.body; // Password verification could be added here
   
   // Verify password first
   const user = await prisma.user.findUnique({ where: { id: userId } });

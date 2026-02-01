@@ -165,7 +165,7 @@ export const optionalAuth = async (
     }
 
     next();
-  } catch (error) {
+  } catch (_error) {
     // For optional auth, we don't throw errors
     next();
   }

@@ -349,7 +349,7 @@ export const clearCart = asyncHandler(async (req: Request, res: Response) => {
 
 export const checkout = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
-  const { paymentMethod: _paymentMethod } = req.body;
+  // const { paymentMethod } = req.body; // Payment method validation could be added here
   
   // Get cart items
   const cartItems = await prisma.cartItem.findMany({
