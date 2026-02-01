@@ -1,5 +1,12 @@
 import prisma from '../config/prisma';
 import logger from '../config/logger';
+import { Prisma } from '@prisma/client';
+
+interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+}
 
 export class QuizService {
   /**
@@ -7,7 +14,7 @@ export class QuizService {
    */
   async getQuizzes(moduleId?: string) {
     try {
-      const where: any = {};
+      const where: Prisma.QuizWhereInput = {};
       if (moduleId) {
         where.moduleId = moduleId;
       }
@@ -104,7 +111,7 @@ export class QuizService {
     userId: string,
     quizId: string,
     attemptId: string,
-    answers: Record<string, any>
+    answers: Record<string, number>
   ) {
     try {
       // Get quiz with questions
@@ -130,12 +137,13 @@ export class QuizService {
       }
 
       // Calculate score
-      const questions = quiz.questions as any[];
+      const questions = quiz.questions as unknown as QuizQuestion[];
       let correctAnswers = 0;
       const totalQuestions = questions.length;
 
       questions.forEach((question, index) => {
-        const userAnswer = answers[index];
+        const questionKey = index.toString();
+        const userAnswer = answers[questionKey];
         if (userAnswer !== undefined && userAnswer === question.correctAnswer) {
           correctAnswers++;
         }
