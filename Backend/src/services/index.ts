@@ -16,3 +16,4 @@ export { default as shopService } from './shopService';
 export { default as chatService } from './chatService';
 export { default as moduleService } from './moduleService';
 export { default as adminService } from './adminService';
+export { default as quizService } from './quizService';
