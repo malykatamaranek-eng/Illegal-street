@@ -52,7 +52,7 @@ export const changePassword = asyncHandler(async (req: Request, res: Response) =
   const userId = req.user!.id;
   const { currentPassword, newPassword } = req.body;
   
-  await userService.changePassword(userId, { currentPassword, newPassword });
+  await userService.changePassword(userId, { oldPassword: currentPassword, newPassword });
   logger.info(`Password changed: ${userId}`);
   
   res.status(200).json({
@@ -240,7 +240,7 @@ export const searchUsers = asyncHandler(async (req: Request, res: Response) => {
 
 export const deleteAccount = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { password } = req.body;
+  const { password: _password } = req.body;
   
   // Verify password first
   const user = await prisma.user.findUnique({ where: { id: userId } });
