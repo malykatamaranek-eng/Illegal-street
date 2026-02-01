@@ -105,6 +105,42 @@ export class QuizService {
   }
 
   /**
+   * Calculate score from quiz and answers
+   */
+  calculateScore(quiz: any, answers: Record<string, number>) {
+    const questions = quiz.questions as unknown as QuizQuestion[];
+    let correctAnswers = 0;
+    const totalQuestions = questions.length;
+
+    if (totalQuestions === 0) {
+      return {
+        score: 0,
+        correctAnswers: 0,
+        totalQuestions: 0,
+        passed: false,
+      };
+    }
+
+    questions.forEach((question, index) => {
+      const questionKey = index.toString();
+      const userAnswer = answers[questionKey];
+      if (userAnswer !== undefined && userAnswer === question.correctAnswer) {
+        correctAnswers++;
+      }
+    });
+
+    const score = Math.round((correctAnswers / totalQuestions) * 100);
+    const passed = score >= 70;
+
+    return {
+      score,
+      correctAnswers,
+      totalQuestions,
+      passed,
+    };
+  }
+
+  /**
    * Submit quiz and calculate score
    */
   async submitQuiz(

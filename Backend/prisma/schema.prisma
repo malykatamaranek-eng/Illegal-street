@@ -234,12 +234,14 @@ model Quiz {
 // QUIZ RESULT MODEL
 // ===================================
 model QuizResult {
-  id          String   @id @default(uuid())
-  userId      String   @map("user_id")
-  quizId      String   @map("quiz_id")
-  score       Float
-  answers     Json
-  completedAt DateTime @default(now()) @map("completed_at")
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  quizId      String    @map("quiz_id")
+  score       Float     @default(0)
+  answers     Json      @default("{}")
+  passed      Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  completedAt DateTime? @map("completed_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
