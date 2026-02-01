@@ -455,6 +455,346 @@ const API = {
                 method: 'DELETE'
             });
         }
+    },
+
+    /**
+     * Ranking APIs
+     */
+    ranking: {
+        /**
+         * Get global ranking
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Ranking data
+         */
+        getGlobal: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/ranking/global?${queryParams}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get monthly ranking
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Ranking data
+         */
+        getMonthly: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/ranking/monthly?${queryParams}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get user rank
+         * @returns {Promise<object>} User rank data
+         */
+        getUserRank: async () => {
+            return await apiRequest('/api/ranking/user', {
+                method: 'GET'
+            });
+        }
+    },
+
+    /**
+     * Achievements APIs
+     */
+    achievements: {
+        /**
+         * Get all achievements
+         * @returns {Promise<object>} Achievements list
+         */
+        getAll: async () => {
+            return await apiRequest('/api/achievements', {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get achievement by ID
+         * @param {string} id - Achievement ID
+         * @returns {Promise<object>} Achievement data
+         */
+        getById: async (id) => {
+            return await apiRequest(`/api/achievements/${id}`, {
+                method: 'GET'
+            });
+        }
+    },
+
+    /**
+     * Users APIs
+     */
+    users: {
+        /**
+         * Get user profile
+         * @returns {Promise<object>} Profile data
+         */
+        getProfile: async () => {
+            return await apiRequest('/api/users/profile', {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Update user profile
+         * @param {object} profileData - Profile data
+         * @returns {Promise<object>} Updated profile
+         */
+        updateProfile: async (profileData) => {
+            return await apiRequest('/api/users/profile', {
+                method: 'PUT',
+                body: JSON.stringify(profileData)
+            });
+        },
+
+        /**
+         * Change password
+         * @param {object} passwordData - Password data
+         * @returns {Promise<object>} Response
+         */
+        changePassword: async (passwordData) => {
+            return await apiRequest('/api/users/password', {
+                method: 'PUT',
+                body: JSON.stringify(passwordData)
+            });
+        },
+
+        /**
+         * Get active sessions
+         * @returns {Promise<object>} Sessions list
+         */
+        getSessions: async () => {
+            return await apiRequest('/api/users/sessions', {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Delete session
+         * @param {string} sessionId - Session ID
+         * @returns {Promise<object>} Response
+         */
+        deleteSession: async (sessionId) => {
+            return await apiRequest(`/api/users/sessions/${sessionId}`, {
+                method: 'DELETE'
+            });
+        }
+    },
+
+    /**
+     * Chat APIs
+     */
+    chat: {
+        /**
+         * Get messages
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Messages list
+         */
+        getMessages: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/chat/messages?${queryParams}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Send message
+         * @param {object} messageData - Message data
+         * @returns {Promise<object>} Created message
+         */
+        sendMessage: async (messageData) => {
+            return await apiRequest('/api/chat/messages', {
+                method: 'POST',
+                body: JSON.stringify(messageData)
+            });
+        },
+
+        /**
+         * Delete message
+         * @param {string} messageId - Message ID
+         * @returns {Promise<object>} Response
+         */
+        deleteMessage: async (messageId) => {
+            return await apiRequest(`/api/chat/messages/${messageId}`, {
+                method: 'DELETE'
+            });
+        }
+    },
+
+    /**
+     * Shop APIs
+     */
+    shop: {
+        /**
+         * Get products
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Products list
+         */
+        getProducts: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/shop/products?${queryParams}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Add to cart
+         * @param {object} cartData - Cart data
+         * @returns {Promise<object>} Response
+         */
+        addToCart: async (cartData) => {
+            return await apiRequest('/api/shop/cart/add', {
+                method: 'POST',
+                body: JSON.stringify(cartData)
+            });
+        },
+
+        /**
+         * Checkout
+         * @param {object} orderData - Order data
+         * @returns {Promise<object>} Created order
+         */
+        checkout: async (orderData) => {
+            return await apiRequest('/api/shop/checkout', {
+                method: 'POST',
+                body: JSON.stringify(orderData)
+            });
+        },
+
+        /**
+         * Get orders
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Orders list
+         */
+        getOrders: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/shop/orders?${queryParams}`, {
+                method: 'GET'
+            });
+        }
+    },
+
+    /**
+     * Admin APIs
+     */
+    admin: {
+        /**
+         * Get analytics
+         * @returns {Promise<object>} Analytics data
+         */
+        getAnalytics: async () => {
+            return await apiRequest('/api/admin/analytics', {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get all users
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Users list
+         */
+        getUsers: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/admin/users?${queryParams}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Get user by ID
+         * @param {string} userId - User ID
+         * @returns {Promise<object>} User data
+         */
+        getUser: async (userId) => {
+            return await apiRequest(`/api/admin/users/${userId}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Create user
+         * @param {object} userData - User data
+         * @returns {Promise<object>} Created user
+         */
+        createUser: async (userData) => {
+            return await apiRequest('/api/admin/users', {
+                method: 'POST',
+                body: JSON.stringify(userData)
+            });
+        },
+
+        /**
+         * Update user
+         * @param {string} userId - User ID
+         * @param {object} userData - User data
+         * @returns {Promise<object>} Updated user
+         */
+        updateUser: async (userId, userData) => {
+            return await apiRequest(`/api/admin/users/${userId}`, {
+                method: 'PUT',
+                body: JSON.stringify(userData)
+            });
+        },
+
+        /**
+         * Delete user
+         * @param {string} userId - User ID
+         * @returns {Promise<object>} Response
+         */
+        deleteUser: async (userId) => {
+            return await apiRequest(`/api/admin/users/${userId}`, {
+                method: 'DELETE'
+            });
+        },
+
+        /**
+         * Delete module
+         * @param {string} moduleId - Module ID
+         * @returns {Promise<object>} Response
+         */
+        deleteModule: async (moduleId) => {
+            return await apiRequest(`/api/admin/modules/${moduleId}`, {
+                method: 'DELETE'
+            });
+        },
+
+        /**
+         * Get orders
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Orders list
+         */
+        getOrders: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/admin/orders?${queryParams}`, {
+                method: 'GET'
+            });
+        },
+
+        /**
+         * Update order status
+         * @param {string} orderId - Order ID
+         * @param {object} statusData - Status data
+         * @returns {Promise<object>} Updated order
+         */
+        updateOrderStatus: async (orderId, statusData) => {
+            return await apiRequest(`/api/admin/orders/${orderId}`, {
+                method: 'PUT',
+                body: JSON.stringify(statusData)
+            });
+        },
+
+        /**
+         * Get audit logs
+         * @param {object} params - Query parameters
+         * @returns {Promise<object>} Audit logs list
+         */
+        getAuditLogs: async (params = {}) => {
+            const queryParams = new URLSearchParams(params);
+            return await apiRequest(`/api/admin/audit-logs?${queryParams}`, {
+                method: 'GET'
+            });
+        }
     }
 };
 
