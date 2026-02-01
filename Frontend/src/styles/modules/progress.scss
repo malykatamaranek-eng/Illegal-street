@@ -310,3 +310,372 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+// ===== New Progress Page Styles =====
+
+// Stats Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+}
+
+.stat-card {
+  @include card;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: $radius-lg;
+    @include flex-center;
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .stat-content {
+    flex: 1;
+  }
+
+  .stat-value {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $text-light;
+    margin-bottom: $spacing-xs / 2;
+  }
+
+  .stat-label {
+    font-size: $font-size-sm;
+    color: $text-gray;
+  }
+}
+
+// Card Header
+.card-header {
+  @include flex-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+
+  h2 {
+    margin: 0;
+    font-size: $font-size-2xl;
+  }
+}
+
+.card-body {
+  // Base card body styles
+}
+
+// Chart Period Buttons
+.chart-period-buttons {
+  display: flex;
+  gap: $spacing-xs;
+
+  .btn {
+    &.active {
+      background: $primary-red;
+      border-color: $primary-red;
+      color: $text-light;
+    }
+  }
+}
+
+// Module Progress Item
+.module-progress-item {
+  padding: $spacing-md;
+  background: $bg-section;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:hover {
+    border-color: $primary-red;
+    transform: translateY(-2px);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.module-progress-header {
+  @include flex-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.module-progress-info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex: 1;
+
+  h4 {
+    margin: 0;
+    font-size: $font-size-lg;
+  }
+}
+
+.module-progress-percent {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $primary-red;
+}
+
+.progress-bar {
+  height: 10px;
+  background: $bg-dark;
+  border-radius: $radius-full;
+  overflow: hidden;
+  margin-bottom: $spacing-sm;
+
+  .progress-fill {
+    height: 100%;
+    background: $gradient-red;
+    border-radius: $radius-full;
+    transition: width $transition-slow;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      animation: shimmer 2s infinite;
+    }
+  }
+}
+
+.module-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: $font-size-sm;
+  color: $text-gray;
+}
+
+// Goals
+.goal-item {
+  padding: $spacing-md;
+  background: $bg-section;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:hover {
+    border-color: $primary-red;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.goal-header {
+  @include flex-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-md;
+
+  h4 {
+    margin: 0 0 $spacing-xs 0;
+    font-size: $font-size-lg;
+  }
+}
+
+.goal-description {
+  font-size: $font-size-sm;
+  color: $text-gray;
+  margin: $spacing-xs 0 0 0;
+}
+
+.goal-actions {
+  display: flex;
+  gap: $spacing-xs;
+
+  .btn {
+    padding: $spacing-xs;
+    min-width: auto;
+  }
+}
+
+.goal-progress {
+  margin-bottom: $spacing-md;
+
+  .progress-label {
+    @include flex-between;
+    margin-bottom: $spacing-xs;
+    font-size: $font-size-sm;
+    color: $text-gray;
+  }
+}
+
+.goal-meta {
+  display: flex;
+  gap: $spacing-md;
+  font-size: $font-size-sm;
+}
+
+// Achievements
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: $spacing-md;
+}
+
+.achievement-card {
+  @include card;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  transition: all $transition-base;
+
+  &.earned {
+    border-color: $primary-red;
+
+    .achievement-icon {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &.locked {
+    opacity: 0.5;
+    filter: grayscale(100%);
+
+    .achievement-icon {
+      font-size: $font-size-3xl;
+    }
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.achievement-icon {
+  font-size: $font-size-4xl;
+  transition: font-size $transition-base;
+}
+
+.achievement-info {
+  flex: 1;
+
+  h4 {
+    margin: 0 0 $spacing-xs 0;
+    font-size: $font-size-base;
+  }
+
+  p {
+    margin: 0;
+    font-size: $font-size-sm;
+    color: $text-gray;
+  }
+}
+
+.achievement-date,
+.achievement-locked {
+  display: block;
+  font-size: $font-size-xs;
+  color: $text-gray;
+  margin-top: $spacing-xs;
+}
+
+// Form styles for goal modal
+.form-group {
+  margin-bottom: $spacing-md;
+
+  label {
+    display: block;
+    margin-bottom: $spacing-xs;
+    color: $text-light;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-sm;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: $spacing-sm;
+    background: $bg-dark;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    color: $text-light;
+    font-size: $font-size-base;
+    transition: all $transition-base;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-red;
+      box-shadow: 0 0 0 3px rgba($primary-red, 0.1);
+    }
+
+    &::placeholder {
+      color: $text-gray;
+    }
+  }
+
+  textarea.form-control {
+    resize: vertical;
+    min-height: 80px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: $spacing-sm;
+  justify-content: flex-end;
+  margin-top: $spacing-lg;
+}
+
+// Badge colors
+.badge {
+  &.badge-error {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+  }
+
+  &.badge-primary {
+    background: rgba($primary-red, 0.2);
+    color: $primary-red;
+  }
+}
+
+// Responsive
+@include tablet {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@include mobile {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .achievements-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-period-buttons {
+    flex-wrap: wrap;
+  }
+}

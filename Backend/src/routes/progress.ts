@@ -4,7 +4,6 @@ import {
   requireAuth,
   validateId,
   handleValidationErrors,
-  apiLimiter,
 } from '../middleware';
 import { body, query } from 'express-validator';
 

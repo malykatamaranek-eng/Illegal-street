@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postępy - Illegal Street</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Fixed Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <svg class="logo" width="40" height="40" viewBox="0 0 40 40">
+                    <path d="M20 5 L35 15 L35 25 L20 35 L5 25 L5 15 Z" fill="none" stroke="#ff0000" stroke-width="2"/>
+                    <circle cx="20" cy="20" r="8" fill="#ff0000"/>
+                </svg>
+                <span>Illegal Street</span>
+            </div>
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Strona główna</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="modules.html" class="nav-link">Moduły</a></li>
+                <li><a href="progress.html" class="nav-link active">Postępy</a></li>
+                <li><a href="ranking.html" class="nav-link">Ranking</a></li>
+                <li><a href="shop.html" class="nav-link">Sklep</a></li>
+                <li><a href="chat.html" class="nav-link">Chat</a></li>
+                <li class="nav-user" id="navUserSection" style="display: none;">
+                    <div class="nav-user-info">
+                        <img src="assets/default-avatar.png" alt="User Avatar" class="nav-user-avatar" id="navAvatar">
+                        <span class="nav-user-name" id="navUsername">User</span>
+                    </div>
+                </li>
+                <li id="authButtons">
+                    <a href="login.html" class="btn btn-secondary btn-small" id="loginBtn">Zaloguj</a>
+                </li>
+                <li id="logoutSection" style="display: none;">
+                    <button type="button" class="btn btn-secondary btn-small" id="logoutBtn">Wyloguj</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="dashboard.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="modules.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                        <span>Moduły</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="progress.html" class="active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        <span>Postępy</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="ranking.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 16v6m-8-6v6m4-10v10M4 8l8-6 8 6v13H4V8z"></path>
+                        </svg>
+                        <span>Ranking</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="ustawienia.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 1v6m0 6v6m-9-9h6m6 0h6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"></path>
+                        </svg>
+                        <span>Ustawienia</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="chat.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span>Chat</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="shop.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span>Sklep</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div>
+                    <h1 class="dashboard-title">Twoje Postępy 📊</h1>
+                    <p class="dashboard-subtitle">Śledź swoje osiągnięcia i postępy w nauce</p>
+                </div>
+            </header>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center" style="padding: 3rem;">
+                <div class="skeleton skeleton-text" style="max-width: 400px; margin: 0 auto;"></div>
+            </div>
+
+            <!-- Main Progress Container -->
+            <div id="progressContainer" class="hidden">
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(255, 107, 107, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalModules">0</div>
+                            <div class="stat-label">Wszystkie moduły</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(81, 207, 102, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#51cf66" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="completedModules">0</div>
+                            <div class="stat-label">Ukończone</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(255, 195, 18, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#ffc312" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="inProgressModules">0</div>
+                            <div class="stat-label">W trakcie</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(116, 125, 252, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#747dfc" stroke-width="2">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalPoints">0</div>
+                            <div class="stat-label">Punkty</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(245, 146, 73, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#f59249" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <polyline points="17 11 19 13 23 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="userLevel">1</div>
+                            <div class="stat-label">Poziom</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(234, 84, 85, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#ea5455" stroke-width="2">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="currentStreak">0</div>
+                            <div class="stat-label">Dni z rzędu</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Chart Section -->
+                <div class="card" style="margin-top: 2rem;">
+                    <div class="card-header">
+                        <h2>Twoja aktywność</h2>
+                        <div class="chart-period-buttons">
+                            <button class="btn btn-secondary btn-small active" data-period="week">Tydzień</button>
+                            <button class="btn btn-secondary btn-small" data-period="month">Miesiąc</button>
+                            <button class="btn btn-secondary btn-small" data-period="year">Rok</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="activityChart" style="max-height: 300px;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Modules Progress Section -->
+                <div class="card" style="margin-top: 2rem;">
+                    <div class="card-header">
+                        <h2>Postępy w modułach</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="modulesProgressList">
+                            <!-- Module progress items will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goals Section -->
+                <div class="card" style="margin-top: 2rem;">
+                    <div class="card-header">
+                        <h2>Cele nauki</h2>
+                        <button class="btn btn-primary btn-small" id="addGoalBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; margin-right: 0.25rem;">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Dodaj cel
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="goalsList">
+                            <!-- Goals will be rendered here -->
+                        </div>
+                        <div id="emptyGoalsState" class="text-center empty-state" style="padding: 2rem;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-icon" style="width: 48px; height: 48px; margin: 0 auto 1rem;">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <h3 class="empty-title">Brak celów nauki</h3>
+                            <p class="empty-subtitle">Dodaj cel, aby śledzić swoje postępy</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements Section -->
+                <div class="card" style="margin-top: 2rem;">
+                    <div class="card-header">
+                        <h2>Osiągnięcia</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="achievementsList" class="achievements-grid">
+                            <!-- Achievements will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Not Authenticated State -->
+            <div id="notAuthenticatedState" class="text-center empty-state hidden" style="padding: 3rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-icon" style="width: 64px; height: 64px; margin: 0 auto 1rem;">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <h2 class="empty-title">Zaloguj się, aby zobaczyć swoje postępy</h2>
+                <p class="empty-subtitle">Śledź swoją naukę i osiągnięcia</p>
+                <a href="login.html" class="btn btn-primary" style="margin-top: 1rem;">Zaloguj się</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Goal Modal -->
+    <div class="modal-overlay hidden" id="goalModal">
+        <div class="modal-content">
+            <button class="modal-close" type="button" id="goalModalClose" aria-label="Zamknij okno">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <h2 style="margin-bottom: 1.5rem;">Dodaj nowy cel</h2>
+
+            <form id="goalForm">
+                <div class="form-group">
+                    <label for="goalTitle">Tytuł celu *</label>
+                    <input type="text" id="goalTitle" name="title" class="form-control" placeholder="np. Ukończ 5 modułów" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="goalDescription">Opis</label>
+                    <textarea id="goalDescription" name="description" class="form-control" rows="3" placeholder="Opcjonalny opis celu"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="goalTarget">Cel liczbowy</label>
+                    <input type="number" id="goalTarget" name="targetValue" class="form-control" min="1" placeholder="np. 5">
+                </div>
+
+                <div class="form-group">
+                    <label for="goalDeadline">Termin</label>
+                    <input type="date" id="goalDeadline" name="deadline" class="form-control">
+                </div>
+
+                <div class="form-actions" style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" id="cancelGoalBtn">Anuluj</button>
+                    <button type="submit" class="btn btn-primary">Dodaj cel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="main.js"></script>
+    <script src="progress.js"></script>
+</body>
+</html>

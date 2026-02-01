@@ -2,7 +2,6 @@ import { Router } from 'express';
 import * as chatController from '../controllers/chatController';
 import {
   requireAuth,
-  requireAdmin,
   validateId,
   handleValidationErrors,
   uploadSingle,

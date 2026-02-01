@@ -36,7 +36,7 @@ const extractToken = (req: Request): string | null => {
 };
 
 // Verify JWT token and decode payload
-const verifyToken = (token: string): JWTPayload => {
+export const verifyToken = (token: string): JWTPayload => {
   try {
     const secret = process.env.JWT_SECRET;
     if (!secret) {

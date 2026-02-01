@@ -54,7 +54,7 @@ class AuthService {
         data: {
           email,
           username,
-          password_hash,
+          passwordHash: password_hash,
         },
       });
 
@@ -68,9 +68,9 @@ class AuthService {
           id: user.id,
           email: user.email,
           username: user.username,
-          avatar_url: user.avatar_url || undefined,
+          avatar_url: user.avatarUrl || undefined,
           level: user.level,
-          total_points: user.total_points,
+          total_points: user.totalPoints,
         },
         tokens,
       };
@@ -97,7 +97,7 @@ class AuthService {
       }
 
       // Verify password
-      const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+      const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
       if (!isPasswordValid) {
         throw new AuthenticationError('Invalid email or password');
@@ -113,9 +113,9 @@ class AuthService {
           id: user.id,
           email: user.email,
           username: user.username,
-          avatar_url: user.avatar_url || undefined,
+          avatar_url: user.avatarUrl || undefined,
           level: user.level,
-          total_points: user.total_points,
+          total_points: user.totalPoints,
         },
         tokens,
       };
@@ -175,9 +175,9 @@ class AuthService {
 
       await prisma.refreshToken.create({
         data: {
-          user_id: userId,
+          userId: userId,
           token: refreshToken,
-          expires_at: expiresAt,
+          expiresAt: expiresAt,
         },
       });
 
@@ -187,10 +187,10 @@ class AuthService {
 
       await prisma.session.create({
         data: {
-          user_id: userId,
+          userId: userId,
           token: accessToken,
-          refresh_token: refreshToken,
-          expires_at: sessionExpiresAt,
+          refreshToken: refreshToken,
+          expiresAt: sessionExpiresAt,
         },
       });
 
@@ -216,7 +216,7 @@ class AuthService {
       const session = await prisma.session.findFirst({
         where: {
           token,
-          expires_at: {
+          expiresAt: {
             gt: new Date(),
           },
         },
@@ -250,7 +250,7 @@ class AuthService {
       const storedToken = await prisma.refreshToken.findFirst({
         where: {
           token: refreshToken,
-          expires_at: {
+          expiresAt: {
             gt: new Date(),
           },
         },
@@ -296,12 +296,12 @@ class AuthService {
       } else {
         // Delete all sessions for user
         await prisma.session.deleteMany({
-          where: { user_id: userId },
+          where: { userId: userId },
         });
 
         // Delete all refresh tokens
         await prisma.refreshToken.deleteMany({
-          where: { user_id: userId },
+          where: { userId: userId },
         });
       }
 
@@ -365,7 +365,7 @@ class AuthService {
       // Update password
       await prisma.user.update({
         where: { id: userId },
-        data: { password_hash },
+        data: { passwordHash: password_hash },
       });
 
       // Delete reset token

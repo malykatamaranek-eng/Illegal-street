@@ -81,16 +81,16 @@ class AnalyticsService {
 
       // Get progress stats
       const progress = await prisma.userProgress.findMany({
-        where: { user_id: userId },
+        where: { userId: userId },
       });
 
       const completedModules = progress.filter((p) => p.status === 'COMPLETED').length;
       const inProgressModules = progress.filter((p) => p.status === 'IN_PROGRESS').length;
-      const totalTimeSpent = progress.reduce((sum, p) => sum + p.time_spent, 0);
+      const totalTimeSpent = progress.reduce((sum, p) => sum + p.timeSpent, 0);
 
       // Get quiz stats
       const quizResults = await prisma.quizResult.findMany({
-        where: { user_id: userId },
+        where: { userId: userId },
       });
 
       const averageScore =
@@ -101,7 +101,7 @@ class AnalyticsService {
       const stats = {
         user_id: userId,
         level: user.level,
-        total_points: user.total_points,
+        total_points: user.totalPoints,
         streak: user.streak,
         modules: {
           completed: completedModules,
@@ -167,7 +167,7 @@ class AnalyticsService {
 
       const activeUsersToday = await prisma.session.count({
         where: {
-          created_at: {
+          createdAt: {
             gte: today,
           },
         },
@@ -215,25 +215,31 @@ class AnalyticsService {
       }
 
       const progress = await prisma.userProgress.findMany({
-        where: { module_id: moduleId },
+        where: { moduleId: moduleId },
       });
 
       const totalEnrollments = progress.length;
       const completions = progress.filter((p) => p.status === 'COMPLETED').length;
       const completionRate = totalEnrollments > 0 ? (completions / totalEnrollments) * 100 : 0;
 
-      const totalTimeSpent = progress.reduce((sum, p) => sum + p.time_spent, 0);
+      const totalTimeSpent = progress.reduce((sum, p) => sum + p.timeSpent, 0);
       const averageTimeSpent = totalEnrollments > 0 ? totalTimeSpent / totalEnrollments : 0;
 
       // Get quiz scores for this module
       const quizzes = await prisma.quiz.findMany({
-        where: { module_id: moduleId },
-        include: {
-          results: true,
+        where: { moduleId: moduleId },
+      });
+
+      // Get all quiz results for this module
+      const quizResults = await prisma.quizResult.findMany({
+        where: {
+          quizId: {
+            in: quizzes.map((q) => q.id),
+          },
         },
       });
 
-      const allScores = quizzes.flatMap((q) => q.results.map((r) => r.score));
+      const allScores = quizResults.map((r) => r.score);
       const averageScore = allScores.length > 0 ? allScores.reduce((a, b) => a + b, 0) / allScores.length : 0;
 
       const stats: ModuleStats = {
@@ -275,10 +281,10 @@ class AnalyticsService {
       // User stats
       const [totalUsers, newToday, newThisWeek, newThisMonth, activeToday] = await Promise.all([
         prisma.user.count(),
-        prisma.user.count({ where: { created_at: { gte: today } } }),
-        prisma.user.count({ where: { created_at: { gte: weekAgo } } }),
-        prisma.user.count({ where: { created_at: { gte: monthAgo } } }),
-        prisma.session.count({ where: { created_at: { gte: today } } }),
+        prisma.user.count({ where: { createdAt: { gte: today } } }),
+        prisma.user.count({ where: { createdAt: { gte: weekAgo } } }),
+        prisma.user.count({ where: { createdAt: { gte: monthAgo } } }),
+        prisma.session.count({ where: { createdAt: { gte: today } } }),
       ]);
 
       // Module stats
@@ -312,7 +318,7 @@ class AnalyticsService {
       ]);
 
       const totalRevenue = orders.reduce(
-        (sum, order) => sum + parseFloat(order.total_price.toString()),
+        (sum, order) => sum + parseFloat(order.totalPrice.toString()),
         0
       );
 
@@ -457,13 +463,13 @@ class AnalyticsService {
 
       const users = await prisma.user.findMany({
         take: limit,
-        orderBy: [{ total_points: 'desc' }, { level: 'desc' }],
+        orderBy: [{ totalPoints: 'desc' }, { level: 'desc' }],
         select: {
           id: true,
           username: true,
-          avatar_url: true,
+          avatarUrl: true,
           level: true,
-          total_points: true,
+          totalPoints: true,
           streak: true,
         },
       });

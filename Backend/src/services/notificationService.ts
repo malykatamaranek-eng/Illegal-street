@@ -15,7 +15,7 @@ class NotificationService {
     try {
       const notification = await prisma.notification.create({
         data: {
-          user_id: data.user_id,
+          userId: data.user_id,
           message: data.message,
           read: false,
         },
@@ -28,10 +28,10 @@ class NotificationService {
 
       return {
         id: notification.id,
-        user_id: notification.user_id,
+        user_id: notification.userId,
         message: notification.message,
         read: notification.read,
-        created_at: notification.created_at,
+        created_at: notification.createdAt,
         metadata: data.metadata,
       };
     } catch (error) {
@@ -48,19 +48,19 @@ class NotificationService {
     filters?: NotificationFilters
   ): Promise<Notification[]> {
     try {
-      const where: any = { user_id: userId };
+      const where: any = { userId: userId };
 
       if (filters?.read !== undefined) {
         where.read = filters.read;
       }
 
       if (filters?.startDate || filters?.endDate) {
-        where.created_at = {};
+        where.createdAt = {};
         if (filters.startDate) {
-          where.created_at.gte = filters.startDate;
+          where.createdAt.gte = filters.startDate;
         }
         if (filters.endDate) {
-          where.created_at.lte = filters.endDate;
+          where.createdAt.lte = filters.endDate;
         }
       }
 
@@ -68,15 +68,15 @@ class NotificationService {
         where,
         take: filters?.limit || 50,
         skip: filters?.offset || 0,
-        orderBy: { created_at: 'desc' },
+        orderBy: { createdAt: 'desc' },
       });
 
       return notifications.map((n) => ({
         id: n.id,
-        user_id: n.user_id,
+        user_id: n.userId,
         message: n.message,
         read: n.read,
-        created_at: n.created_at,
+        created_at: n.createdAt,
       }));
     } catch (error) {
       logger.error('Get notifications error:', error);
@@ -91,7 +91,7 @@ class NotificationService {
     try {
       const count = await prisma.notification.count({
         where: {
-          user_id: userId,
+          userId: userId,
           read: false,
         },
       });
@@ -117,10 +117,10 @@ class NotificationService {
 
       return {
         id: notification.id,
-        user_id: notification.user_id,
+        user_id: notification.userId,
         message: notification.message,
         read: notification.read,
-        created_at: notification.created_at,
+        created_at: notification.createdAt,
       };
     } catch (error) {
       logger.error('Mark as read error:', error);
@@ -135,7 +135,7 @@ class NotificationService {
     try {
       const result = await prisma.notification.updateMany({
         where: {
-          user_id: userId,
+          userId: userId,
           read: false,
         },
         data: { read: true },
@@ -172,7 +172,7 @@ class NotificationService {
   async deleteAllNotifications(userId: string): Promise<number> {
     try {
       const result = await prisma.notification.deleteMany({
-        where: { user_id: userId },
+        where: { userId: userId },
       });
 
       logger.info(`Deleted ${result.count} notifications for user: ${userId}`);
@@ -191,7 +191,7 @@ class NotificationService {
     try {
       const result = await prisma.notification.deleteMany({
         where: {
-          user_id: userId,
+          userId: userId,
           read: true,
         },
       });
@@ -215,7 +215,7 @@ class NotificationService {
   ): Promise<void> {
     try {
       const notifications = userIds.map((userId) => ({
-        user_id: userId,
+        userId: userId,
         message,
         read: false,
       }));

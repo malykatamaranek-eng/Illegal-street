@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sklep - Illegal Street</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Fixed Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <svg class="logo" width="40" height="40" viewBox="0 0 40 40">
+                    <path d="M20 5 L35 15 L35 25 L20 35 L5 25 L5 15 Z" fill="none" stroke="#ff0000" stroke-width="2"/>
+                    <circle cx="20" cy="20" r="8" fill="#ff0000"/>
+                </svg>
+                <span>Illegal Street</span>
+            </div>
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Strona główna</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="modules.html" class="nav-link">Moduły</a></li>
+                <li><a href="progress.html" class="nav-link">Postępy</a></li>
+                <li><a href="ranking.html" class="nav-link">Ranking</a></li>
+                <li><a href="shop.html" class="nav-link active">Sklep</a></li>
+                <li><a href="chat.html" class="nav-link">Chat</a></li>
+                <li class="nav-user" id="navUserSection" style="display: none;">
+                    <div class="nav-user-info">
+                        <img src="assets/default-avatar.png" alt="User Avatar" class="nav-user-avatar" id="navAvatar">
+                        <span class="nav-user-name" id="navUsername">User</span>
+                    </div>
+                </li>
+                <li id="authButtons">
+                    <a href="login.html" class="btn btn-secondary btn-small" id="loginBtn">Zaloguj</a>
+                </li>
+                <li id="logoutSection" style="display: none;">
+                    <button type="button" class="btn btn-secondary btn-small" id="logoutBtn">Wyloguj</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>🛍️ Sklep</h1>
+                <p class="subtitle">Wymień punkty na nagrody i certyfikaty</p>
+                <div class="user-points">
+                    Dostępne punkty: <strong id="userPointsDisplay">0</strong>
+                </div>
+            </div>
+
+            <!-- Shop Tabs -->
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="products">Produkty</button>
+                    <button class="tab-btn" data-tab="cart">Koszyk <span id="cartCount" class="badge">0</span></button>
+                    <button class="tab-btn" data-tab="orders">Historia zamówień</button>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div class="tab-content active" id="productsTab">
+                <div class="products-grid" id="productsGrid">
+                    <div class="loading">Ładowanie produktów...</div>
+                </div>
+            </div>
+
+            <!-- Cart Tab -->
+            <div class="tab-content" id="cartTab">
+                <div class="cart-container">
+                    <div id="cartItems" class="cart-items">
+                        <div class="empty-state">
+                            <p>Twój koszyk jest pusty</p>
+                        </div>
+                    </div>
+                    <div class="cart-summary" id="cartSummary" style="display: none;">
+                        <h3>Podsumowanie</h3>
+                        <div class="summary-row">
+                            <span>Całkowity koszt:</span>
+                            <strong id="totalPoints">0 punktów</strong>
+                        </div>
+                        <button id="checkoutBtn" class="btn btn-primary btn-block">Złóż zamówienie</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div class="tab-content" id="ordersTab">
+                <div id="ordersList" class="orders-list">
+                    <div class="loading">Ładowanie zamówień...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="api.js"></script>
+    <script src="main.js"></script>
+    <script src="shop.js"></script>
+</body>
+</html>

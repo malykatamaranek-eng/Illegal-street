@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { authService } from '../services';
 import { asyncHandler } from '../middleware/errorHandler';
 import logger from '../config/logger';
@@ -27,7 +27,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
 export const refresh = asyncHandler(async (req: Request, res: Response) => {
   const { refreshToken } = req.body;
-  const result = await authService.refreshTokens(refreshToken);
+  const result = await authService.refreshAccessToken(refreshToken);
   
   res.status(200).json({
     success: true,
@@ -103,8 +103,6 @@ export const verify2FA = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const verifySession = asyncHandler(async (req: Request, res: Response) => {
-  const userId = req.user!.id;
-  
   res.status(200).json({
     success: true,
     message: 'Session valid',
