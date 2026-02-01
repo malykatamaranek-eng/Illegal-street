@@ -52,7 +52,7 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const getProductById = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const product = await prisma.product.findUnique({
     where: { id },
@@ -64,7 +64,7 @@ export const getProductById = asyncHandler(async (req: Request, res: Response) =
             select: {
               id: true,
               username: true,
-              avatar: true,
+              avatarUrl: true,
             },
           },
         },
@@ -105,7 +105,7 @@ export const getCategories = asyncHandler(async (req: Request, res: Response) =>
 });
 
 export const getProductsByCategory = asyncHandler(async (req: Request, res: Response) => {
-  const { categoryId } = req.params;
+  const { categoryId } = req.params as { categoryId: string };
   const { page = '1', limit = '20' } = req.query;
   const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
   
@@ -185,7 +185,7 @@ export const filterProducts = asyncHandler(async (req: Request, res: Response) =
   });
 });
 
-export const addToCart = asyncHandler(async (req: Request, res: Response) => {
+export const addToCart = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
   const { productId, quantity = 1 } = req.body;
   
@@ -195,10 +195,11 @@ export const addToCart = asyncHandler(async (req: Request, res: Response) => {
   });
   
   if (!product) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       message: 'Product not found',
     });
+    return;
   }
   
   // Check if item already in cart
@@ -220,11 +221,12 @@ export const addToCart = asyncHandler(async (req: Request, res: Response) => {
       },
     });
     
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: 'Cart updated',
       data: updatedItem,
     });
+    return;
   }
   
   const cartItem = await prisma.cartItem.create({
@@ -278,7 +280,7 @@ export const getCart = asyncHandler(async (req: Request, res: Response) => {
 
 export const updateCartItem = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   const { quantity } = req.body;
   
   const cartItem = await prisma.cartItem.findFirst({
@@ -312,7 +314,7 @@ export const updateCartItem = asyncHandler(async (req: Request, res: Response) =
 
 export const removeFromCart = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const cartItem = await prisma.cartItem.findFirst({
     where: {
@@ -355,9 +357,9 @@ export const clearCart = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export const checkout = asyncHandler(async (req: Request, res: Response) => {
+export const checkout = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
-  const { shippingAddress, paymentMethod } = req.body;
+  const { paymentMethod } = req.body;
   
   // Get cart items
   const cartItems = await prisma.cartItem.findMany({
@@ -368,14 +370,15 @@ export const checkout = asyncHandler(async (req: Request, res: Response) => {
   });
   
   if (cartItems.length === 0) {
-    return res.status(400).json({
+    res.status(400).json({
       success: false,
       message: 'Cart is empty',
     });
+    return;
   }
   
   const total = cartItems.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
+    (sum, item) => sum + Number(item.product.price) * item.quantity,
     0
   );
   
@@ -383,24 +386,13 @@ export const checkout = asyncHandler(async (req: Request, res: Response) => {
   const order = await prisma.order.create({
     data: {
       userId,
-      total,
+      totalPrice: total,
       status: 'PENDING',
-      shippingAddress,
-      paymentMethod,
-      items: {
-        create: cartItems.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-          price: item.product.price,
-        })),
-      },
-    },
-    include: {
-      items: {
-        include: {
-          product: true,
-        },
-      },
+      items: JSON.stringify(cartItems.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: Number(item.product.price),
+      }))),
     },
   });
   
@@ -428,13 +420,6 @@ export const getOrders = asyncHandler(async (req: Request, res: Response) => {
     skip,
     take: parseInt(limit as string),
     orderBy: { createdAt: 'desc' },
-    include: {
-      items: {
-        include: {
-          product: true,
-        },
-      },
-    },
   });
   
   res.status(200).json({
@@ -445,7 +430,7 @@ export const getOrders = asyncHandler(async (req: Request, res: Response) => {
 
 export const getOrderById = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const order = await prisma.order.findFirst({
     where: {
@@ -494,7 +479,7 @@ export const getWishlist = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export const addToWishlist = asyncHandler(async (req: Request, res: Response) => {
+export const addToWishlist = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
   const { productId } = req.body;
   
@@ -507,10 +492,11 @@ export const addToWishlist = asyncHandler(async (req: Request, res: Response) =>
   });
   
   if (existing) {
-    return res.status(400).json({
+    res.status(400).json({
       success: false,
       message: 'Product already in wishlist',
     });
+    return;
   }
   
   const wishlistItem = await prisma.wishlistItem.create({
@@ -534,7 +520,7 @@ export const addToWishlist = asyncHandler(async (req: Request, res: Response) =>
 
 export const removeFromWishlist = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const wishlistItem = await prisma.wishlistItem.findFirst({
     where: {
@@ -563,14 +549,13 @@ export const removeFromWishlist = asyncHandler(async (req: Request, res: Respons
 });
 
 export const getRecommendations = asyncHandler(async (req: Request, res: Response) => {
-  const userId = req.user?.id;
   const { limit = '10' } = req.query;
   
   // Simple recommendation: get popular products
   const products = await prisma.product.findMany({
     take: parseInt(limit as string),
     orderBy: {
-      sales: 'desc',
+      createdAt: 'desc',
     },
     include: {
       category: true,

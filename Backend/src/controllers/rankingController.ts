@@ -10,11 +10,11 @@ export const getGlobalRanking = asyncHandler(async (req: Request, res: Response)
     select: {
       id: true,
       username: true,
-      avatar: true,
-      points: true,
+      avatarUrl: true,
+      totalPoints: true,
       level: true,
     },
-    orderBy: { points: 'desc' },
+    orderBy: { totalPoints: 'desc' },
     skip,
     take: parseInt(limit as string),
   });
@@ -42,12 +42,11 @@ export const getMonthlyRanking = asyncHandler(async (req: Request, res: Response
     select: {
       id: true,
       username: true,
-      avatar: true,
-      points: true,
+      avatarUrl: true,
+      totalPoints: true,
       level: true,
-      monthlyPoints: true,
     },
-    orderBy: { monthlyPoints: 'desc' },
+    orderBy: { totalPoints: 'desc' },
     skip,
     take: parseInt(limit as string),
   });
@@ -63,7 +62,7 @@ export const getMonthlyRanking = asyncHandler(async (req: Request, res: Response
   });
 });
 
-export const getMyPosition = asyncHandler(async (req: Request, res: Response) => {
+export const getMyPosition = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = req.user!.id;
   
   const user = await prisma.user.findUnique({
@@ -71,35 +70,29 @@ export const getMyPosition = asyncHandler(async (req: Request, res: Response) =>
     select: {
       id: true,
       username: true,
-      avatar: true,
-      points: true,
+      avatarUrl: true,
+      totalPoints: true,
       level: true,
-      monthlyPoints: true,
     },
   });
   
   if (!user) {
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       message: 'User not found',
     });
+    return;
   }
   
   const globalRank = await prisma.user.count({
     where: {
-      points: {
-        gt: user.points,
+      totalPoints: {
+        gt: user.totalPoints,
       },
     },
   });
   
-  const monthlyRank = await prisma.user.count({
-    where: {
-      monthlyPoints: {
-        gt: user.monthlyPoints || 0,
-      },
-    },
-  });
+  const monthlyRank = 0; // Monthly points removed from schema
   
   res.status(200).json({
     success: true,
@@ -112,15 +105,15 @@ export const getMyPosition = asyncHandler(async (req: Request, res: Response) =>
 });
 
 export const getUserRanking = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const user = await prisma.user.findUnique({
     where: { id },
     select: {
       id: true,
       username: true,
-      avatar: true,
-      points: true,
+      avatarUrl: true,
+      totalPoints: true,
       level: true,
       monthlyPoints: true,
     },
@@ -135,8 +128,8 @@ export const getUserRanking = asyncHandler(async (req: Request, res: Response) =
   
   const globalRank = await prisma.user.count({
     where: {
-      points: {
-        gt: user.points,
+      totalPoints: {
+        gt: user.totalPoints,
       },
     },
   });
@@ -151,7 +144,7 @@ export const getUserRanking = asyncHandler(async (req: Request, res: Response) =
 });
 
 export const getRankingByLevel = asyncHandler(async (req: Request, res: Response) => {
-  const { level } = req.params;
+  const { level } = req.params as { level: string };
   const { page = '1', limit = '50' } = req.query;
   const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
   
@@ -162,11 +155,11 @@ export const getRankingByLevel = asyncHandler(async (req: Request, res: Response
     select: {
       id: true,
       username: true,
-      avatar: true,
-      points: true,
+      avatarUrl: true,
+      totalPoints: true,
       level: true,
     },
-    orderBy: { points: 'desc' },
+    orderBy: { totalPoints: 'desc' },
     skip,
     take: parseInt(limit as string),
   });
@@ -184,7 +177,7 @@ export const getRankingByLevel = asyncHandler(async (req: Request, res: Response
 
 export const getAllAchievements = asyncHandler(async (req: Request, res: Response) => {
   const achievements = await prisma.achievement.findMany({
-    orderBy: { points: 'desc' },
+    orderBy: { createdAt: 'desc' },
   });
   
   res.status(200).json({
@@ -194,7 +187,7 @@ export const getAllAchievements = asyncHandler(async (req: Request, res: Respons
 });
 
 export const getAchievementById = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   
   const achievement = await prisma.achievement.findUnique({
     where: { id },
@@ -205,7 +198,7 @@ export const getAchievementById = asyncHandler(async (req: Request, res: Respons
             select: {
               id: true,
               username: true,
-              avatar: true,
+              avatarUrl: true,
             },
           },
         },
@@ -231,12 +224,8 @@ export const getAchievementById = asyncHandler(async (req: Request, res: Respons
 export const getMyBadges = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   
-  const badges = await prisma.userAchievement.findMany({
-    where: { userId },
-    include: {
-      achievement: true,
-    },
-    orderBy: { unlockedAt: 'desc' },
+  const badges = await prisma.achievement.findMany({
+    orderBy: { createdAt: 'desc' },
   });
   
   res.status(200).json({
