@@ -21,7 +21,7 @@ router.use('/chat', chatRoutes);
 router.use('/admin', adminRoutes);
 
 // Health check
-router.get('/health', (req, res) => {
+router.get('/health', (_req, res) => {
   res.status(200).json({
     success: true,
     message: 'API is healthy',
@@ -30,7 +30,7 @@ router.get('/health', (req, res) => {
 });
 
 // API info
-router.get('/', (req, res) => {
+router.get('/', (_req, res) => {
   res.status(200).json({
     success: true,
     message: 'Illegal-street API',

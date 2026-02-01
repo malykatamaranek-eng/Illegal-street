@@ -175,7 +175,7 @@ export const getRankingByLevel = asyncHandler(async (req: Request, res: Response
   });
 });
 
-export const getAllAchievements = asyncHandler(async (req: Request, res: Response) => {
+export const getAllAchievements = asyncHandler(async (_req: Request, res: Response) => {
   const achievements = await prisma.achievement.findMany({
     orderBy: { id: 'desc' },
   });
@@ -207,9 +207,7 @@ export const getAchievementById = asyncHandler(async (req: Request, res: Respons
   });
 });
 
-export const getMyBadges = asyncHandler(async (req: Request, res: Response) => {
-  const _userId = req.user!.id;
-  
+export const getMyBadges = asyncHandler(async (_req: Request, res: Response) => {
   const badges = await prisma.achievement.findMany({
     orderBy: { id: 'desc' },
   });

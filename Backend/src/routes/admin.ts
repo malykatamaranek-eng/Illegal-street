@@ -7,7 +7,6 @@ import {
   validateCreateModule,
   validateCreateProduct,
   handleValidationErrors,
-  apiLimiter,
 } from '../middleware';
 import { body, query } from 'express-validator';
 

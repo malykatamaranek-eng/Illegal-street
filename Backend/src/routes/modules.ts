@@ -4,7 +4,6 @@ import {
   requireAuth,
   optionalAuth,
   validateId,
-  validatePagination,
   handleValidationErrors,
   apiLimiter,
 } from '../middleware';

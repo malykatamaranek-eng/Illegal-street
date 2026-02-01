@@ -2,7 +2,6 @@ import { Router } from 'express';
 import * as rankingController from '../controllers/rankingController';
 import {
   requireAuth,
-  optionalAuth,
   validateId,
   handleValidationErrors,
   apiLimiter,
