@@ -84,6 +84,13 @@ docker exec illegal-street-backend npm run prisma:seed
 
 **📖 For detailed Docker setup, see [INSTALLATION.md](INSTALLATION.md)**
 
+**🧪 To test the cookie consent API fix, run:**
+```bash
+./test-cookie-consent-fix.sh
+```
+
+**📋 For deployment and troubleshooting, see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)**
+
 ### Manual Setup (Development)
 
 #### Prerequisites
