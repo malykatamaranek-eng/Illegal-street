@@ -1,0 +1,369 @@
+// ===== Responsive Utilities Module =====
+// Dedicated module for responsive design utilities and grid systems
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+// ===== Responsive Grid System =====
+
+// Container with responsive padding
+.container-responsive {
+  width: 100%;
+  max-width: $breakpoint-wide;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @media (min-width: $breakpoint-tablet) {
+    padding: 0 $spacing-lg;
+  }
+
+  @media (min-width: $breakpoint-wide) {
+    padding: 0 $spacing-xl;
+  }
+}
+
+// Responsive Grid System
+.grid {
+  display: grid;
+  gap: $spacing-md;
+
+  // 2 column grid
+  &.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+
+    @media (max-width: $breakpoint-mobile) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // 3 column grid
+  &.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+
+    @media (max-width: $breakpoint-desktop) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: $breakpoint-mobile) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // 4 column grid
+  &.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+
+    @media (max-width: $breakpoint-desktop) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: $breakpoint-mobile) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Auto-fit grid (responsive columns)
+  &.grid-auto {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  // Responsive gap sizes
+  &.gap-sm {
+    gap: $spacing-sm;
+  }
+
+  &.gap-lg {
+    gap: $spacing-lg;
+  }
+
+  &.gap-xl {
+    gap: $spacing-xl;
+  }
+}
+
+// ===== Responsive Flexbox Utilities =====
+
+.flex-responsive {
+  display: flex;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+
+  &.flex-no-wrap-desktop {
+    @media (min-width: $breakpoint-desktop) {
+      flex-wrap: nowrap;
+    }
+  }
+}
+
+// Stack on mobile
+.stack-mobile {
+  display: flex;
+  gap: $spacing-md;
+
+  @media (max-width: $breakpoint-tablet) {
+    flex-direction: column;
+  }
+}
+
+// ===== Responsive Visibility =====
+
+.hide-mobile {
+  @media (max-width: $breakpoint-mobile) {
+    display: none !important;
+  }
+}
+
+.hide-tablet {
+  @media (max-width: $breakpoint-tablet) {
+    display: none !important;
+  }
+}
+
+.hide-desktop {
+  @media (min-width: $breakpoint-desktop) {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  display: none !important;
+
+  @media (max-width: $breakpoint-mobile) {
+    display: block !important;
+  }
+}
+
+.show-tablet {
+  display: none !important;
+
+  @media (max-width: $breakpoint-tablet) {
+    display: block !important;
+  }
+}
+
+// ===== Responsive Typography =====
+
+.text-responsive {
+  font-size: $font-size-base;
+
+  @media (min-width: $breakpoint-tablet) {
+    font-size: $font-size-lg;
+  }
+
+  @media (min-width: $breakpoint-desktop) {
+    font-size: $font-size-xl;
+  }
+}
+
+.heading-responsive {
+  font-size: $font-size-2xl;
+
+  @media (min-width: $breakpoint-tablet) {
+    font-size: $font-size-3xl;
+  }
+
+  @media (min-width: $breakpoint-desktop) {
+    font-size: $font-size-4xl;
+  }
+}
+
+// ===== Responsive Spacing =====
+
+@each $size, $value in (xs: $spacing-xs, sm: $spacing-sm, md: $spacing-md, lg: $spacing-lg, xl: $spacing-xl) {
+  // Responsive padding
+  .p-#{$size}-mobile {
+    @media (max-width: $breakpoint-mobile) {
+      padding: $value;
+    }
+  }
+
+  .p-#{$size}-tablet {
+    @media (max-width: $breakpoint-tablet) {
+      padding: $value;
+    }
+  }
+
+  // Responsive margin
+  .m-#{$size}-mobile {
+    @media (max-width: $breakpoint-mobile) {
+      margin: $value;
+    }
+  }
+
+  .m-#{$size}-tablet {
+    @media (max-width: $breakpoint-tablet) {
+      margin: $value;
+    }
+  }
+}
+
+// ===== Responsive Images =====
+
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+// ===== Responsive Cards =====
+
+.card-responsive {
+  @include card;
+  
+  @media (max-width: $breakpoint-mobile) {
+    padding: $spacing-sm;
+    
+    h3, h4 {
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+// ===== Touch-Friendly Elements =====
+
+// Ensure minimum tap target size (44x44px per Apple/Google guidelines)
+.btn-touch,
+button.touch-target,
+a.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  
+  @media (max-width: $breakpoint-tablet) {
+    padding: $spacing-sm $spacing-md;
+  }
+}
+
+// ===== Responsive Modal Improvements =====
+
+.modal-responsive {
+  .modal-content {
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+
+    @media (max-width: $breakpoint-tablet) {
+      width: 95%;
+      max-width: 100%;
+      max-height: 95vh;
+      padding: $spacing-md;
+    }
+
+    @media (max-width: $breakpoint-mobile) {
+      width: 100%;
+      border-radius: 0;
+      height: 100vh;
+      max-height: 100vh;
+      padding: $spacing-sm;
+    }
+  }
+}
+
+// ===== Responsive Navigation =====
+
+.nav-responsive {
+  @media (max-width: $breakpoint-tablet) {
+    .nav-menu {
+      position: fixed;
+      top: 70px;
+      right: -100%;
+      width: 280px;
+      height: calc(100vh - 70px);
+      background: $bg-section;
+      flex-direction: column;
+      padding: $spacing-lg;
+      transition: right $transition-base;
+      border-left: 1px solid $border-color;
+      z-index: $z-dropdown;
+
+      &.active {
+        right: 0;
+      }
+    }
+  }
+}
+
+// ===== Responsive Tables =====
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  @include custom-scrollbar;
+
+  table {
+    min-width: 600px;
+    width: 100%;
+
+    @media (max-width: $breakpoint-tablet) {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// ===== Responsive Form Layout =====
+
+.form-responsive {
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+
+    @media (max-width: $breakpoint-tablet) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-group {
+    margin-bottom: $spacing-md;
+
+    @media (max-width: $breakpoint-mobile) {
+      margin-bottom: $spacing-sm;
+    }
+  }
+}
+
+// ===== Reduced Motion Support =====
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// ===== Print Styles =====
+
+@media print {
+  .no-print,
+  .navbar,
+  .sidebar,
+  .nav-toggle,
+  button:not(.btn-print) {
+    display: none !important;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+}
