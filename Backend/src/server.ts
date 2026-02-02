@@ -5,7 +5,7 @@ import ChatGateway from './websocket/chatGateway';
 import logger from './config/logger';
 
 const PORT = parseInt(process.env.PORT || '5000', 10);
-const HOST = '0.0.0.0'; // Bind to all interfaces
+const HOST = process.env.HOST || '0.0.0.0'; // Configurable host binding
 const server = http.createServer(app);
 
 // Initialize WebSocket
