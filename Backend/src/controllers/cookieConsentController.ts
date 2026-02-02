@@ -70,12 +70,17 @@ export const savePreferences = asyncHandler(
           existingConsentId,
           { necessary, functional, analytics, marketing }
         );
-      } catch (error) {
-        // If consent not found, create new one
-        consent = await cookieConsentService.savePreferences(
-          { necessary, functional, analytics, marketing },
-          ipAddress
-        );
+      } catch (error: any) {
+        // If consent not found (P2025 is Prisma's "Record not found" error), create new one
+        // Other errors will be handled by asyncHandler
+        if (error.code === 'P2025' || error.message?.includes('not found')) {
+          consent = await cookieConsentService.savePreferences(
+            { necessary, functional, analytics, marketing },
+            ipAddress
+          );
+        } else {
+          throw error; // Re-throw other errors to be handled by error middleware
+        }
       }
     } else {
       // Create new consent
