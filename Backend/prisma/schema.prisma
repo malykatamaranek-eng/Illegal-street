@@ -539,3 +539,22 @@ model Goal {
   @@index([completed])
   @@map("goals")
 }
+
+// ===================================
+// COOKIE CONSENT MODEL
+// ===================================
+model CookieConsent {
+  id         String   @id @default(uuid())
+  consentId  String   @unique @map("consent_id")
+  necessary  Boolean  @default(true)
+  functional Boolean  @default(false)
+  analytics  Boolean  @default(false)
+  marketing  Boolean  @default(false)
+  ipAddress  String?  @map("ip_address")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([consentId])
+  @@index([createdAt])
+  @@map("cookie_consents")
+}

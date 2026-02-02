@@ -8,6 +8,7 @@ import rankingRoutes from './ranking';
 import shopRoutes from './shop';
 import chatRoutes from './chat';
 import adminRoutes from './admin';
+import cookieConsentRoutes from './cookieConsent';
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.use('/ranking', rankingRoutes);
 router.use('/shop', shopRoutes);
 router.use('/chat', chatRoutes);
 router.use('/admin', adminRoutes);
+router.use('/cookie-consent', cookieConsentRoutes);
 
 // Health check
 router.get('/health', (_req, res) => {
@@ -47,6 +49,7 @@ router.get('/', (_req, res) => {
       shop: '/api/shop',
       chat: '/api/chat',
       admin: '/api/admin',
+      cookieConsent: '/api/cookie-consent',
     },
   });
 });
