@@ -325,7 +325,7 @@
                     `).join('')}
 
                     <div class="quiz-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.QuizPage.closeQuizModal()">Anuluj</button>
+                        <button type="button" class="btn btn-secondary" id="quizCancelBtn">Anuluj</button>
                         <button type="submit" class="btn btn-primary">Zakończ quiz</button>
                     </div>
                 </form>
@@ -335,6 +335,11 @@
         const quizForm = document.getElementById('quizForm');
         if (quizForm) {
             quizForm.addEventListener('submit', (e) => submitQuiz(e, quiz.id, questions));
+        }
+
+        const cancelBtn = document.getElementById('quizCancelBtn');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', closeQuizModal);
         }
     }
 
@@ -430,11 +435,25 @@
                 </div>
 
                 <div class="quiz-results-actions">
-                    <button type="button" class="btn btn-secondary" onclick="window.QuizPage.closeQuizModal()">Zamknij</button>
-                    <button type="button" class="btn btn-primary" onclick="window.QuizPage.retakeQuiz('${results.quizId}')">Spróbuj ponownie</button>
+                    <button type="button" class="btn btn-secondary" id="quizResultCloseBtn">Zamknij</button>
+                    <button type="button" class="btn btn-primary" id="quizRetakeBtn" data-quiz-id="${results.quizId}">Spróbuj ponownie</button>
                 </div>
             </div>
         `;
+
+        // Attach event handlers
+        const closeBtn = document.getElementById('quizResultCloseBtn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeQuizModal);
+        }
+
+        const retakeBtn = document.getElementById('quizRetakeBtn');
+        if (retakeBtn) {
+            retakeBtn.addEventListener('click', () => {
+                const quizId = retakeBtn.getAttribute('data-quiz-id');
+                if (quizId) retakeQuiz(quizId);
+            });
+        }
 
         // Reload user stats
         loadUserStats();
@@ -481,8 +500,56 @@
      * Show error message
      */
     function showError(message) {
-        // Simple alert for now - could be replaced with a toast notification
-        alert(message);
+        showToast(message, 'error');
+    }
+
+    /**
+     * Show toast notification
+     */
+    function showToast(message, type = 'info') {
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
+            <div class="toast-content">
+                <div class="toast-message">${escapeHtml(message)}</div>
+                <button class="toast-close" aria-label="Close">&times;</button>
+            </div>
+        `;
+
+        // Add to body
+        document.body.appendChild(toast);
+
+        // Show toast
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+
+        // Auto-hide after 5 seconds
+        const hideTimeout = setTimeout(() => {
+            hideToast(toast);
+        }, 5000);
+
+        // Close button handler
+        const closeBtn = toast.querySelector('.toast-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                clearTimeout(hideTimeout);
+                hideToast(toast);
+            });
+        }
+    }
+
+    /**
+     * Hide toast notification
+     */
+    function hideToast(toast) {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
     }
 
     /**

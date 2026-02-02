@@ -300,13 +300,13 @@
   }
 
   &.success svg {
-    color: #22c55e;
-    filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.5));
+    color: $success-green;
+    filter: drop-shadow(0 0 20px rgba($success-green, 0.5));
   }
 
   &.fail svg {
-    color: #ef4444;
-    filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.5));
+    color: $error-red;
+    filter: drop-shadow(0 0 20px rgba($error-red, 0.5));
   }
 }
 
@@ -320,11 +320,11 @@
   }
 
   &.success {
-    color: #22c55e;
+    color: $success-green;
   }
 
   &.fail {
-    color: #ef4444;
+    color: $error-red;
   }
 }
 
@@ -396,11 +396,11 @@
     }
 
     &.correct {
-      color: #22c55e;
+      color: $success-green;
     }
 
     &.incorrect {
-      color: #ef4444;
+      color: $error-red;
     }
   }
 }
@@ -540,12 +540,12 @@
   }
 
   &.warning {
-    border-color: #fbbf24;
+    border-color: $warning-yellow;
     animation: pulse 1s ease-in-out infinite;
   }
 
   &.danger {
-    border-color: #ef4444;
+    border-color: $error-red;
     animation: pulse 0.5s ease-in-out infinite;
   }
 
