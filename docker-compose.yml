@@ -5,7 +5,7 @@ services:
     image: postgres:15-bookworm
     container_name: illegal-street-db
     env_file:
-      - .env.docker
+      - .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -43,7 +43,7 @@ services:
       dockerfile: Dockerfile
     container_name: illegal-street-backend
     env_file:
-      - .env.docker
+      - .env
     ports:
       - "3000:3000"
     environment:
