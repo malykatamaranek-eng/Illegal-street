@@ -39,7 +39,7 @@ export const getPreferences = asyncHandler(
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: {
         hasConsent: true,
