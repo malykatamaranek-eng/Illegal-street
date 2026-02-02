@@ -1,11 +1,14 @@
-FROM node:18-alpine
+FROM nginx:alpine
 
-WORKDIR /app/frontend
+# Copy static files to nginx html directory
+COPY . /usr/share/nginx/html
 
-RUN npm install -g http-server
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY . .
+# Remove default nginx config
+RUN rm -f /etc/nginx/conf.d/default.conf.default
 
 EXPOSE 8080
 
-CMD ["http-server", ".", "-p", "8080", "--cors", "--gzip"]
+CMD ["nginx", "-g", "daemon off;"]

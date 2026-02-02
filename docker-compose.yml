@@ -79,7 +79,8 @@ services:
     networks:
       - illegal-street-network
     volumes:
-      - ./Frontend:/app/frontend
+      - ./Frontend:/usr/share/nginx/html
+      - ./Frontend/nginx.conf:/etc/nginx/conf.d/default.conf
     restart: unless-stopped
 
 volumes:
