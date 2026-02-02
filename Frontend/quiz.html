@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizy - Illegal Street</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Fixed Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <svg class="logo" width="40" height="40" viewBox="0 0 40 40">
+                    <path d="M20 5 L35 15 L35 25 L20 35 L5 25 L5 15 Z" fill="none" stroke="#ff0000" stroke-width="2"/>
+                    <circle cx="20" cy="20" r="8" fill="#ff0000"/>
+                </svg>
+                <span>Illegal Street</span>
+            </div>
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Strona główna</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="modules.html" class="nav-link">Moduły</a></li>
+                <li><a href="quiz.html" class="nav-link active">Quizy</a></li>
+                <li><a href="progress.html" class="nav-link">Postępy</a></li>
+                <li><a href="ranking.html" class="nav-link">Ranking</a></li>
+                <li><a href="shop.html" class="nav-link">Sklep</a></li>
+                <li><a href="chat.html" class="nav-link">Chat</a></li>
+                <li class="nav-user" id="navUserSection" style="display: none;">
+                    <div class="nav-user-info">
+                        <img src="assets/default-avatar.png" alt="User Avatar" class="nav-user-avatar" id="navAvatar">
+                        <span class="nav-user-name" id="navUsername">User</span>
+                    </div>
+                </li>
+                <li id="authButtons">
+                    <a href="login.html" class="btn btn-secondary btn-small" id="loginBtn">Zaloguj</a>
+                </li>
+                <li id="logoutSection" style="display: none;">
+                    <button type="button" class="btn btn-secondary btn-small" id="logoutBtn">Wyloguj</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="dashboard.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="modules.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                        <span>Moduły</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="quiz.html" class="active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>Quizy</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="progress.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        <span>Postępy</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="ranking.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 16v6m-8-6v6m4-10v10M4 8l8-6 8 6v13H4V8z"></path>
+                        </svg>
+                        <span>Ranking</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Quizy</h1>
+                    <p class="text-gray">Sprawdź swoją wiedzę o przepisach drogowych</p>
+                </div>
+
+                <!-- Quiz Filters -->
+                <div class="courses-header" style="margin-bottom: 2rem;">
+                    <div class="search-box">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" id="quizSearchInput" placeholder="Szukaj quizu..." class="input-field">
+                    </div>
+                    
+                    <div class="courses-filters">
+                        <select id="quizCategoryFilter" class="input-field" style="max-width: 200px;">
+                            <option value="">Wszystkie kategorie</option>
+                            <option value="beginner">Podstawowy</option>
+                            <option value="intermediate">Średniozaawansowany</option>
+                            <option value="advanced">Zaawansowany</option>
+                        </select>
+                        
+                        <select id="quizDifficultyFilter" class="input-field" style="max-width: 200px;">
+                            <option value="">Wszystkie poziomy</option>
+                            <option value="easy">Łatwy</option>
+                            <option value="medium">Średni</option>
+                            <option value="hard">Trudny</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Quiz Stats -->
+                <div class="stats-grid" style="margin-bottom: 3rem;">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="completedQuizzes">-</div>
+                            <div class="stat-label">Ukończone quizy</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="averageScore">-</div>
+                            <div class="stat-label">Średni wynik</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="perfectScores">-</div>
+                            <div class="stat-label">Perfekcyjne wyniki</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz List -->
+                <div id="quizList" class="quiz-list">
+                    <!-- Quizzes will be loaded here dynamically -->
+                    <div class="skeleton-card">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text"></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text"></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text"></div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-state text-center hidden">
+                    <svg class="empty-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <h3 class="empty-title">Brak quizów</h3>
+                    <p class="empty-subtitle">Nie znaleziono quizów spełniających kryteria wyszukiwania</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div class="modal-overlay hidden" id="quizModal">
+        <div class="modal-content modal-large modal-responsive">
+            <button class="modal-close" type="button" id="quizModalClose" aria-label="Zamknij quiz">
+                &times;
+            </button>
+            <div id="quizContent">
+                <!-- Quiz content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="quiz.js"></script>
+</body>
+</html>
