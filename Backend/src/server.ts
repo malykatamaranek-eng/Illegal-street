@@ -4,7 +4,8 @@ import app from './main';
 import ChatGateway from './websocket/chatGateway';
 import logger from './config/logger';
 
-const PORT = process.env.PORT || 5000;
+const PORT = parseInt(process.env.PORT || '5000', 10);
+const HOST = process.env.HOST || '0.0.0.0'; // Configurable host binding
 const server = http.createServer(app);
 
 // Initialize WebSocket
@@ -16,7 +17,7 @@ const startServer = async (): Promise<void> => {
     chatGateway = new ChatGateway(server);
     logger.info('Chat Gateway initialized successfully');
 
-    server.listen(PORT, () => {
+    server.listen(PORT, HOST, () => {
       logger.info(`Server running on port ${PORT}`);
       logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
       logger.info(`Health check: http://localhost:${PORT}/health`);
