@@ -4,6 +4,8 @@
 @use 'sass:math';
 @use 'variables' as *;
 @use 'mixins' as *;
+@use 'modules/home';
+@use 'modules/auth';
 @use 'modules/dashboard';
 @use 'modules/courses';
 @use 'modules/progress';
@@ -343,7 +345,7 @@ a {
   list-style: none;
 
   @include tablet {
-    display: none;
+    display: flex; // Will be overridden by home.scss mobile styles
   }
 }
 
