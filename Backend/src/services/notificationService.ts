@@ -8,9 +8,12 @@ import {
 } from '../types/notification';
 
 // Helper to get chatGateway instance
+// Note: Uses require() instead of import() to avoid circular dependency issues
+// at module initialization time. This is intentional and safe since getChatGateway
+// is called only after server initialization is complete.
 const getChatGateway = () => {
   try {
-    // Use dynamic import to avoid circular dependencies
+    // Use dynamic require to avoid circular dependencies
     const server = require('../server');
     return server.chatGateway;
   } catch {
