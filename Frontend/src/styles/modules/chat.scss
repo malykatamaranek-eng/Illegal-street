@@ -1,4 +1,7 @@
 // ===== E2E Encrypted Chat Styles =====
+@use 'sass:math';
+@use '../variables' as *;
+@use '../mixins' as *;
 
 .chat {
   display: flex;
@@ -103,7 +106,7 @@
       display: flex;
       align-items: center;
       gap: $spacing-sm;
-      margin-bottom: $spacing-xs / 2;
+      margin-bottom: math.div($spacing-xs, 2);
       font-size: $font-size-sm;
 
       .message-author {
@@ -162,7 +165,7 @@
       transition: opacity $transition-base;
 
       button {
-        padding: $spacing-xs / 2;
+        padding: math.div($spacing-xs, 2);
         background: transparent;
         border: none;
         color: $text-gray;

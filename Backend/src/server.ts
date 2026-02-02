@@ -23,7 +23,7 @@ const startServer = async (): Promise<void> => {
       logger.info('WebSocket enabled');
     });
   } catch (error) {
-    console.error('Failed to start server:', error);
+    logger.error('Failed to start server:', error);
     process.exit(1);
   }
 };

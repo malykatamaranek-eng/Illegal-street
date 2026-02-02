@@ -1,4 +1,7 @@
 // ===== Ranking & Achievements Styles =====
+@use 'sass:math';
+@use '../variables' as *;
+@use '../mixins' as *;
 
 .ranking {
   &-header {
@@ -157,7 +160,7 @@
       .username {
         font-weight: $font-weight-bold;
         font-size: $font-size-lg;
-        margin-bottom: $spacing-xs / 2;
+        margin-bottom: math.div($spacing-xs, 2);
       }
 
       .level {

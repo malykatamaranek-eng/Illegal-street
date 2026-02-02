@@ -1,4 +1,7 @@
 // ===== Admin Panel Styles =====
+@use 'sass:math';
+@use '../variables' as *;
+@use '../mixins' as *;
 
 .admin {
   &-header {
@@ -28,7 +31,7 @@
 
       .username {
         font-weight: $font-weight-medium;
-        margin-bottom: $spacing-xs / 2;
+        margin-bottom: math.div($spacing-xs, 2);
       }
 
       .role {
@@ -212,7 +215,7 @@
 
             button {
               @include button-secondary;
-              padding: $spacing-xs / 2 $spacing-sm;
+              padding: math.div($spacing-xs, 2) $spacing-sm;
               font-size: $font-size-sm;
 
               &.danger {
@@ -464,13 +467,13 @@
 
       .log-action {
         font-weight: $font-weight-medium;
-        margin-bottom: $spacing-xs / 2;
+        margin-bottom: math.div($spacing-xs, 2);
       }
 
       .log-details {
         font-size: $font-size-sm;
         color: $text-gray;
-        margin-bottom: $spacing-xs / 2;
+        margin-bottom: math.div($spacing-xs, 2);
       }
 
       .log-time {
@@ -485,7 +488,7 @@
 
       .user-name {
         font-weight: $font-weight-medium;
-        margin-bottom: $spacing-xs / 2;
+        margin-bottom: math.div($spacing-xs, 2);
       }
 
       .user-ip {

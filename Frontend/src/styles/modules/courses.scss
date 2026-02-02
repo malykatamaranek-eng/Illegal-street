@@ -1,4 +1,7 @@
 // ===== Courses/Modules System Styles =====
+@use 'sass:math';
+@use '../variables' as *;
+@use '../mixins' as *;
 
 .courses {
   &-header {
