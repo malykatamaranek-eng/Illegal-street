@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
 import crypto from 'crypto';
+import sharp from 'sharp';
 import logger from '../config/logger';
 import { InternalServerError, ValidationError } from '../utils/errors';
 
@@ -236,18 +237,19 @@ class ImageService {
   }
 
   /**
-   * Resize image (placeholder - requires sharp library)
-   * TODO: Install sharp and implement image resizing
+   * Resize image using sharp library
    */
-  async resizeImage(buffer: Buffer, _width: number, _height: number): Promise<Buffer> {
+  async resizeImage(buffer: Buffer, width: number, height: number): Promise<Buffer> {
     try {
-      // This is a placeholder
-      // In production, use sharp library:
-      // const sharp = require('sharp');
-      // return await sharp(buffer).resize(width, height).toBuffer();
+      const resizedBuffer = await sharp(buffer)
+        .resize(width, height, {
+          fit: 'cover',
+          position: 'center',
+        })
+        .toBuffer();
 
-      logger.warn('Image resizing not implemented - returning original buffer');
-      return buffer;
+      logger.info(`Image resized to ${width}x${height}`);
+      return resizedBuffer;
     } catch (error) {
       logger.error('Resize image error:', error);
       throw new InternalServerError('Failed to resize image');

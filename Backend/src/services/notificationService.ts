@@ -7,6 +7,21 @@ import {
   NotificationType,
 } from '../types/notification';
 
+// Helper to get chatGateway instance
+// Note: Uses require() instead of import() to avoid circular dependency issues
+// at module initialization time. This is intentional and safe since getChatGateway
+// is called only after server initialization is complete.
+const getChatGateway = () => {
+  try {
+    // Use dynamic require to avoid circular dependencies
+    const server = require('../server');
+    return server.chatGateway;
+  } catch {
+    logger.warn('ChatGateway not available yet');
+    return null;
+  }
+};
+
 class NotificationService {
   /**
    * Create a notification
@@ -23,8 +38,15 @@ class NotificationService {
 
       logger.info(`Notification created for user: ${data.user_id}`);
 
-      // TODO: Emit WebSocket event for real-time notification
-      // this.emitNotification(notification);
+      // Emit WebSocket event for real-time notification
+      this.emitNotification(notification.userId, {
+        id: notification.id,
+        user_id: notification.userId,
+        message: notification.message,
+        read: notification.read,
+        created_at: notification.createdAt,
+        metadata: data.metadata,
+      });
 
       return {
         id: notification.id,
@@ -226,7 +248,14 @@ class NotificationService {
 
       logger.info(`Broadcast notification sent to ${userIds.length} users`);
 
-      // TODO: Emit WebSocket events for real-time notifications
+      // Emit WebSocket events for real-time notifications
+      userIds.forEach((userId) => {
+        this.emitNotification(userId, {
+          user_id: userId,
+          message,
+          read: false,
+        });
+      });
     } catch (error) {
       logger.error('Broadcast notification error:', error);
       throw error;
@@ -293,12 +322,22 @@ class NotificationService {
   }
 
   /**
-   * TODO: Emit WebSocket event (implement when WebSocket is ready)
+   * Emit WebSocket notification to user
    */
-  // private emitNotification(notification: Notification): void {
-  //   // This will be implemented when WebSocket service is ready
-  //   // io.to(notification.user_id).emit('notification', notification);
-  // }
+  private emitNotification(userId: string, notification: any): void {
+    try {
+      const chatGateway = getChatGateway();
+      if (chatGateway) {
+        chatGateway.sendToUser(userId, 'notification', notification);
+        logger.info(`WebSocket notification sent to user: ${userId}`);
+      } else {
+        logger.debug('ChatGateway not available - notification will be delivered via polling');
+      }
+    } catch (error) {
+      logger.error('Error emitting notification:', error);
+      // Don't throw - notification is already saved in database
+    }
+  }
 }
 
 export default new NotificationService();
