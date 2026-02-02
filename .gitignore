@@ -45,6 +45,8 @@ temp/
 # Build artifacts
 dist/
 build/
+Backend/dist/
+Frontend/dist/
 
 # TypeScript compiled files
 Frontend/src/**/*.js
