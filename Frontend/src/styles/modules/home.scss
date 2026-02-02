@@ -1,0 +1,446 @@
+// ===== Home Page Styles =====
+@use '../variables' as *;
+@use '../mixins' as *;
+
+// Hero Section
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: $spacing-lg;
+
+  @include mobile {
+    padding: $spacing-md;
+    min-height: 90vh;
+  }
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      rgba($bg-dark, 0.3) 0%,
+      rgba($bg-dark, 0.6) 50%,
+      rgba($bg-dark, 0.9) 100%
+    );
+    z-index: 2;
+  }
+}
+
+.hero-car-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.7;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  max-width: 800px;
+  @include fade-in;
+
+  @include mobile {
+    max-width: 100%;
+    padding: 0 $spacing-sm;
+  }
+}
+
+.hero-subtitle {
+  font-size: $font-size-sm;
+  color: $primary-red;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-semibold;
+
+  @include mobile {
+    font-size: $font-size-xs;
+    letter-spacing: 2px;
+  }
+}
+
+.hero-title {
+  font-size: 5rem;
+  font-weight: $font-weight-black;
+  color: $text-light;
+  margin-bottom: $spacing-md;
+  text-shadow: 0 0 30px rgba($primary-red, 0.5);
+  line-height: 1.1;
+
+  @include tablet {
+    font-size: 3.5rem;
+  }
+
+  @include mobile {
+    font-size: 2.5rem;
+  }
+}
+
+.hero-tagline {
+  font-size: $font-size-xl;
+  color: $text-gray;
+  margin-bottom: $spacing-xl;
+  font-weight: $font-weight-light;
+
+  @include tablet {
+    font-size: $font-size-lg;
+  }
+
+  @include mobile {
+    font-size: $font-size-base;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+
+  @include mobile {
+    flex-direction: column;
+    width: 100%;
+    gap: $spacing-sm;
+  }
+}
+
+.btn-language {
+  @include button-secondary;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  @include mobile {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.lang-text {
+  font-weight: $font-weight-semibold;
+}
+
+// Hero Sidebar (Social Links)
+.hero-sidebar {
+  position: fixed;
+  right: $spacing-lg;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+
+  @include tablet {
+    display: none;
+  }
+}
+
+.social-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.social-sidebar-link {
+  color: $text-gray;
+  transition: all $transition-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: $radius-md;
+  background: rgba($bg-section, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid $border-color;
+
+  &:hover {
+    color: $primary-red;
+    border-color: $primary-red;
+    box-shadow: $shadow-red;
+    transform: translateX(-5px);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+// Social Navigation Icons (in navbar)
+.social-nav-icons {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  @include mobile {
+    width: 100%;
+    justify-content: center;
+    padding: $spacing-sm 0;
+    border-top: 1px solid $border-color;
+    margin-top: $spacing-sm;
+  }
+}
+
+.nav-social-link {
+  color: $text-gray;
+  transition: all $transition-base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-md;
+  border: 1px solid transparent;
+
+  &:hover {
+    color: $primary-red;
+    border-color: $primary-red;
+    background: rgba($primary-red, 0.1);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// Scroll Indicator
+.scroll-indicator {
+  position: absolute;
+  bottom: $spacing-xl;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+  color: $text-gray;
+  font-size: $font-size-sm;
+  @include flex-column;
+  align-items: center;
+  gap: $spacing-xs;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.scroll-arrow {
+  width: 24px;
+  height: 24px;
+  border-right: 2px solid $primary-red;
+  border-bottom: 2px solid $primary-red;
+  transform: rotate(45deg);
+  animation: scroll-bounce 2s infinite;
+}
+
+@keyframes scroll-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: rotate(45deg) translateY(0);
+  }
+  40% {
+    transform: rotate(45deg) translateY(10px);
+  }
+  60% {
+    transform: rotate(45deg) translateY(5px);
+  }
+}
+
+// Footer
+.footer {
+  background: $bg-section;
+  border-top: 1px solid $border-color;
+  padding: $spacing-xl $spacing-lg;
+  position: relative;
+  z-index: 2;
+
+  @include mobile {
+    padding: $spacing-lg $spacing-md;
+  }
+}
+
+.footer-content {
+  text-align: center;
+  @include flex-column;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-xl;
+  color: $text-light;
+  margin-bottom: $spacing-sm;
+
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  @include mobile {
+    font-size: $font-size-lg;
+
+    .logo {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
+
+.footer-tagline {
+  font-size: $font-size-sm;
+  color: $text-gray;
+  font-style: italic;
+
+  @include mobile {
+    font-size: $font-size-xs;
+  }
+}
+
+// Mobile Navigation Enhancements
+.nav-menu {
+  @include tablet {
+    position: fixed;
+    top: 70px;
+    right: -100%;
+    width: 280px;
+    height: calc(100vh - 70px);
+    background: $bg-section;
+    border-left: 1px solid $border-color;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: $spacing-lg;
+    gap: $spacing-sm;
+    transition: right $transition-base;
+    overflow-y: auto;
+    @include custom-scrollbar;
+    z-index: $z-dropdown;
+
+    &.active {
+      right: 0;
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    li {
+      width: 100%;
+    }
+
+    .nav-link {
+      display: block;
+      padding: $spacing-sm;
+      width: 100%;
+      border-radius: $radius-md;
+      
+      &:hover,
+      &.active {
+        background: rgba($primary-red, 0.1);
+      }
+
+      &.btn-login {
+        width: 100%;
+        text-align: center;
+        margin-top: $spacing-sm;
+      }
+    }
+  }
+
+  @include mobile {
+    width: 100%;
+    right: -100%;
+  }
+}
+
+.nav-toggle.active {
+  span:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+  }
+
+  span:nth-child(2) {
+    opacity: 0;
+  }
+
+  span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+  }
+}
+
+// Nav User Section (for logged in users)
+.nav-user {
+  @include tablet {
+    width: 100%;
+    padding: $spacing-sm;
+    border-top: 1px solid $border-color;
+    margin-top: $spacing-sm;
+  }
+}
+
+.nav-user-info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: pointer;
+  padding: $spacing-xs;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+
+  &:hover {
+    background: rgba($primary-red, 0.1);
+  }
+
+  @include mobile {
+    width: 100%;
+    padding: $spacing-sm;
+  }
+}
+
+.nav-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-full;
+  border: 2px solid $primary-red;
+  object-fit: cover;
+}
+
+.nav-user-name {
+  font-weight: $font-weight-medium;
+  color: $text-light;
+  font-size: $font-size-sm;
+
+  @include mobile {
+    font-size: $font-size-base;
+  }
+}
+
+// Touch-friendly buttons for mobile
+@include tablet {
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+    font-size: $font-size-base;
+  }
+
+  .btn-small {
+    min-height: 40px;
+    font-size: $font-size-sm;
+  }
+}
