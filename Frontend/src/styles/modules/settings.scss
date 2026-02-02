@@ -1,4 +1,7 @@
 // ===== User Settings Styles =====
+@use 'sass:math';
+@use '../variables' as *;
+@use '../mixins' as *;
 
 .settings {
   max-width: 900px;
@@ -298,13 +301,13 @@
 
       .session-device {
         font-weight: $font-weight-medium;
-        margin-bottom: $spacing-xs / 2;
+        margin-bottom: math.div($spacing-xs, 2);
       }
 
       .session-location {
         font-size: $font-size-sm;
         color: $text-gray;
-        margin-bottom: $spacing-xs / 2;
+        margin-bottom: math.div($spacing-xs, 2);
       }
 
       .session-time {
@@ -391,7 +394,7 @@
   .notification-info {
     .notification-title {
       font-weight: $font-weight-medium;
-      margin-bottom: $spacing-xs / 2;
+      margin-bottom: math.div($spacing-xs, 2);
     }
 
     .notification-description {

@@ -1,4 +1,7 @@
 // ===== Shop Module Styles =====
+@use 'sass:math';
+@use '../variables' as *;
+@use '../mixins' as *;
 
 .shop {
   &-header {
@@ -213,7 +216,7 @@
       svg {
         width: 16px;
         height: 16px;
-        margin-right: $spacing-xs / 2;
+        margin-right: math.div($spacing-xs, 2);
       }
     }
   }
@@ -298,7 +301,7 @@
 
       .item-name {
         font-weight: $font-weight-medium;
-        margin-bottom: $spacing-xs / 2;
+        margin-bottom: math.div($spacing-xs, 2);
       }
 
       .item-price {

@@ -1,8 +1,17 @@
 // ===== Illegal Street - Main SCSS =====
 
-// Import variables and mixins
-@import 'variables';
-@import 'mixins';
+// Import all dependencies first (required by SCSS @use)
+@use 'sass:math';
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'modules/dashboard';
+@use 'modules/courses';
+@use 'modules/progress';
+@use 'modules/ranking';
+@use 'modules/settings';
+@use 'modules/chat';
+@use 'modules/shop';
+@use 'modules/admin';
 
 // ===== Reset & Base Styles =====
 * {
@@ -450,16 +459,6 @@ a {
     margin-left: 0;
   }
 }
-
-// ===== Import module styles =====
-@import 'modules/dashboard';
-@import 'modules/courses';
-@import 'modules/progress';
-@import 'modules/ranking';
-@import 'modules/settings';
-@import 'modules/chat';
-@import 'modules/shop';
-@import 'modules/admin';
 
 // ===== Responsive =====
 @include mobile {

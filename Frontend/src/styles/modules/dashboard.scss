@@ -1,4 +1,7 @@
 // ===== Dashboard Module Styles =====
+@use 'sass:math';
+@use '../variables' as *;
+@use '../mixins' as *;
 
 .dashboard {
   &-header {
@@ -181,7 +184,7 @@
 
   &-title {
     font-weight: $font-weight-medium;
-    margin-bottom: $spacing-xs / 2;
+    margin-bottom: math.div($spacing-xs, 2);
   }
 
   &-time {

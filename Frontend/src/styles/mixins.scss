@@ -1,4 +1,5 @@
 // ===== SCSS Mixins =====
+@use 'variables' as *;
 
 // Flexbox utilities
 @mixin flex-center {

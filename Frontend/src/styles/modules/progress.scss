@@ -1,4 +1,7 @@
 // ===== Progress System Styles =====
+@use 'sass:math';
+@use '../variables' as *;
+@use '../mixins' as *;
 
 .progress {
   &-header {
@@ -205,7 +208,7 @@
 
     .legend-scale {
       display: flex;
-      gap: $spacing-xs / 2;
+      gap: math.div($spacing-xs, 2);
 
       .scale-item {
         width: 15px;
@@ -348,7 +351,7 @@
     font-size: $font-size-3xl;
     font-weight: $font-weight-bold;
     color: $text-light;
-    margin-bottom: $spacing-xs / 2;
+    margin-bottom: math.div($spacing-xs, 2);
   }
 
   .stat-label {
