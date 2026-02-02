@@ -56,3 +56,30 @@ Frontend/src/**/*.js.map
 # Compiled CSS (keep styles.css in root)
 Frontend/src/styles/**/*.css
 Frontend/src/styles/**/*.css.map
+
+# Source maps (generated files - JS and CSS only)
+**/*.js.map
+**/*.css.map
+
+# Audit reports
+audit-report.json
+Backend/audit-report.json
+
+# JWT rotation files
+.jwt-rotation
+Backend/.jwt-rotation
+
+# Redundant auto-generated documentation (root and Backend only)
+# Keep only essential docs like README.md, INSTALLATION.md, etc.
+/*_SUMMARY.md
+/*_COMPLETE.md
+/*_IMPLEMENTATION.md
+/*_STATUS.md
+/*_CHECKLIST.md
+/*_REPORT.md
+Backend/*_SUMMARY.md
+Backend/*_COMPLETE.md
+Backend/*_IMPLEMENTATION.md
+Backend/*_STATUS.md
+Backend/*_CHECKLIST.md
+Backend/*_REPORT.md
