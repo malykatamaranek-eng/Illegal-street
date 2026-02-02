@@ -27,8 +27,10 @@ This tells ts-node to load `.d.ts` declaration files (like `src/types/express.d.
 **Solution:** Added explicit type conversion in `src/server.ts`:
 ```typescript
 const PORT = parseInt(process.env.PORT || '5000', 10);
-const HOST = '0.0.0.0';
+const HOST = process.env.HOST || '0.0.0.0'; // Configurable via environment variable
 ```
+
+This ensures PORT is a number and makes HOST binding configurable for security.
 
 ### 3. Missing API Endpoints - 404 Errors
 **Issue:** Frontend was receiving 404 errors for:
