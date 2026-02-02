@@ -53,7 +53,7 @@ const savePreferences = async (
     const consent = await prisma.cookieConsent.create({
       data: {
         consentId,
-        necessary: preferences.necessary !== false, // Always true
+        necessary: true, // Always true - required for site functionality
         functional: preferences.functional || false,
         analytics: preferences.analytics || false,
         marketing: preferences.marketing || false,
@@ -88,7 +88,7 @@ const updatePreferences = async (
     const consent = await prisma.cookieConsent.update({
       where: { consentId },
       data: {
-        necessary: preferences.necessary !== false,
+        necessary: true, // Always true - required for site functionality
         functional: preferences.functional || false,
         analytics: preferences.analytics || false,
         marketing: preferences.marketing || false,
