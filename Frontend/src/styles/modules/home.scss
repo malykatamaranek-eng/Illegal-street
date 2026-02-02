@@ -320,6 +320,7 @@
 // Mobile Navigation Enhancements
 .nav-menu {
   @include tablet {
+    display: flex;
     position: fixed;
     top: 70px;
     right: -100%;

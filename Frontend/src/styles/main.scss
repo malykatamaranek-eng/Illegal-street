@@ -345,7 +345,7 @@ a {
   list-style: none;
 
   @include tablet {
-    display: none;
+    display: flex; // Will be overridden by home.scss mobile styles
   }
 }
 
